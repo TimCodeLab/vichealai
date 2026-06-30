@@ -13,7 +13,7 @@
     </ion-header>
 
     <ion-content class="s-content">
-      <div class="s-body">
+      <div class="s-body anim-fade-up">
 
         <!-- Profile Card -->
         <div class="s-profile-card" @click="router.push('/profile')">
@@ -322,7 +322,7 @@ function clearCache() {
 
 function handleLogout() {
   authStore.logout()
-  router.push('/login')
+  router.replace('/login').catch(() => { window.location.replace('/login') })
 }
 </script>
 
@@ -501,4 +501,11 @@ function handleLogout() {
 }
 .toast-enter-active, .toast-leave-active { transition: all 0.25s ease; }
 .toast-enter-from, .toast-leave-to { opacity: 0; transform: translateX(-50%) translateY(12px); }
+.s-section { animation: fadeUp .35s ease both; }
+.s-section:nth-child(1){animation-delay:.08s}.s-section:nth-child(2){animation-delay:.16s}.s-section:nth-child(3){animation-delay:.24s}.s-section:nth-child(4){animation-delay:.32s}
+.s-profile-card { animation: fadeUp .35s .02s ease both; transition:transform .18s,box-shadow .18s; }
+.s-profile-card:active { transform:scale(.98); }
+.s-toggle { transition:background .25s; }
+.s-toggle-knob { transition:transform .25s; }
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>

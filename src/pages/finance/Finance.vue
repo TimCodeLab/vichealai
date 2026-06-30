@@ -14,7 +14,7 @@
     </ion-header>
 
     <ion-content style="--background:#f5f7fa">
-      <div class="pg-body">
+      <div class="pg-body anim-fade-up">
 
         <!-- Hero summary card -->
         <div class="hero-card">
@@ -467,4 +467,9 @@ ion-modal  { --border-radius:20px 20px 0 0; --max-height:90vh; align-items:flex-
 .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:#1f2937; color:white; padding:11px 20px; border-radius:24px; font-size:13px; font-weight:600; z-index:9999; white-space:nowrap; box-shadow:0 4px 20px rgba(0,0,0,.2); }
 .toast-enter-active, .toast-leave-active { transition: all .25s; }
 .toast-enter-from, .toast-leave-to { opacity:0; transform:translateX(-50%) translateY(12px); }
+.fee-card { animation: fadeUp .35s ease both; }
+.fee-card:nth-child(1){animation-delay:.05s}.fee-card:nth-child(2){animation-delay:.10s}.fee-card:nth-child(3){animation-delay:.15s}.fee-card:nth-child(4){animation-delay:.20s}.fee-card:nth-child(5){animation-delay:.25s}
+.an-card { animation: fadeUp .3s ease both; }
+.an-card:nth-child(1){animation-delay:.05s}.an-card:nth-child(2){animation-delay:.10s}.an-card:nth-child(3){animation-delay:.15s}.an-card:nth-child(4){animation-delay:.20s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>

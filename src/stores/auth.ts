@@ -7,6 +7,9 @@ export interface User {
   name: string
   role: 'super_admin' | 'school_admin' | 'teacher' | 'student' | 'parent'
   schoolId: string
+  phone?: string
+  isActive?: boolean
+  createdAt?: string
 }
 
 export const useAuth = defineStore('auth', () => {
@@ -43,6 +46,6 @@ export const useAuth = defineStore('auth', () => {
     isAuthenticated,
     setAuth,
     logout,
-    initializeFromStorage
+    initializeFromStorage,
   }
 })

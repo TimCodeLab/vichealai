@@ -87,13 +87,15 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const authStore = useAuth()
 
-  // Initialize from storage on first check
-  if (!authStore.user && localStorage.getItem('user')) {
+  // Only restore from storage if this is a fresh load (not after logout)
+  const hasToken = !!localStorage.getItem('authToken')
+  if (!authStore.user && hasToken) {
     authStore.initializeFromStorage()
   }
 
+  // Always read the token directly for the most up-to-date value
+  const isAuthenticated = !!localStorage.getItem('authToken') && authStore.isAuthenticated
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthenticated = authStore.isAuthenticated
 
   if (requiresAuth && !isAuthenticated) {
     next('/login')

@@ -15,7 +15,7 @@
     </ion-header>
 
     <ion-content style="--background:#f5f7fa">
-      <div class="pg-body">
+      <div class="pg-body anim-fade-up">
 
         <!-- Search -->
         <div class="pg-search">

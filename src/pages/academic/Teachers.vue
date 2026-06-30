@@ -14,7 +14,7 @@
     </ion-header>
 
     <ion-content style="--background:#f5f7fa">
-      <div class="pg-body">
+      <div class="pg-body anim-fade-up">
         <div class="pg-search">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
           <input v-model="searchQuery" class="pg-search-input" :placeholder="t('actions.search') + '...'" />
@@ -144,7 +144,8 @@ function saveItem() {
 .pg-count  { font-size:12px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; }
 .pg-empty  { text-align:center; padding:60px 20px 40px; }
 .pg-empty-btn { margin-top:16px; padding:10px 24px; background:#1976d2; color:white; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
-.pg-card   { display:flex; align-items:flex-start; gap:12px; background:white; border-radius:14px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.pg-card   { display:flex; align-items:flex-start; gap:12px; background:white; border-radius:14px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px rgba(0,0,0,.06); transition:transform .18s,box-shadow .18s; }
+.pg-card:active { transform:scale(.98); }
 .pg-avatar { width:46px; height:46px; border-radius:50%; color:white; font-size:19px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 3px 10px rgba(0,0,0,.15); }
 .pg-info   { flex:1; min-width:0; }
 .pg-name   { font-size:15px; font-weight:700; color:#1f2937; margin-bottom:5px; }
@@ -175,4 +176,8 @@ ion-modal  { --border-radius:20px 20px 0 0; --max-height:88vh; align-items:flex-
 .mo-cancel { flex:1; padding:13px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
 .mo-save   { flex:2; padding:13px; background:linear-gradient(135deg,#1565c0,#1976d2); color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
 .mo-save:disabled { opacity:.45; cursor:default; }
+.pg-body.anim-fade-up { animation: fadeUp .4s ease both; }
+.pg-card { animation: fadeUp .35s ease both; }
+.pg-card:nth-child(1){animation-delay:.05s}.pg-card:nth-child(2){animation-delay:.10s}.pg-card:nth-child(3){animation-delay:.15s}.pg-card:nth-child(4){animation-delay:.20s}.pg-card:nth-child(5){animation-delay:.25s}.pg-card:nth-child(6){animation-delay:.30s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>

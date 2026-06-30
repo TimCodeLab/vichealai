@@ -23,6 +23,7 @@ import './assets/styles/tailwind.css'
 
 /* App styles */
 import './assets/styles/main.css'
+import './assets/styles/animations.css'
 
 const app = createApp(App)
 const pinia = createPinia()

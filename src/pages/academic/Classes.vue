@@ -14,7 +14,7 @@
     </ion-header>
 
     <ion-content style="--background:#f5f7fa">
-      <div class="pg-body">
+      <div class="pg-body anim-fade-up">
         <div class="pg-search">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
           <input v-model="searchQuery" class="pg-search-input" :placeholder="t('actions.search') + '...'" />
@@ -142,7 +142,8 @@ function saveItem() {
 .pg-empty-btn { margin-top:16px; padding:10px 24px; background:#1976d2; color:white; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
 /* Grid layout for classes */
 .pg-grid   { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-.pg-cls-card { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.06); }
+.pg-cls-card { background:white; border-radius:14px; overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,.06); transition:transform .18s,box-shadow .18s; }
+.pg-card:active { transform:scale(.98); }
 .pg-cls-top  { padding:18px 12px 14px; display:flex; align-items:flex-start; justify-content:space-between; }
 .pg-cls-icon { font-size:28px; }
 .pg-cls-actions { display:flex; gap:4px; }
@@ -166,4 +167,8 @@ ion-modal  { --border-radius:20px 20px 0 0; --max-height:88vh; align-items:flex-
 .mo-cancel { flex:1; padding:13px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
 .mo-save   { flex:2; padding:13px; background:linear-gradient(135deg,#1565c0,#1976d2); color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
 .mo-save:disabled { opacity:.45; cursor:default; }
+.pg-body.anim-fade-up { animation: fadeUp .4s ease both; }
+.pg-cls-card { animation: fadeUp .35s ease both; }
+.pg-cls-card:nth-child(1){animation-delay:.05s}.pg-cls-card:nth-child(2){animation-delay:.10s}.pg-cls-card:nth-child(3){animation-delay:.15s}.pg-cls-card:nth-child(4){animation-delay:.20s}.pg-cls-card:nth-child(5){animation-delay:.25s}.pg-cls-card:nth-child(6){animation-delay:.30s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>

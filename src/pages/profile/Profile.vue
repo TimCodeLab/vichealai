@@ -32,7 +32,7 @@
     </ion-header>
 
     <ion-content class="profile-content">
-      <div class="profile-body">
+      <div class="profile-body anim-fade-up">
 
         <!-- Toast notification -->
         <transition name="toast">
@@ -276,7 +276,7 @@ function triggerAvatarChange() {
 
 function handleLogout() {
   authStore.logout()
-  router.push('/login')
+  router.replace('/login').catch(() => { window.location.replace('/login') })
 }
 </script>
 
@@ -596,4 +596,10 @@ function handleLogout() {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 .btn-logout:active { background: #fff5f5; }
+.section-card { animation: fadeUp .35s ease both; }
+.section-card:nth-child(1){animation-delay:.05s}.section-card:nth-child(2){animation-delay:.12s}.section-card:nth-child(3){animation-delay:.19s}
+.btn-logout { animation: fadeUp .35s .26s ease both; }
+.btn-change-pw,.save-header-btn,.back-btn { transition:opacity .15s,transform .15s; }
+.btn-change-pw:not(:disabled):active,.btn-logout:active { transform:scale(.97); }
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 </style>
