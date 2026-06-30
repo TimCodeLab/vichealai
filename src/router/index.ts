@@ -71,6 +71,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/settings',
     component: () => import('@/pages/settings/Settings.vue'),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/profile',
+    component: () => import('@/pages/profile/Profile.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 

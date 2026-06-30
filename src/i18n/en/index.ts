@@ -13,7 +13,14 @@ export default {
     library: 'Library',
     communication: 'Communication',
     settings: 'Settings',
-    logout: 'Logout'
+    logout: 'Logout',
+    students: 'Students',
+    teachers: 'Teachers',
+    classes: 'Classes',
+    timetable: 'Timetable',
+    marks: 'Marks',
+    reports: 'Reports',
+    announcements: 'Announcements'
   },
   roles: {
     super_admin: 'Super Administrator',
@@ -97,5 +104,20 @@ export default {
     welcome: 'Welcome',
     quickStats: 'Quick Stats',
     recentActivity: 'Recent Activity'
+  },
+  profile: {
+    title: 'My Profile',
+    personalInfo: 'Personal Information',
+    accountInfo: 'Account Information',
+    changePassword: 'Change Password',
+    currentPassword: 'Current Password',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password',
+    updatePassword: 'Update Password',
+    passwordUpdated: 'Password updated successfully',
+    role: 'Role',
+    school: 'School',
+    userId: 'User ID',
+    status: 'Status'
   }
 }

@@ -6,14 +6,21 @@ export default {
   nav: {
     dashboard: 'ផ្ទាំងគ្រប់គ្រង',
     academics: 'ឯកវិទ្យាល័យ',
-    attendance: 'ស្វាគមន៍',
+    attendance: 'វត្តមាន',
     homework: 'កិច្ចការផ្ទះ',
     exams: 'ការប្រឡង',
     finance: 'ហិរញ្ញវត្ថុ',
     library: 'បណ្ណាល័យ',
     communication: 'ទំនាក់ទំនង',
     settings: 'ការកំណត់',
-    logout: 'ចាកចេញ'
+    logout: 'ចាកចេញ',
+    students: 'សិស្ស',
+    teachers: 'គ្រូបង្រៀន',
+    classes: 'ថ្នាក់រៀន',
+    timetable: 'តារាងពេលវេលា',
+    marks: 'ពិន្ទុ',
+    reports: 'របាយការណ៍',
+    announcements: 'សេចក្ដីប្រកាស'
   },
   roles: {
     super_admin: 'អ្នកគ្រប់គ្រងលំដាប់កំពូល',
@@ -97,5 +104,20 @@ export default {
     welcome: 'ស្វាគមន៍',
     quickStats: 'ស្ថិតិលឿន',
     recentActivity: 'សកម្មភាពថ្មីៗ'
+  },
+  profile: {
+    title: 'ប្រវត្តិរូបខ្ញុំ',
+    personalInfo: 'ព័ត៌មានផ្ទាល់ខ្លួន',
+    accountInfo: 'ព័ត៌មានគណនី',
+    changePassword: 'ផ្លាស់ប្ដូរពាក្យសម្ងាត់',
+    currentPassword: 'ពាក្យសម្ងាត់បច្ចុប្បន្ន',
+    newPassword: 'ពាក្យសម្ងាត់ថ្មី',
+    confirmPassword: 'បញ្ជាក់ពាក្យសម្ងាត់',
+    updatePassword: 'ធ្វើបច្ចុប្បន្នភាពពាក្យសម្ងាត់',
+    passwordUpdated: 'ពាក្យសម្ងាត់ត្រូវបានធ្វើបច្ចុប្បន្នភាព',
+    role: 'តួនាទី',
+    school: 'សាលារៀន',
+    userId: 'លេខសម្គាល់អ្នកប្រើ',
+    status: 'ស្ថានភាព'
   }
 }

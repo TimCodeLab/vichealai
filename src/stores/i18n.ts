@@ -27,6 +27,10 @@ export const useI18nStore = defineStore('i18n', () => {
     const saved = localStorage.getItem('language') as Language
     if (saved && ['en', 'km'].includes(saved)) {
       locale.value = saved
+    } else {
+      // No saved preference — use KM as default and persist it
+      locale.value = 'km'
+      localStorage.setItem('language', 'km')
     }
   }
 

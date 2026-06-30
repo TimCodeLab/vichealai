@@ -1,8 +1,31 @@
 <template>
-  <ion-header>
-    <ion-toolbar>
-      <ion-title class="app-title">VICHEALAI</ion-title>
-      <language-toggle />
+  <ion-header class="app-header">
+    <ion-toolbar class="app-toolbar">
+      <div class="header-content">
+        <!-- Logo + Title -->
+        <div class="brand">
+          <div class="brand-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="8" fill="rgba(255,255,255,0.2)"/>
+              <path d="M7 20L14 8L21 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9.5 16H18.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-name">VICHEALAI</span>
+            <span v-if="authStore.user" class="brand-user">{{ authStore.user.name }}</span>
+          </div>
+        </div>
+
+        <!-- Right side controls -->
+        <div class="header-actions">
+          <div v-if="isOfflineMode" class="offline-badge">
+            <span class="offline-dot"></span>
+            <span class="offline-label">Offline</span>
+          </div>
+          <language-toggle />
+        </div>
+      </div>
     </ion-toolbar>
   </ion-header>
 
@@ -91,15 +114,99 @@ watch(
 </script>
 
 <style scoped>
-:deep(ion-toolbar) {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
+/* Header container */
+.app-header {
+  --border-width: 0;
 }
 
-.app-title {
-  font-weight: 600;
-  letter-spacing: 0.5px;
+:deep(.app-toolbar) {
+  --background: linear-gradient(135deg, #1a6fd4 0%, #007bff 50%, #0056cc 100%);
+  --border-width: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --min-height: 60px;
+  box-shadow: 0 2px 12px rgba(0, 123, 255, 0.35);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 60px;
+  width: 100%;
+}
+
+/* Brand */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.brand-user {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* Right side actions */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Offline badge */
+.offline-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+
+.offline-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffc107;
+  animation: pulse 1.5s infinite;
+}
+
+.offline-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 .no-internet-content {

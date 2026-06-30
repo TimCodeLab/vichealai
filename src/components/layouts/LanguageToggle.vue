@@ -4,7 +4,7 @@
     class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/20 hover:bg-white/30 border border-white/30 text-white transition-all duration-200 text-sm font-medium"
   >
     <span class="text-lg">{{ currentFlagIcon }}</span>
-    <span class="hidden sm:inline">{{ currentLangLabel }}</span>
+    <span>{{ currentLangCode }}</span>
   </button>
 </template>
 
@@ -26,9 +26,8 @@ const currentFlagIcon = computed(() => {
   return lang?.flag || '🇰🇭'
 })
 
-const currentLangLabel = computed(() => {
-  const lang = languages.find(l => l.code === currentLang.value)
-  return lang?.label || 'ខ្មែរ'
+const currentLangCode = computed(() => {
+  return currentLang.value === 'km' ? 'KM' : 'EN'
 })
 
 function toggleLanguage() {

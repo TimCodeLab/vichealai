@@ -1,243 +1,254 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
-        <ion-title>{{ t('roles.student') }}</ion-title>
-      </ion-toolbar>
+    <!-- Header -->
+    <ion-header class="pg-header">
+      <div class="pg-bar">
+        <button class="pg-back" @click="router.back()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="pg-title">{{ t('nav.students') }}</span>
+        <button class="pg-new" @click="openCreate">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+          {{ t('actions.create') }}
+        </button>
+      </div>
     </ion-header>
 
-    <ion-content>
-      <div class="page-container">
-        <div class="header-section">
-          <h1>{{ t('roles.student') }}</h1>
-          <ion-button @click="showCreateModal = true">
-            <ion-icon slot="start" :icon="addIcon"></ion-icon>
-            {{ t('actions.create') }}
-          </ion-button>
+    <ion-content style="--background:#f5f7fa">
+      <div class="pg-body">
+
+        <!-- Search -->
+        <div class="pg-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
+          <input v-model="searchQuery" class="pg-search-input" :placeholder="t('actions.search') + '...'" />
+          <span v-if="searchQuery" class="pg-search-clear" @click="searchQuery = ''">✕</span>
         </div>
 
-        <div class="search-section">
-          <ion-searchbar
-            v-model="searchQuery"
-            :placeholder="t('actions.search')"
-          ></ion-searchbar>
+        <!-- Count + Filter -->
+        <div class="pg-meta">
+          <span class="pg-count">{{ filtered.length }} {{ t('nav.students') }}</span>
+          <div class="pg-filters">
+            <button v-for="f in filters" :key="f.val" :class="['pg-filter', { active: activeFilter === f.val }]" @click="activeFilter = f.val">{{ f.label }}</button>
+          </div>
         </div>
 
-        <div v-if="filteredStudents.length === 0" class="empty-state">
-          <p>{{ t('messages.noData') }}</p>
+        <!-- Empty -->
+        <div v-if="filtered.length === 0" class="pg-empty">
+          <div style="font-size:52px;margin-bottom:12px">👥</div>
+          <div style="font-size:16px;font-weight:600;color:#374151">No students found</div>
+          <div style="font-size:13px;color:#9ca3af;margin-top:4px">Try a different search or add a new student</div>
+          <button class="pg-empty-btn" @click="openCreate">+ Add Student</button>
         </div>
 
-        <ion-card v-for="student in filteredStudents" :key="student.id" class="student-card">
-          <ion-card-header>
-            <ion-card-title>{{ student.name }}</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <div class="student-info">
-              <p><strong>{{ t('forms.email') }}:</strong> {{ student.email }}</p>
-              <p><strong>Class:</strong> {{ getClassName(student.classId) }}</p>
-              <p><strong>{{ t('forms.date') }}:</strong> {{ formatDate(student.dateOfBirth) }}</p>
+        <!-- Cards -->
+        <div v-for="student in filtered" :key="student.id" class="pg-card">
+          <div class="pg-avatar" :style="{ background: aColor(student.name) }">{{ aInitial(student.name) }}</div>
+          <div class="pg-info">
+            <div class="pg-name">{{ student.name }}</div>
+            <div class="pg-row"><span class="pg-lbl">✉️</span><span class="pg-val">{{ student.email }}</span></div>
+            <div class="pg-row"><span class="pg-lbl">🏫</span><span class="pg-val">{{ className(student.classId) }}</span></div>
+            <div class="pg-row" v-if="student.dateOfBirth"><span class="pg-lbl">🎂</span><span class="pg-val">{{ fmtDate(student.dateOfBirth) }}</span></div>
+            <div class="pg-badges">
+              <span class="pg-badge pg-green">● Active</span>
+              <span v-if="student.gender" class="pg-badge pg-blue">{{ student.gender === 'M' || student.gender === 'male' ? '♂ Male' : '♀ Female' }}</span>
             </div>
-            <div class="action-buttons">
-              <ion-button size="small" fill="outline" @click="editStudent(student)">
-                {{ t('actions.edit') }}
-              </ion-button>
-              <ion-button size="small" fill="outline" color="danger" @click="deleteStudent(student.id)">
-                {{ t('actions.delete') }}
-              </ion-button>
-            </div>
-          </ion-card-content>
-        </ion-card>
+          </div>
+          <div class="pg-actions">
+            <button class="pg-btn pg-btn-edit" @click="editItem(student)" title="Edit">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+            <button class="pg-btn pg-btn-del" @click="deleteItem(student.id)" title="Delete">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div style="height:28px"></div>
       </div>
-
-      <!-- Create/Edit Modal -->
-      <ion-modal :is-open="showCreateModal" @did-dismiss="showCreateModal = false">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>{{ editingStudent ? t('actions.edit') : t('actions.create') }} {{ t('roles.student') }}</ion-title>
-            <ion-buttons slot="end">
-              <ion-button @click="showCreateModal = false">{{ t('actions.cancel') }}</ion-button>
-            </ion-buttons>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <form @submit.prevent="saveStudent" class="modal-form">
-            <ion-item>
-              <ion-label position="stacked">{{ t('forms.name') }}</ion-label>
-              <ion-input v-model="formData.name" required></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="stacked">{{ t('forms.email') }}</ion-label>
-              <ion-input v-model="formData.email" type="email" required></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="stacked">Class</ion-label>
-              <ion-select v-model="formData.classId" required>
-                <ion-select-option v-for="cls in classes" :key="cls.id" :value="cls.id">
-                  {{ cls.name }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="stacked">{{ t('forms.date') }}</ion-label>
-              <ion-input v-model="formData.dateOfBirth" type="date" required></ion-input>
-            </ion-item>
-
-            <div class="modal-buttons">
-              <ion-button expand="block" type="submit">{{ t('actions.save') }}</ion-button>
-            </div>
-          </form>
-        </ion-content>
-      </ion-modal>
     </ion-content>
+
+    <!-- Modal -->
+    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+      <div class="mo-wrap">
+        <div class="mo-handle"></div>
+        <div class="mo-head">
+          <span class="mo-title">{{ editing ? '✏️ Edit Student' : '➕ New Student' }}</span>
+          <button class="mo-close" @click="closeModal">✕</button>
+        </div>
+        <div class="mo-body">
+          <div class="mo-field">
+            <label class="mo-label">Full Name *</label>
+            <input v-model="form.name" class="mo-input" placeholder="e.g. Sokha Chan" />
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Email</label>
+            <input v-model="form.email" type="email" class="mo-input" placeholder="student@school.edu.kh" />
+          </div>
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">Gender</label>
+              <select v-model="form.gender" class="mo-input">
+                <option value="male">♂ Male</option>
+                <option value="female">♀ Female</option>
+              </select>
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">Date of Birth</label>
+              <input v-model="form.dateOfBirth" type="date" class="mo-input" />
+            </div>
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Class</label>
+            <select v-model="form.classId" class="mo-input">
+              <option value="">-- Select Class --</option>
+              <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
+            </select>
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Address</label>
+            <input v-model="form.address" class="mo-input" placeholder="Home address" />
+          </div>
+          <div class="mo-btns">
+            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
+            <button class="mo-save" @click="saveItem" :disabled="!form.name">{{ t('actions.save') }}</button>
+          </div>
+        </div>
+      </div>
+    </ion-modal>
   </ion-page>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import {
-  IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon,
-  IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonModal, IonItem,
-  IonLabel, IonInput, IonSelect, IonSelectOption, IonSearchbar, IonButtons
-} from '@ionic/vue'
-import { add as addIcon } from 'ionicons/icons'
+import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
+import { useRouter } from 'vue-router'
 import { useI18n } from '@/composables/useI18n'
 import { LocalStorageService } from '@/services/localStorageService'
-import type { Student, Class } from '@/types'
 
+const router = useRouter()
 const { t } = useI18n()
 
 const searchQuery = ref('')
-const showCreateModal = ref(false)
-const editingStudent = ref<Student | null>(null)
+const activeFilter = ref('all')
+const showModal = ref(false)
+const editing = ref<any>(null)
+const students = ref<any[]>(LocalStorageService.get<any[]>('students', []) || [])
+const classes  = ref<any[]>(LocalStorageService.get<any[]>('classes',  []) || [])
+const form = ref({ name:'', email:'', classId:'', dateOfBirth:'', gender:'male', address:'' })
 
-const students = ref<Student[]>(LocalStorageService.get<Student[]>('students', []) || [])
-const classes = ref<Class[]>(LocalStorageService.get<Class[]>('classes', []) || [])
+const filters = [
+  { val: 'all',    label: 'All'    },
+  { val: 'active', label: 'Active' },
+  { val: 'male',   label: '♂ Male' },
+  { val: 'female', label: '♀ Female' },
+]
 
-const formData = ref({
-  name: '',
-  email: '',
-  classId: '',
-  dateOfBirth: ''
+const filtered = computed(() => {
+  let list = students.value
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase()
+    list = list.filter(s => s.name?.toLowerCase().includes(q) || s.email?.toLowerCase().includes(q))
+  }
+  if (activeFilter.value === 'male')   list = list.filter(s => s.gender === 'male' || s.gender === 'M')
+  if (activeFilter.value === 'female') list = list.filter(s => s.gender === 'female' || s.gender === 'F')
+  return list
 })
 
-const filteredStudents = computed(() => {
-  return students.value.filter(s =>
-    s.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    s.email.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
+const palette = ['#1976d2','#2e7d32','#e65100','#6a1b9a','#c62828','#00838f','#4527a0','#558b2f']
+function aColor(n: string)   { return palette[(n?.charCodeAt(0)||0) % palette.length] }
+function aInitial(n: string) { return (n||'?').charAt(0).toUpperCase() }
+function className(id: string) { return classes.value.find(c=>c.id===id)?.name || (id ? id : '—') }
+function fmtDate(d: string)  { return d ? new Date(d).toLocaleDateString() : '—' }
 
-function getClassName(classId: string): string {
-  const cls = classes.value.find(c => c.id === classId)
-  return cls?.name || classId
-}
+function openCreate() { form.value = {name:'',email:'',classId:'',dateOfBirth:'',gender:'male',address:''}; editing.value=null; showModal.value=true }
+function editItem(s: any)    { editing.value=s; form.value={...s}; showModal.value=true }
+function closeModal()        { showModal.value=false; editing.value=null }
 
-function formatDate(date: string): string {
-  return new Date(date).toLocaleDateString()
-}
-
-function editStudent(student: Student) {
-  editingStudent.value = student
-  formData.value = { ...student }
-  showCreateModal.value = true
-}
-
-function deleteStudent(id: string) {
+function deleteItem(id: string) {
   if (confirm(t('messages.confirmDelete'))) {
-    students.value = students.value.filter(s => s.id !== id)
+    students.value = students.value.filter(s=>s.id!==id)
     LocalStorageService.set('students', students.value)
   }
 }
-
-function saveStudent() {
-  if (editingStudent.value) {
-    const index = students.value.findIndex(s => s.id === editingStudent.value!.id)
-    if (index !== -1) {
-      students.value[index] = { ...students.value[index], ...formData.value }
-    }
+function saveItem() {
+  if (!form.value.name) return
+  if (editing.value) {
+    const i = students.value.findIndex(s=>s.id===editing.value.id)
+    if (i!==-1) students.value[i] = {...students.value[i],...form.value}
   } else {
-    const newStudent: Student = {
-      id: `student_${Date.now()}`,
-      schoolId: 'school_1',
-      parentId: '',
-      gender: 'M',
-      address: '',
-      enrollmentDate: new Date().toISOString(),
-      status: 'active',
-      ...formData.value
-    }
-    students.value.push(newStudent)
+    students.value.push({id:`stu_${Date.now()}`,schoolId:'school_1',status:'active',...form.value})
   }
-  LocalStorageService.set('students', students.value)
-  showCreateModal.value = false
-  editingStudent.value = null
-  formData.value = { name: '', email: '', classId: '', dateOfBirth: '' }
+  LocalStorageService.set('students',students.value); closeModal()
 }
 </script>
 
 <style scoped>
-.page-container {
-  padding: 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
+/* Header */
+.pg-header { background: linear-gradient(135deg,#1565c0 0%,#1976d2 45%,#0288d1 100%); box-shadow:0 4px 20px rgba(21,101,192,.4); }
+.pg-bar    { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; height:56px; }
+.pg-back   { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.18); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.pg-title  { font-size:17px; font-weight:700; color:white; letter-spacing:.3px; }
+.pg-new    { display:flex; align-items:center; gap:5px; padding:7px 12px; background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.35); border-radius:20px; color:white; font-size:13px; font-weight:600; cursor:pointer; }
+.pg-new:active { background:rgba(255,255,255,.32); }
 
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+/* Body */
+.pg-body { padding:14px; }
 
-.header-section h1 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 600;
-}
+/* Search */
+.pg-search { display:flex; align-items:center; gap:8px; background:white; border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 14px; margin-bottom:12px; box-shadow:0 1px 4px rgba(0,0,0,.05); }
+.pg-search:focus-within { border-color:#1976d2; }
+.pg-search-input { flex:1; border:none; outline:none; font-size:14px; color:#1f2937; background:transparent; }
+.pg-search-input::placeholder { color:#9ca3af; }
+.pg-search-clear { color:#9ca3af; cursor:pointer; font-size:13px; }
 
-.search-section {
-  margin-bottom: 20px;
-}
+/* Meta row */
+.pg-meta    { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.pg-count   { font-size:12px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; }
+.pg-filters { display:flex; gap:4px; }
+.pg-filter  { padding:4px 10px; border-radius:20px; border:1.5px solid #e5e7eb; background:white; font-size:11px; font-weight:600; color:#6b7280; cursor:pointer; white-space:nowrap; }
+.pg-filter.active { background:#1976d2; border-color:#1976d2; color:white; }
 
-.empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  color: #999;
-}
+/* Empty */
+.pg-empty     { text-align:center; padding:60px 20px 40px; }
+.pg-empty-btn { margin-top:16px; padding:10px 24px; background:#1976d2; color:white; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
 
-.student-card {
-  margin-bottom: 16px;
-}
+/* Card */
+.pg-card    { display:flex; align-items:flex-start; gap:12px; background:white; border-radius:14px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.04); }
+.pg-avatar  { width:46px; height:46px; border-radius:50%; color:white; font-size:19px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 3px 10px rgba(0,0,0,.15); }
+.pg-info    { flex:1; min-width:0; }
+.pg-name    { font-size:15px; font-weight:700; color:#1f2937; margin-bottom:5px; }
+.pg-row     { display:flex; align-items:center; gap:5px; font-size:12px; margin-bottom:2px; }
+.pg-lbl     { flex-shrink:0; }
+.pg-val     { color:#374151; font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pg-badges  { display:flex; gap:5px; margin-top:6px; flex-wrap:wrap; }
+.pg-badge   { font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; }
+.pg-green   { background:#dcfce7; color:#16a34a; }
+.pg-blue    { background:#dbeafe; color:#1d4ed8; }
+.pg-orange  { background:#ffedd5; color:#c2410c; }
 
-.student-info {
-  margin-bottom: 12px;
-}
+/* Action buttons */
+.pg-actions { display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
+.pg-btn     { width:32px; height:32px; border-radius:8px; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .15s; }
+.pg-btn-edit { background:#eff6ff; color:#1976d2; }
+.pg-btn-edit:active { background:#dbeafe; }
+.pg-btn-del  { background:#fff5f5; color:#ef4444; }
+.pg-btn-del:active  { background:#fee2e2; }
 
-.student-info p {
-  margin: 8px 0;
-  font-size: 14px;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.modal-form {
-  padding: 16px;
-}
-
-.modal-form ion-item {
-  margin-bottom: 16px;
-}
-
-.modal-buttons {
-  padding: 16px;
-  display: flex;
-  gap: 8px;
-}
+/* Modal */
+ion-modal { --border-radius:20px 20px 0 0; --max-height:88vh; align-items:flex-end; }
+.mo-wrap   { background:white; border-radius:20px 20px 0 0; display:flex; flex-direction:column; max-height:88vh; }
+.mo-handle { width:36px; height:4px; border-radius:2px; background:#e5e7eb; margin:12px auto 0; }
+.mo-head   { display:flex; align-items:center; justify-content:space-between; padding:14px 18px 10px; border-bottom:1px solid #f3f4f6; }
+.mo-title  { font-size:16px; font-weight:700; color:#1f2937; }
+.mo-close  { width:30px; height:30px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; font-size:13px; color:#6b7280; }
+.mo-body   { flex:1; overflow-y:auto; padding:16px 18px; display:flex; flex-direction:column; gap:13px; }
+.mo-field  { display:flex; flex-direction:column; gap:5px; }
+.mo-row2   { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.mo-label  { font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; }
+.mo-input  { width:100%; padding:11px 13px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:14px; color:#1f2937; background:#f9fafb; outline:none; box-sizing:border-box; }
+.mo-input:focus { border-color:#1976d2; background:white; }
+.mo-btns   { display:flex; gap:10px; padding-top:4px; }
+.mo-cancel { flex:1; padding:13px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
+.mo-save   { flex:2; padding:13px; background:linear-gradient(135deg,#1565c0,#1976d2); color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
+.mo-save:disabled { opacity:.45; cursor:default; }
 </style>
