@@ -5,22 +5,50 @@
         <!-- Logo + Title -->
         <div class="brand">
           <div class="brand-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="28" height="28" rx="8" fill="rgba(255,255,255,0.2)"/>
-              <path d="M7 20L14 8L21 20" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9.5 16H18.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                width="28"
+                height="28"
+                rx="8"
+                fill="rgba(255,255,255,0.2)"
+              />
+              <path
+                d="M7 20L14 8L21 20"
+                stroke="white"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9.5 16H18.5"
+                stroke="white"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
             </svg>
           </div>
           <div class="brand-text">
             <span class="brand-name">VICHEALAI</span>
-            <span v-if="authStore.user" class="brand-user">{{ authStore.user.name }}</span>
+            <span
+              v-if="authStore.user"
+              class="brand-user"
+            >{{ authStore.user.name }}</span>
           </div>
         </div>
 
         <!-- Right side controls -->
         <div class="header-actions">
-          <div v-if="isOfflineMode" class="offline-badge">
-            <span class="offline-dot"></span>
+          <div
+            v-if="isOfflineMode"
+            class="offline-badge"
+          >
+            <span class="offline-dot" />
             <span class="offline-label">Offline</span>
           </div>
           <language-toggle />
@@ -30,7 +58,10 @@
   </ion-header>
 
   <!-- No Internet Modal -->
-  <ion-modal :is-open="showNoInternetModal" @did-dismiss="dismissNoInternetModal">
+  <ion-modal
+    :is-open="showNoInternetModal"
+    @did-dismiss="dismissNoInternetModal"
+  >
     <ion-header>
       <ion-toolbar color="danger">
         <ion-title>{{ t('messages.error') }}</ion-title>
@@ -38,30 +69,43 @@
     </ion-header>
     <ion-content class="no-internet-content">
       <div class="modal-body">
-        <div class="icon-placeholder">🌐</div>
+        <div class="icon-placeholder">
+          🌐
+        </div>
         <h2>{{ t('app.title') }}</h2>
-        <p class="subtitle">{{ t('app.subtitle') }}</p>
+        <p class="subtitle">
+          {{ t('app.subtitle') }}
+        </p>
         <p class="description">
           {{ t('app.subtitle') }}
         </p>
 
         <div class="button-group">
-          <ion-button expand="block" color="danger" @click="switchToOfflineMode" class="primary-btn">
+          <ion-button
+            expand="block"
+            color="danger"
+            class="primary-btn"
+            @click="switchToOfflineMode"
+          >
             {{ t('actions.save') }}
           </ion-button>
-          <ion-button expand="block" fill="outline" color="danger" @click="dismissNoInternetModal" class="secondary-btn">
+          <ion-button
+            expand="block"
+            fill="outline"
+            color="danger"
+            class="secondary-btn"
+            @click="dismissNoInternetModal"
+          >
             {{ t('actions.cancel') }}
           </ion-button>
         </div>
       </div>
     </ion-content>
   </ion-modal>
-
-
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import {computed, ref} from 'vue';
 import {
   IonHeader,
   IonToolbar,
@@ -69,37 +113,37 @@ import {
   IonButton,
   IonModal,
   IonContent
-} from '@ionic/vue'
-import { close } from 'ionicons/icons'
-import { useOfflineModeStore } from '@/stores/offlineMode'
-import { useAuth } from '@/stores/auth'
-import { watch } from 'vue'
-import LanguageToggle from './LanguageToggle.vue'
-import { useI18n } from '@/composables/useI18n'
+} from '@ionic/vue';
+import {close} from 'ionicons/icons';
+import {useOfflineModeStore} from '@/stores/offlineMode';
+import {useAuth} from '@/stores/auth';
+import {watch} from 'vue';
+import LanguageToggle from './LanguageToggle.vue';
+import {useI18n} from '@/composables/useI18n';
 
-const { t } = useI18n()
+const {t} = useI18n();
 
-const offlineModeStore = useOfflineModeStore()
-const authStore = useAuth()
+const offlineModeStore = useOfflineModeStore();
+const authStore = useAuth();
 
-const showNoInternetModal = ref(false)
+const showNoInternetModal = ref(false);
 
 const appTitle = computed(() => {
-  const user = authStore.user
-  return user ? `VICHEALAI - ${user.name}` : 'VICHEALAI'
-})
+  const user = authStore.user;
+  return user ? `VICHEALAI - ${user.name}` : 'VICHEALAI';
+});
 
-const isOfflineMode = computed(() => offlineModeStore.isOfflineMode)
-const statusMessage = computed(() => offlineModeStore.statusMessages[offlineModeStore.status])
+const isOfflineMode = computed(() => offlineModeStore.isOfflineMode);
+const statusMessage = computed(() => offlineModeStore.statusMessages[offlineModeStore.status]);
 
 
 function switchToOfflineMode() {
-  offlineModeStore.setOfflineMode(true)
-  showNoInternetModal.value = false
+  offlineModeStore.setOfflineMode(true);
+  showNoInternetModal.value = false;
 }
 
 function dismissNoInternetModal() {
-  showNoInternetModal.value = false
+  showNoInternetModal.value = false;
 }
 
 // Show no internet modal when internet is lost and not already in offline mode
@@ -107,10 +151,10 @@ watch(
   () => offlineModeStore.hasInternet,
   (hasInternet) => {
     if (!hasInternet && !offlineModeStore.isOfflineMode) {
-      showNoInternetModal.value = true
+      showNoInternetModal.value = true;
     }
   }
-)
+);
 </script>
 
 <style scoped>

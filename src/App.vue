@@ -1,28 +1,34 @@
 <template>
   <ion-app>
     <router-view v-slot="{ Component, route }">
-      <transition name="page" mode="out-in">
-        <component :is="Component" :key="route.path" />
+      <transition
+        name="page"
+        mode="out-in"
+      >
+        <component
+          :is="Component"
+          :key="route.path"
+        />
       </transition>
     </router-view>
   </ion-app>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { IonApp } from '@ionic/vue'
-import { useI18nStore } from '@/stores/i18n'
-import { useAuth } from '@/stores/auth'
-import { MockDataService } from '@/services/mockDataService'
+import {onMounted} from 'vue';
+import {IonApp} from '@ionic/vue';
+import {useI18nStore} from '@/stores/i18n';
+import {useAuth} from '@/stores/auth';
+import {MockDataService} from '@/services/mockDataService';
 
-const i18nStore = useI18nStore()
-const authStore = useAuth()
+const i18nStore = useI18nStore();
+const authStore = useAuth();
 
 onMounted(() => {
-  i18nStore.initializeFromStorage()
-  authStore.initializeFromStorage()
-  MockDataService.initializeLocalStorage()
-})
+  i18nStore.initializeFromStorage();
+  authStore.initializeFromStorage();
+  MockDataService.initializeLocalStorage();
+});
 </script>
 
 <style>

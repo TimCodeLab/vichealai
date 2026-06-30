@@ -35,9 +35,9 @@
         <!-- Empty -->
         <div v-if="filtered.length === 0" class="pg-empty">
           <div style="font-size:52px;margin-bottom:12px">👥</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">No students found</div>
-          <div style="font-size:13px;color:#9ca3af;margin-top:4px">Try a different search or add a new student</div>
-          <button class="pg-empty-btn" @click="openCreate">+ Add Student</button>
+          <div style="font-size:16px;font-weight:600;color:#374151">{{ t('students.notFound') }}</div>
+          <div style="font-size:13px;color:#9ca3af;margin-top:4px">{{ t('students.notFoundSub') }}</div>
+          <button class="pg-empty-btn" @click="openCreate">+ {{ t('students.add') }}</button>
         </div>
 
         <!-- Cards -->
@@ -49,15 +49,15 @@
             <div class="pg-row"><span class="pg-lbl">🏫</span><span class="pg-val">{{ className(student.classId) }}</span></div>
             <div class="pg-row" v-if="student.dateOfBirth"><span class="pg-lbl">🎂</span><span class="pg-val">{{ fmtDate(student.dateOfBirth) }}</span></div>
             <div class="pg-badges">
-              <span class="pg-badge pg-green">● Active</span>
-              <span v-if="student.gender" class="pg-badge pg-blue">{{ student.gender === 'M' || student.gender === 'male' ? '♂ Male' : '♀ Female' }}</span>
+              <span class="pg-badge pg-green">● {{ t('students.active') }}</span>
+              <span v-if="student.gender" class="pg-badge pg-blue">{{ student.gender === 'M' || student.gender === 'male' ? '♂ ' + t('students.male') : '♀ ' + t('students.female') }}</span>
             </div>
           </div>
           <div class="pg-actions">
-            <button class="pg-btn pg-btn-edit" @click="editItem(student)" title="Edit">
+            <button class="pg-btn pg-btn-edit" @click="editItem(student)" :title="t('actions.edit')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
-            <button class="pg-btn pg-btn-del" @click="deleteItem(student.id)" title="Delete">
+            <button class="pg-btn pg-btn-del" @click="deleteItem(student.id)" :title="t('actions.delete')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
           </div>
@@ -72,41 +72,41 @@
       <div class="mo-wrap">
         <div class="mo-handle"></div>
         <div class="mo-head">
-          <span class="mo-title">{{ editing ? '✏️ Edit Student' : '➕ New Student' }}</span>
+          <span class="mo-title">{{ editing ? '✏️ ' + t('students.editTitle') : '➕ ' + t('students.newTitle') }}</span>
           <button class="mo-close" @click="closeModal">✕</button>
         </div>
         <div class="mo-body">
           <div class="mo-field">
-            <label class="mo-label">Full Name *</label>
-            <input v-model="form.name" class="mo-input" placeholder="e.g. Sokha Chan" />
+            <label class="mo-label">{{ t('students.fullName') }} *</label>
+            <input v-model="form.name" class="mo-input" :placeholder="t('students.placeholderName')" />
           </div>
           <div class="mo-field">
-            <label class="mo-label">Email</label>
-            <input v-model="form.email" type="email" class="mo-input" placeholder="student@school.edu.kh" />
+            <label class="mo-label">{{ t('forms.email') }}</label>
+            <input v-model="form.email" type="email" class="mo-input" :placeholder="t('students.placeholderEmail')" />
           </div>
           <div class="mo-row2">
             <div class="mo-field">
-              <label class="mo-label">Gender</label>
+              <label class="mo-label">{{ t('students.gender') }}</label>
               <select v-model="form.gender" class="mo-input">
-                <option value="male">♂ Male</option>
-                <option value="female">♀ Female</option>
+                <option value="male">♂ {{ t('students.male') }}</option>
+                <option value="female">♀ {{ t('students.female') }}</option>
               </select>
             </div>
             <div class="mo-field">
-              <label class="mo-label">Date of Birth</label>
+              <label class="mo-label">{{ t('students.dob') }}</label>
               <input v-model="form.dateOfBirth" type="date" class="mo-input" />
             </div>
           </div>
           <div class="mo-field">
-            <label class="mo-label">Class</label>
+            <label class="mo-label">{{ t('nav.classes') }}</label>
             <select v-model="form.classId" class="mo-input">
-              <option value="">-- Select Class --</option>
+              <option value="">-- {{ t('students.selectClass') }} --</option>
               <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
           </div>
           <div class="mo-field">
-            <label class="mo-label">Address</label>
-            <input v-model="form.address" class="mo-input" placeholder="Home address" />
+            <label class="mo-label">{{ t('forms.address') }}</label>
+            <input v-model="form.address" class="mo-input" :placeholder="t('students.address')" />
           </div>
           <div class="mo-btns">
             <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
@@ -136,12 +136,12 @@ const students = ref<any[]>(LocalStorageService.get<any[]>('students', []) || []
 const classes  = ref<any[]>(LocalStorageService.get<any[]>('classes',  []) || [])
 const form = ref({ name:'', email:'', classId:'', dateOfBirth:'', gender:'male', address:'' })
 
-const filters = [
-  { val: 'all',    label: 'All'    },
-  { val: 'active', label: 'Active' },
-  { val: 'male',   label: '♂ Male' },
-  { val: 'female', label: '♀ Female' },
-]
+const filters = computed(() => [
+  { val: 'all',    label: t('actions.all') },
+  { val: 'active', label: t('students.active') },
+  { val: 'male',   label: t('filters.male') },
+  { val: 'female', label: t('filters.female') },
+])
 
 const filtered = computed(() => {
   let list = students.value

@@ -23,7 +23,7 @@
 
         <div class="header-right">
           <button class="lang-btn ripple-wrap" @click="toggleLanguage">
-            <span class="lang-flag">{{ currentFlagIcon }}</span>
+            <img class="lang-flag" :src="`https://flagcdn.com/20x15/${currentLang === 'km' ? 'kh' : 'gb'}.png`" :alt="currentLangCode" width="20" height="15" />
             <span class="lang-code">{{ currentLangCode }}</span>
           </button>
 
@@ -99,7 +99,7 @@
 
         <!-- Features Grid -->
         <div class="section-head anim-fade-up" style="animation-delay:.22s">
-          <span class="section-title">{{ t('dashboard.modules') || 'Modules' }}</span>
+          <span class="section-title">{{ t('dashboard.modules') }}</span>
         </div>
 
         <div class="features-grid stagger anim-fade-up" style="animation-delay:.25s">
@@ -166,7 +166,6 @@ const i18nStore = useI18nStore()
 const { t }     = useI18n()
 
 const currentLang     = computed(() => i18nStore.locale)
-const currentFlagIcon = computed(() => currentLang.value === 'km' ? 'KH' : 'GB')
 const currentLangCode = computed(() => currentLang.value === 'km' ? 'KM' : 'EN')
 function toggleLanguage() { i18nStore.setLocale(currentLang.value === 'km' ? 'en' : 'km') }
 
@@ -289,7 +288,7 @@ const features = computed(() => [
   cursor:pointer; transition:background .2s;
 }
 .lang-btn:active { background:rgba(255,255,255,.3); transform:scale(.95); }
-.lang-flag { font-size:12px; font-weight:800; color:rgba(255,255,255,.85); }
+.lang-flag { width:20px; height:15px; border-radius:3px; object-fit:cover; flex-shrink:0; }
 
 /* Bell */
 .icon-btn {

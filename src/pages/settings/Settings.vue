@@ -53,8 +53,8 @@
                 <span class="s-row-label">Language</span>
               </div>
               <div class="s-lang-toggle">
-                <button :class="['s-lang-btn', { active: currentLang === 'km' }]" @click="setLanguage('km')">🇰🇭 KM</button>
-                <button :class="['s-lang-btn', { active: currentLang === 'en' }]" @click="setLanguage('en')">🇬🇧 EN</button>
+                <button :class="['s-lang-btn', { active: currentLang === 'km' }]" @click="setLanguage('km')"><img src="https://flagcdn.com/20x15/kh.png" width="20" height="15" style="border-radius:2px;vertical-align:middle;margin-right:5px" /> KM</button>
+                <button :class="['s-lang-btn', { active: currentLang === 'en' }]" @click="setLanguage('en')"><img src="https://flagcdn.com/20x15/gb.png" width="20" height="15" style="border-radius:2px;vertical-align:middle;margin-right:5px" /> EN</button>
               </div>
             </div>
 

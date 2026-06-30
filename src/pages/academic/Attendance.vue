@@ -89,11 +89,11 @@
             </div>
             <div class="sum-pill sum-permission">
               <span class="sum-num">{{ countStatus('permission') }}</span>
-              <span class="sum-lbl">Permission</span>
+              <span class="sum-lbl">{{ t('attendance.permission') }}</span>
             </div>
             <div class="sum-pill sum-absent">
               <span class="sum-num">{{ countStatus('absent') }}</span>
-              <span class="sum-lbl">Absent</span>
+              <span class="sum-lbl">{{ t('attendance.absent') }}</span>
             </div>
             <div class="sum-pill sum-total">
               <span class="sum-num">{{ shownStudents.length }}</span>
@@ -116,11 +116,11 @@
               <div class="th-name">Student Name</div>
               <div class="th-check">
                 <span class="th-icon">🙏</span>
-                <span class="th-txt">Permission</span>
+                <span class="th-txt">{{ t('attendance.permission') }}</span>
               </div>
               <div class="th-check">
                 <span class="th-icon">❌</span>
-                <span class="th-txt">Absent</span>
+                <span class="th-txt">{{ t('attendance.absent') }}</span>
               </div>
               <div class="th-reason">Reason</div>
             </div>
@@ -175,7 +175,7 @@
                 <input
                   v-model="row.reason"
                   class="reason-input"
-                  :placeholder="row.status === 'present' ? '—' : 'Reason...'"
+                  :placeholder="row.status === 'present' ? '—' : t('attendance.reason')"
                   :disabled="row.status === 'present'"
                   @input="isDirty = true"
                 />
