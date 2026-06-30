@@ -18,6 +18,9 @@ import '@ionic/vue/css/text-transformation.css'
 import '@ionic/vue/css/flex-utils.css'
 import '@ionic/vue/css/display.css'
 
+/* Tailwind CSS */
+import './assets/styles/tailwind.css'
+
 /* App styles */
 import './assets/styles/main.css'
 

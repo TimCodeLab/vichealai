@@ -9,7 +9,7 @@ export interface User {
   schoolId: string
 }
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuth = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const token = ref<string | null>(localStorage.getItem('authToken'))
   const isAuthenticated = computed(() => !!token.value)

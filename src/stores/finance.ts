@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import type { Fee, StudentFee, Invoice, Payment, FinancialReport } from '@/types'
 import api from '@/services/api'
 
-export const useFinanceStore = defineStore('finance', () => {
+export const useFinance = defineStore('finance', () => {
   const fees = ref<Fee[]>([])
   const studentFees = ref<StudentFee[]>([])
   const invoices = ref<Invoice[]>([])

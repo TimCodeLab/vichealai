@@ -1,32 +1,41 @@
 <template>
-  <div class="greeting-section">
+  <div class="px-4 py-6 bg-gradient-to-b from-slate-800 to-slate-900 flex flex-col gap-4">
     <!-- Greeting Card -->
-    <div class="greeting-card">
-      <div class="greeting-content">
-        <div class="user-avatar">
-          <img :src="userAvatar" :alt="user?.name" />
+    <div class="glass-effect rounded-3xl p-6 flex items-center justify-between border-l-4 border-l-purple-500 animate-slide-in-left">
+      <div class="flex items-center gap-4 flex-1">
+        <div class="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-purple-400 animate-glow-pulse">
+          <img
+            :src="userAvatar"
+            :alt="user?.name"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-400 to-transparent opacity-20"></div>
         </div>
-        <div class="greeting-text">
-          <p class="greeting">{{ greeting }}</p>
-          <h2>{{ user?.name || 'User' }}</h2>
-          <p class="role">{{ getRoleLabel(user?.role) }}</p>
+        <div class="flex-1">
+          <p class="text-xs uppercase text-purple-300 tracking-widest font-semibold">{{ greeting }}</p>
+          <h2 class="text-2xl font-bold text-white mt-1 bg-gradient-to-r from-purple-200 to-pink-200 bg-clip-text text-transparent">
+            {{ user?.name || 'User' }}
+          </h2>
+          <p class="text-sm text-gray-300">{{ getRoleLabel(user?.role) }}</p>
         </div>
       </div>
-      <div class="greeting-icon">👋</div>
+      <div class="text-5xl animate-bounce-slow">👋</div>
     </div>
 
     <!-- Quick Actions Card -->
-    <div class="quick-actions">
-      <div class="actions-container">
-        <div
-          v-for="action in quickActions"
+    <div class="glass-effect rounded-3xl p-6 border-t-4 border-t-pink-500 animate-slide-in-right">
+      <h3 class="text-white font-bold mb-4 text-center">Quick Actions</h3>
+      <div class="grid grid-cols-3 gap-3">
+        <button
+          v-for="(action, index) in quickActions"
           :key="action.id"
-          class="action-button"
           @click="navigateTo(action.path)"
+          class="card-hover flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-purple-500/20 to-pink-500/20 hover:from-purple-500/40 hover:to-pink-500/40 rounded-2xl border border-purple-400/30 transition-all duration-300 active:scale-95 group"
+          :style="{ animationDelay: `${index * 0.1}s` }"
         >
-          <div class="action-icon">{{ action.icon }}</div>
-          <p class="action-label">{{ action.label }}</p>
-        </div>
+          <div class="text-4xl group-hover:animate-float">{{ action.icon }}</div>
+          <p class="text-xs text-white text-center font-semibold group-hover:text-purple-200 transition-colors">{{ action.label }}</p>
+        </button>
       </div>
     </div>
   </div>
@@ -35,10 +44,12 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
+import { useAuth } from '@/stores/auth'
+import { useI18n } from '@/composables/useI18n'
 
 const router = useRouter()
-const authStore = useAuthStore()
+const authStore = useAuth()
+const { t } = useI18n()
 
 const user = computed(() => authStore.user)
 
@@ -50,44 +61,44 @@ const userAvatar = computed(() => {
 
 const greeting = computed(() => {
   const hour = new Date().getHours()
-  if (hour < 12) return 'Good morning!'
-  if (hour < 18) return 'Good afternoon!'
-  return 'Good evening!'
+  if (hour < 12) return t('greeting.morning')
+  if (hour < 18) return t('greeting.afternoon')
+  return t('greeting.evening')
 })
 
 const quickActions = computed(() => {
   const role = user.value?.role
   const defaultActions = [
-    { id: 'classes', icon: '📚', label: 'Classes', path: '/classes' },
-    { id: 'students', icon: '👥', label: 'Students', path: '/students' },
-    { id: 'teachers', icon: '👨‍🏫', label: 'Teachers', path: '/teachers' }
+    { id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes' },
+    { id: 'students', icon: '👥', label: t('roles.student'), path: '/students' },
+    { id: 'teachers', icon: '👨‍🏫', label: t('roles.teacher'), path: '/teachers' }
   ]
 
   const roleActions: Record<string, any[]> = {
     teacher: [
-      { id: 'attendance', icon: '📋', label: 'Attendance', path: '/attendance' },
-      { id: 'homework', icon: '📝', label: 'Homework', path: '/homework' },
-      { id: 'classes', icon: '📚', label: 'Classes', path: '/classes' }
+      { id: 'attendance', icon: '📋', label: t('nav.attendance'), path: '/attendance' },
+      { id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework' },
+      { id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes' }
     ],
     student: [
-      { id: 'homework', icon: '📝', label: 'Homework', path: '/homework' },
-      { id: 'classes', icon: '📚', label: 'Classes', path: '/classes' },
-      { id: 'exams', icon: '📊', label: 'Exams', path: '/exams' }
+      { id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework' },
+      { id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes' },
+      { id: 'exams', icon: '📊', label: t('nav.exams'), path: '/exams' }
     ],
     parent: [
-      { id: 'students', icon: '👥', label: 'Child Progress', path: '/students' },
-      { id: 'attendance', icon: '📋', label: 'Attendance', path: '/attendance' },
-      { id: 'homework', icon: '📝', label: 'Homework', path: '/homework' }
+      { id: 'students', icon: '👥', label: t('roles.student'), path: '/students' },
+      { id: 'attendance', icon: '📋', label: t('nav.attendance'), path: '/attendance' },
+      { id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework' }
     ],
     accountant: [
-      { id: 'finance', icon: '💰', label: 'Finance', path: '/finance' },
-      { id: 'students', icon: '👥', label: 'Students', path: '/students' },
-      { id: 'reports', icon: '📊', label: 'Reports', path: '/reports' }
+      { id: 'finance', icon: '💰', label: t('nav.finance'), path: '/finance' },
+      { id: 'students', icon: '👥', label: t('roles.student'), path: '/students' },
+      { id: 'reports', icon: '📊', label: t('nav.dashboard'), path: '/reports' }
     ],
     librarian: [
-      { id: 'library', icon: '📖', label: 'Library', path: '/library' },
-      { id: 'students', icon: '👥', label: 'Students', path: '/students' },
-      { id: 'classes', icon: '📚', label: 'Classes', path: '/classes' }
+      { id: 'library', icon: '📖', label: t('nav.library'), path: '/library' },
+      { id: 'students', icon: '👥', label: t('roles.student'), path: '/students' },
+      { id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes' }
     ]
   }
 
@@ -96,16 +107,16 @@ const quickActions = computed(() => {
 
 function getRoleLabel(role?: string): string {
   const labels: Record<string, string> = {
-    super_admin: '🔐 Super Administrator',
-    school_admin: '🏫 School Administrator',
-    vice_principal: '👔 Vice Principal',
-    teacher: '👨‍🏫 Teacher',
-    student: '👨‍🎓 Student',
-    parent: '👨‍👩‍👧 Parent',
-    accountant: '💰 Accountant',
-    librarian: '📖 Librarian',
-    receptionist: '📞 Receptionist',
-    security: '🔒 Security'
+    super_admin: '🔐 ' + t('roles.super_admin'),
+    school_admin: '🏫 ' + t('roles.school_admin'),
+    vice_principal: '👔 ' + t('roles.vice_principal'),
+    teacher: '👨‍🏫 ' + t('roles.teacher'),
+    student: '👨‍🎓 ' + t('roles.student'),
+    parent: '👨‍👩‍👧 ' + t('roles.parent'),
+    accountant: '💰 ' + t('roles.accountant'),
+    librarian: '📖 ' + t('roles.librarian'),
+    receptionist: '📞 ' + t('roles.receptionist'),
+    security: '🔒 ' + t('roles.security')
   }
   return labels[role || ''] || 'User'
 }
@@ -118,147 +129,3 @@ onMounted(() => {
   authStore.initializeFromStorage()
 })
 </script>
-
-<style scoped>
-.greeting-section {
-  padding: 16px;
-  background: linear-gradient(135deg, #1a2a3a 0%, #2a3a4a 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.greeting-card {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.greeting-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.user-avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 12px;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.user-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.greeting-text {
-  flex: 1;
-}
-
-.greeting {
-  margin: 0;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.greeting-text h2 {
-  margin: 4px 0 2px 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.role {
-  margin: 0;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.greeting-icon {
-  font-size: 32px;
-  animation: wave 2s ease-in-out infinite;
-}
-
-@keyframes wave {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(20deg);
-  }
-}
-
-.quick-actions {
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.actions-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-  gap: 12px;
-}
-
-.action-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.action-button:active {
-  transform: scale(0.95);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.action-icon {
-  font-size: 28px;
-}
-
-.action-label {
-  margin: 0;
-  font-size: 12px;
-  color: #ffffff;
-  text-align: center;
-  font-weight: 500;
-}
-
-@media (max-width: 600px) {
-  .greeting-card {
-    padding: 12px;
-  }
-
-  .user-avatar {
-    width: 48px;
-    height: 48px;
-  }
-
-  .greeting-text h2 {
-    font-size: 16px;
-  }
-
-  .actions-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-</style>

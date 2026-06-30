@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import type { Announcement, Notification, Message } from '@/types'
 import api from '@/services/api'
 
-export const useCommunicationStore = defineStore('communication', () => {
+export const useCommunication = defineStore('communication', () => {
   const announcements = ref<Announcement[]>([])
   const notifications = ref<Notification[]>([])
   const messages = ref<Message[]>([])

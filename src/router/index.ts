@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import { useAuthStore } from '@/stores/authStore'
+import { useAuth } from '@/stores/auth'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -9,62 +9,67 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    component: () => import('@/pages/auth/LoginPage.vue'),
+    component: () => import('@/pages/auth/Login.vue'),
     meta: { requiresAuth: false }
   },
   {
     path: '/dashboard',
-    component: () => import('@/pages/dashboard/DashboardPage.vue'),
+    component: () => import('@/pages/dashboard/Dashboard.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/students',
-    component: () => import('@/pages/students/StudentsPage.vue'),
+    component: () => import('@/pages/academic/Students.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/teachers',
-    component: () => import('@/pages/teachers/TeachersPage.vue'),
+    component: () => import('@/pages/academic/Teachers.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/attendance',
-    component: () => import('@/pages/attendance/AttendancePage.vue'),
+    component: () => import('@/pages/academic/Attendance.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/classes',
-    component: () => import('@/pages/classes/ClassesPage.vue'),
+    component: () => import('@/pages/academic/Classes.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/homework',
-    component: () => import('@/pages/homework/HomeworkPage.vue'),
+    component: () => import('@/pages/academic/Homework.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/exams',
-    component: () => import('@/pages/exams/ExamsPage.vue'),
+    component: () => import('@/pages/academic/Exams.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/communication',
+    component: () => import('@/pages/communication/Communication.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/finance',
-    component: () => import('@/pages/finance/FinancePage.vue'),
+    component: () => import('@/pages/finance/Finance.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/library',
-    component: () => import('@/pages/library/LibraryPage.vue'),
+    component: () => import('@/pages/library/Library.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/reports',
-    component: () => import('@/pages/reports/ReportsPage.vue'),
+    component: () => import('@/pages/reports/Reports.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/settings',
-    component: () => import('@/pages/settings/SettingsPage.vue'),
+    component: () => import('@/pages/settings/Settings.vue'),
     meta: { requiresAuth: true }
   }
 ]
@@ -75,7 +80,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
+  const authStore = useAuth()
 
   // Initialize from storage on first check
   if (!authStore.user && localStorage.getItem('user')) {

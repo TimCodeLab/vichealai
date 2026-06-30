@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import type { Exam, ExamSchedule, ExamResult, ReportCard } from '@/types'
 import api from '@/services/api'
 
-export const useExamStore = defineStore('exam', () => {
+export const useExam = defineStore('exam', () => {
   const exams = ref<Exam[]>([])
   const schedules = ref<ExamSchedule[]>([])
   const results = ref<ExamResult[]>([])

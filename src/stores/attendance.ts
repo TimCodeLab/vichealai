@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import type { Attendance, AttendanceReport } from '@/types'
 import api from '@/services/api'
 
-export const useAttendanceStore = defineStore('attendance', () => {
+export const useattendance = defineStore('attendance', () => {
   const attendance = ref<Attendance[]>([])
   const reports = ref<AttendanceReport[]>([])
   const loading = ref(false)

@@ -13,7 +13,7 @@ class APIClient {
   private getOfflineStore() {
     try {
       // Lazy import to avoid circular dependencies
-      const { useOfflineModeStore } = require('@/stores/offlineModeStore')
+      const { useOfflineModeStore } = require('@/stores/offlineMode')
       return useOfflineModeStore()
     } catch {
       return null

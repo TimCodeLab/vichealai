@@ -75,12 +75,10 @@ import {
   IonButton,
   IonList,
   IonListHeader,
-  useIonToast
 } from '@ionic/vue'
-import { useAuthStore } from '@/stores/authStore'
+import { useAuth } from '@/stores/auth'
 
-const toast = useIonToast() as any
-const authStore = useAuthStore()
+const authStore = useAuth()
 
 const selectedReportType = ref('students')
 const startDate = ref('')

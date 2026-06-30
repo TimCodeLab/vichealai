@@ -1,46 +1,44 @@
-import { useIonToast } from '@ionic/vue'
+import { toastController } from '@ionic/vue'
 
 export function useAppToast() {
-  const toast = useIonToast()
-
   async function showError(message: string) {
-    await toast.present({
+    const toast = await toastController.create({
       message,
       duration: 4000,
       position: 'top',
-      color: 'danger',
-      icon: 'alert-circle'
+      color: 'danger'
     })
+    await toast.present()
   }
 
   async function showWarning(message: string) {
-    await toast.present({
+    const toast = await toastController.create({
       message,
       duration: 4000,
       position: 'top',
-      color: 'warning',
-      icon: 'warning'
+      color: 'warning'
     })
+    await toast.present()
   }
 
   async function showSuccess(message: string) {
-    await toast.present({
+    const toast = await toastController.create({
       message,
       duration: 2000,
       position: 'top',
-      color: 'success',
-      icon: 'checkmark-circle'
+      color: 'success'
     })
+    await toast.present()
   }
 
   async function showInfo(message: string) {
-    await toast.present({
+    const toast = await toastController.create({
       message,
       duration: 3000,
       position: 'top',
-      color: 'primary',
-      icon: 'information-circle'
+      color: 'primary'
     })
+    await toast.present()
   }
 
   return {

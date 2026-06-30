@@ -2,6 +2,7 @@
   <ion-header>
     <ion-toolbar>
       <ion-title class="app-title">VICHEALAI</ion-title>
+      <language-toggle />
     </ion-toolbar>
   </ion-header>
 
@@ -9,24 +10,24 @@
   <ion-modal :is-open="showNoInternetModal" @did-dismiss="dismissNoInternetModal">
     <ion-header>
       <ion-toolbar color="danger">
-        <ion-title>No Internet Connection</ion-title>
+        <ion-title>{{ t('messages.error') }}</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="no-internet-content">
       <div class="modal-body">
         <div class="icon-placeholder">🌐</div>
-        <h2>Oh, no internet.</h2>
-        <p class="subtitle">Switch to offline mode?</p>
+        <h2>{{ t('app.title') }}</h2>
+        <p class="subtitle">{{ t('app.subtitle') }}</p>
         <p class="description">
-          With offline mode you can still view classes, students, teachers, and access your settings.
+          {{ t('app.subtitle') }}
         </p>
 
         <div class="button-group">
           <ion-button expand="block" color="danger" @click="switchToOfflineMode" class="primary-btn">
-            SWITCH TO OFFLINE MODE
+            {{ t('actions.save') }}
           </ion-button>
           <ion-button expand="block" fill="outline" color="danger" @click="dismissNoInternetModal" class="secondary-btn">
-            DISMISS
+            {{ t('actions.cancel') }}
           </ion-button>
         </div>
       </div>
@@ -47,12 +48,16 @@ import {
   IonContent
 } from '@ionic/vue'
 import { close } from 'ionicons/icons'
-import { useOfflineModeStore } from '@/stores/offlineModeStore'
-import { useAuthStore } from '@/stores/authStore'
+import { useOfflineModeStore } from '@/stores/offlineMode'
+import { useAuth } from '@/stores/auth'
 import { watch } from 'vue'
+import LanguageToggle from './LanguageToggle.vue'
+import { useI18n } from '@/composables/useI18n'
+
+const { t } = useI18n()
 
 const offlineModeStore = useOfflineModeStore()
-const authStore = useAuthStore()
+const authStore = useAuth()
 
 const showNoInternetModal = ref(false)
 
@@ -86,6 +91,12 @@ watch(
 </script>
 
 <style scoped>
+:deep(ion-toolbar) {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .app-title {
   font-weight: 600;
   letter-spacing: 0.5px;
