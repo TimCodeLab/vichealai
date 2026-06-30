@@ -22,18 +22,18 @@
         </div>
 
         <div class="pg-meta">
-          <span class="pg-count">{{ filtered.length }} assignments</span>
+          <span class="pg-count">{{ filtered.length }} {{ t('homework.assignmentsLabel') }}</span>
           <div style="display:flex;gap:4px">
-            <button class="pg-filter" :class="{ active: filter==='all' }"     @click="filter='all'">All</button>
-            <button class="pg-filter" :class="{ active: filter==='pending' }" @click="filter='pending'">Pending</button>
-            <button class="pg-filter" :class="{ active: filter==='overdue' }" @click="filter='overdue'">Overdue</button>
+            <button class="pg-filter" :class="{ active: filter==='all' }"     @click="filter='all'">{{ t('homework.all') }}</button>
+            <button class="pg-filter" :class="{ active: filter==='pending' }" @click="filter='pending'">{{ t('homework.pending') }}</button>
+            <button class="pg-filter" :class="{ active: filter==='overdue' }" @click="filter='overdue'">{{ t('homework.overdue') }}</button>
           </div>
         </div>
 
         <div v-if="filtered.length === 0" class="pg-empty">
           <div style="font-size:52px;margin-bottom:12px">📝</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">No homework found</div>
-          <button class="pg-empty-btn" @click="openCreate">+ Assign Homework</button>
+          <div style="font-size:16px;font-weight:600;color:#374151">{{ t('homework.notFound') }}</div>
+          <button class="pg-empty-btn" @click="openCreate">+ {{ t('homework.add') }}</button>
         </div>
 
         <div v-for="hw in filtered" :key="hw.id" class="pg-card">
@@ -42,8 +42,8 @@
             <div class="pg-name">{{ hw.title }}</div>
             <div class="pg-row" v-if="hw.description"><span style="color:#6b7280;font-size:12px">{{ hw.description }}</span></div>
             <div class="pg-row"><span>🏫</span><span class="pg-val">{{ getClassName(hw.classId) }}</span></div>
-            <div class="pg-row"><span>📅</span><span class="pg-val" :class="{ 'overdue-text': isOverdue(hw.dueDate) }">Due: {{ formatDate(hw.dueDate) }}</span></div>
-            <span class="pg-badge" :class="isOverdue(hw.dueDate) ? 'badge-red' : 'badge-orange'">{{ isOverdue(hw.dueDate) ? '⚠ Overdue' : '⏳ Pending' }}</span>
+            <div class="pg-row"><span>📅</span><span class="pg-val" :class="{ 'overdue-text': isOverdue(hw.dueDate) }">{{ t('homework.dueLabel') }}: {{ formatDate(hw.dueDate) }}</span></div>
+            <span class="pg-badge" :class="isOverdue(hw.dueDate) ? 'badge-red' : 'badge-orange'">{{ isOverdue(hw.dueDate) ? '⚠ ' + t('homework.overdue') : '⏳ ' + t('homework.pending') }}</span>
           </div>
           <div class="pg-actions">
             <button class="pg-btn pg-btn-edit" @click="editItem(hw)">
@@ -63,20 +63,20 @@
       <div class="mo-wrap">
         <div class="mo-handle"></div>
         <div class="mo-head">
-          <span class="mo-title">{{ editing ? '✏️ Edit Homework' : '📝 New Assignment' }}</span>
+          <span class="mo-title">{{ editing ? '✏️ ' + t('homework.editTitle') : '📝 ' + t('homework.newTitle') }}</span>
           <button class="mo-close" @click="closeModal">✕</button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">Title *</label><input v-model="form.title" class="mo-input" placeholder="e.g. Math Chapter 5 Exercises" /></div>
-          <div class="mo-field"><label class="mo-label">Description</label><textarea v-model="form.description" class="mo-input mo-textarea" placeholder="Instructions for students..." rows="3"></textarea></div>
+          <div class="mo-field"><label class="mo-label">{{ t('homework.titleLabel') }} *</label><input v-model="form.title" class="mo-input" placeholder="e.g. Math Chapter 5 Exercises" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('homework.description') }}</label><textarea v-model="form.description" class="mo-input mo-textarea" placeholder="Instructions for students..." rows="3"></textarea></div>
           <div class="mo-field">
-            <label class="mo-label">Class</label>
+            <label class="mo-label">{{ t('nav.classes') }}</label>
             <select v-model="form.classId" class="mo-input">
-              <option value="">-- Select Class --</option>
+              <option value="">-- {{ t('homework.selectClass') }} --</option>
               <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
             </select>
           </div>
-          <div class="mo-field"><label class="mo-label">Due Date</label><input v-model="form.dueDate" type="date" class="mo-input" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('homework.dueDate') }}</label><input v-model="form.dueDate" type="date" class="mo-input" /></div>
           <div class="mo-btns">
             <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
             <button class="mo-save" @click="saveItem" :disabled="!form.title">{{ t('actions.save') }}</button>

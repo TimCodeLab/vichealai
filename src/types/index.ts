@@ -11,7 +11,17 @@ export interface User {
   createdAt: string
 }
 
-export type UserRole = 'super_admin' | 'school_admin' | 'vice_principal' | 'teacher' | 'student' | 'parent' | 'accountant' | 'librarian' | 'receptionist' | 'security'
+export type UserRole =
+  | 'super_admin'
+  | 'school_admin'
+  | 'vice_principal'
+  | 'teacher'
+  | 'student'
+  | 'parent'
+  | 'accountant'
+  | 'librarian'
+  | 'receptionist'
+  | 'security'
 
 // School
 export interface School {
@@ -427,7 +437,7 @@ export interface Report {
   name: string
   description: string
   generatedDate: string
-  data: any
+  data: unknown
   filters: ReportFilter
 }
 

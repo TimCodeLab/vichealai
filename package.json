@@ -36,6 +36,7 @@
     "postcss": "^8.5.16",
     "tailwindcss": "^4.3.2",
     "vite": "^4.4.0",
-    "vitest": "^0.34.0"
+    "vitest": "^0.34.0",
+    "vue-eslint-parser": "^10.4.1"
   }
 }

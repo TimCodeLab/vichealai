@@ -1,5 +1,4 @@
 import type {
-  User,
   School,
   Grade,
   Class,
@@ -13,7 +12,7 @@ import type {
   FinanceFee,
   Book,
   Announcement
-} from '@/types'
+} from '@/types';
 
 export class MockDataService {
   static generateSchools(): School[] {
@@ -42,45 +41,45 @@ export class MockDataService {
         principalId: 'user_2',
         status: 'active'
       }
-    ]
+    ];
   }
 
   static generateGrades(): Grade[] {
     return [
-      { id: 'grade_1', schoolId: 'school_1', name: 'Grade 9', level: 9 },
-      { id: 'grade_2', schoolId: 'school_1', name: 'Grade 10', level: 10 },
-      { id: 'grade_3', schoolId: 'school_1', name: 'Grade 11', level: 11 },
-      { id: 'grade_4', schoolId: 'school_1', name: 'Grade 12', level: 12 }
-    ]
+      {id: 'grade_1', schoolId: 'school_1', name: 'Grade 9', level: 9},
+      {id: 'grade_2', schoolId: 'school_1', name: 'Grade 10', level: 10},
+      {id: 'grade_3', schoolId: 'school_1', name: 'Grade 11', level: 11},
+      {id: 'grade_4', schoolId: 'school_1', name: 'Grade 12', level: 12}
+    ];
   }
 
   static generateClasses(): Class[] {
     return [
-      { id: 'class_1', schoolId: 'school_1', gradeId: 'grade_2', name: 'Class 10A', classTeacherId: 'teacher_1' },
-      { id: 'class_2', schoolId: 'school_1', gradeId: 'grade_2', name: 'Class 10B', classTeacherId: 'teacher_2' },
-      { id: 'class_3', schoolId: 'school_1', gradeId: 'grade_3', name: 'Class 11A', classTeacherId: 'teacher_3' },
-      { id: 'class_4', schoolId: 'school_1', gradeId: 'grade_4', name: 'Class 12A', classTeacherId: 'teacher_4' }
-    ]
+      {id: 'class_1', schoolId: 'school_1', gradeId: 'grade_2', name: 'Class 10A', classTeacherId: 'teacher_1'},
+      {id: 'class_2', schoolId: 'school_1', gradeId: 'grade_2', name: 'Class 10B', classTeacherId: 'teacher_2'},
+      {id: 'class_3', schoolId: 'school_1', gradeId: 'grade_3', name: 'Class 11A', classTeacherId: 'teacher_3'},
+      {id: 'class_4', schoolId: 'school_1', gradeId: 'grade_4', name: 'Class 12A', classTeacherId: 'teacher_4'}
+    ];
   }
 
   static generateSections(): Section[] {
     return [
-      { id: 'section_1', classId: 'class_1', name: 'Morning' },
-      { id: 'section_2', classId: 'class_1', name: 'Afternoon' },
-      { id: 'section_3', classId: 'class_2', name: 'Morning' },
-      { id: 'section_4', classId: 'class_2', name: 'Afternoon' }
-    ]
+      {id: 'section_1', classId: 'class_1', name: 'Morning'},
+      {id: 'section_2', classId: 'class_1', name: 'Afternoon'},
+      {id: 'section_3', classId: 'class_2', name: 'Morning'},
+      {id: 'section_4', classId: 'class_2', name: 'Afternoon'}
+    ];
   }
 
   static generateSubjects(): Subject[] {
     return [
-      { id: 'subj_1', schoolId: 'school_1', name: 'Mathematics', code: 'MATH101', description: 'General Mathematics' },
-      { id: 'subj_2', schoolId: 'school_1', name: 'English', code: 'ENG101', description: 'English Language' },
-      { id: 'subj_3', schoolId: 'school_1', name: 'Science', code: 'SCI101', description: 'General Science' },
-      { id: 'subj_4', schoolId: 'school_1', name: 'History', code: 'HIST101', description: 'World History' },
-      { id: 'subj_5', schoolId: 'school_1', name: 'Khmer', code: 'KHM101', description: 'Khmer Language' },
-      { id: 'subj_6', schoolId: 'school_1', name: 'Physical Education', code: 'PE101', description: 'Physical Education' }
-    ]
+      {id: 'subj_1', schoolId: 'school_1', name: 'Mathematics', code: 'MATH101', description: 'General Mathematics'},
+      {id: 'subj_2', schoolId: 'school_1', name: 'English', code: 'ENG101', description: 'English Language'},
+      {id: 'subj_3', schoolId: 'school_1', name: 'Science', code: 'SCI101', description: 'General Science'},
+      {id: 'subj_4', schoolId: 'school_1', name: 'History', code: 'HIST101', description: 'World History'},
+      {id: 'subj_5', schoolId: 'school_1', name: 'Khmer', code: 'KHM101', description: 'Khmer Language'},
+      {id: 'subj_6', schoolId: 'school_1', name: 'Physical Education', code: 'PE101', description: 'Physical Education'}
+    ];
   }
 
   static generateStudents(): Student[] {
@@ -137,7 +136,7 @@ export class MockDataService {
         enrollmentDate: '2022-09-01',
         status: 'active'
       }
-    ]
+    ];
   }
 
   static generateTeachers(): Teacher[] {
@@ -194,11 +193,11 @@ export class MockDataService {
         joinDate: '2017-08-20',
         status: 'active'
       }
-    ]
+    ];
   }
 
   static generateAttendance(): Attendance[] {
-    const today = new Date().toISOString().split('T')[0]
+    const today = new Date().toISOString().split('T')[0];
     return [
       {
         id: 'attend_1',
@@ -227,7 +226,7 @@ export class MockDataService {
         recordedBy: 'teacher_1',
         recordedAt: new Date().toISOString()
       }
-    ]
+    ];
   }
 
   static generateHomework(): Homework[] {
@@ -254,7 +253,7 @@ export class MockDataService {
         dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
         status: 'assigned'
       }
-    ]
+    ];
   }
 
   static generateExams(): Exam[] {
@@ -287,7 +286,7 @@ export class MockDataService {
         createdBy: 'teacher_2',
         status: 'scheduled'
       }
-    ]
+    ];
   }
 
   static generateFinanceFees(): FinanceFee[] {
@@ -325,7 +324,7 @@ export class MockDataService {
         description: 'Library access and materials',
         status: 'active'
       }
-    ]
+    ];
   }
 
   static generateBooks(): Book[] {
@@ -363,7 +362,7 @@ export class MockDataService {
         category: 'Science',
         status: 'available'
       }
-    ]
+    ];
   }
 
   static generateAnnouncements(): Announcement[] {
@@ -398,62 +397,62 @@ export class MockDataService {
         publishedAt: new Date().toISOString(),
         status: 'published'
       }
-    ]
+    ];
   }
 
   static initializeLocalStorage() {
-    const schoolsKey = 'schools'
-    const gradesKey = 'grades'
-    const classesKey = 'classes'
-    const sectionsKey = 'sections'
-    const subjectsKey = 'subjects'
-    const studentsKey = 'students'
-    const teachersKey = 'teachers'
-    const attendanceKey = 'attendance'
-    const homeworkKey = 'homework'
-    const examsKey = 'exams'
-    const feesKey = 'fees'
-    const booksKey = 'books'
-    const announcementsKey = 'announcements'
+    const schoolsKey = 'schools';
+    const gradesKey = 'grades';
+    const classesKey = 'classes';
+    const sectionsKey = 'sections';
+    const subjectsKey = 'subjects';
+    const studentsKey = 'students';
+    const teachersKey = 'teachers';
+    const attendanceKey = 'attendance';
+    const homeworkKey = 'homework';
+    const examsKey = 'exams';
+    const feesKey = 'fees';
+    const booksKey = 'books';
+    const announcementsKey = 'announcements';
 
     if (!localStorage.getItem(schoolsKey)) {
-      localStorage.setItem(schoolsKey, JSON.stringify(this.generateSchools()))
+      localStorage.setItem(schoolsKey, JSON.stringify(this.generateSchools()));
     }
     if (!localStorage.getItem(gradesKey)) {
-      localStorage.setItem(gradesKey, JSON.stringify(this.generateGrades()))
+      localStorage.setItem(gradesKey, JSON.stringify(this.generateGrades()));
     }
     if (!localStorage.getItem(classesKey)) {
-      localStorage.setItem(classesKey, JSON.stringify(this.generateClasses()))
+      localStorage.setItem(classesKey, JSON.stringify(this.generateClasses()));
     }
     if (!localStorage.getItem(sectionsKey)) {
-      localStorage.setItem(sectionsKey, JSON.stringify(this.generateSections()))
+      localStorage.setItem(sectionsKey, JSON.stringify(this.generateSections()));
     }
     if (!localStorage.getItem(subjectsKey)) {
-      localStorage.setItem(subjectsKey, JSON.stringify(this.generateSubjects()))
+      localStorage.setItem(subjectsKey, JSON.stringify(this.generateSubjects()));
     }
     if (!localStorage.getItem(studentsKey)) {
-      localStorage.setItem(studentsKey, JSON.stringify(this.generateStudents()))
+      localStorage.setItem(studentsKey, JSON.stringify(this.generateStudents()));
     }
     if (!localStorage.getItem(teachersKey)) {
-      localStorage.setItem(teachersKey, JSON.stringify(this.generateTeachers()))
+      localStorage.setItem(teachersKey, JSON.stringify(this.generateTeachers()));
     }
     if (!localStorage.getItem(attendanceKey)) {
-      localStorage.setItem(attendanceKey, JSON.stringify(this.generateAttendance()))
+      localStorage.setItem(attendanceKey, JSON.stringify(this.generateAttendance()));
     }
     if (!localStorage.getItem(homeworkKey)) {
-      localStorage.setItem(homeworkKey, JSON.stringify(this.generateHomework()))
+      localStorage.setItem(homeworkKey, JSON.stringify(this.generateHomework()));
     }
     if (!localStorage.getItem(examsKey)) {
-      localStorage.setItem(examsKey, JSON.stringify(this.generateExams()))
+      localStorage.setItem(examsKey, JSON.stringify(this.generateExams()));
     }
     if (!localStorage.getItem(feesKey)) {
-      localStorage.setItem(feesKey, JSON.stringify(this.generateFinanceFees()))
+      localStorage.setItem(feesKey, JSON.stringify(this.generateFinanceFees()));
     }
     if (!localStorage.getItem(booksKey)) {
-      localStorage.setItem(booksKey, JSON.stringify(this.generateBooks()))
+      localStorage.setItem(booksKey, JSON.stringify(this.generateBooks()));
     }
     if (!localStorage.getItem(announcementsKey)) {
-      localStorage.setItem(announcementsKey, JSON.stringify(this.generateAnnouncements()))
+      localStorage.setItem(announcementsKey, JSON.stringify(this.generateAnnouncements()));
     }
   }
 }

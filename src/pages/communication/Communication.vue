@@ -6,12 +6,12 @@
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <div class="pg-title-wrap">
-          <span class="pg-title">Notifications</span>
+          <span class="pg-title">{{ t('communication.title') }}</span>
           <span v-if="unreadCount > 0" class="pg-unread-dot">{{ unreadCount }}</span>
         </div>
         <button class="pg-new" @click="openCreate">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
-          New
+          {{ t('communication.new') }}
         </button>
       </div>
     </ion-header>
@@ -29,16 +29,16 @@
 
         <!-- Mark all read -->
         <div class="meta-row" v-if="filtered.length > 0">
-          <span class="meta-count">{{ filtered.length }} notifications</span>
-          <button v-if="unreadCount > 0" class="mark-read-btn" @click="markAllRead">✓ Mark all read</button>
+          <span class="meta-count">{{ filtered.length }} {{ t('communication.notifications') }}</span>
+          <button v-if="unreadCount > 0" class="mark-read-btn" @click="markAllRead">✓ {{ t('communication.markRead') }}</button>
         </div>
 
         <!-- Empty -->
         <div v-if="filtered.length === 0" class="pg-empty">
           <div style="font-size:56px;margin-bottom:12px">🔔</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">No notifications</div>
-          <div style="font-size:13px;color:#9ca3af;margin-top:4px">You're all caught up!</div>
-          <button class="pg-empty-btn" @click="openCreate">+ Create Announcement</button>
+          <div style="font-size:16px;font-weight:600;color:#374151">{{ t('communication.noNotifTitle') }}</div>
+          <div style="font-size:13px;color:#9ca3af;margin-top:4px">{{ t('communication.noNotif') }}</div>
+          <button class="pg-empty-btn" @click="openCreate">+ {{ t('communication.createAnnounce') }}</button>
         </div>
 
         <!-- Notification cards -->
@@ -61,7 +61,7 @@
             <div class="notif-content">{{ item.content }}</div>
             <div class="notif-footer">
               <span class="notif-badge" :style="{ background: typeColorLight(item.type), color: typeColorDark(item.type) }">
-                {{ item.type || 'general' }}
+                {{ typeLabel(item.type || 'general') }}
               </span>
               <span v-if="item.targetRole" class="notif-badge notif-badge-gray">{{ item.targetRole }}</span>
             </div>
@@ -80,37 +80,37 @@
       <div class="mo-wrap">
         <div class="mo-handle"></div>
         <div class="mo-head">
-          <span class="mo-title">📢 New Announcement</span>
+          <span class="mo-title">📢 {{ t('communication.newTitle') }}</span>
           <button class="mo-close" @click="closeModal">✕</button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">Title *</label><input v-model="form.title" class="mo-input" placeholder="Announcement title" /></div>
-          <div class="mo-field"><label class="mo-label">Content *</label><textarea v-model="form.content" class="mo-input mo-textarea" placeholder="Write your message here..." rows="4"></textarea></div>
+          <div class="mo-field"><label class="mo-label">{{ t('communication.titleLabel') }} *</label><input v-model="form.title" class="mo-input" placeholder="Announcement title" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('communication.contentLabel') }} *</label><textarea v-model="form.content" class="mo-input mo-textarea" placeholder="Write your message here..." rows="4"></textarea></div>
           <div class="mo-row2">
             <div class="mo-field">
-              <label class="mo-label">Type</label>
+              <label class="mo-label">{{ t('communication.typeLabel') }}</label>
               <select v-model="form.type" class="mo-input">
-                <option value="general">📢 General</option>
-                <option value="academic">📚 Academic</option>
-                <option value="event">🎉 Event</option>
-                <option value="urgent">🚨 Urgent</option>
-                <option value="holiday">🏖 Holiday</option>
-                <option value="exam">📝 Exam</option>
+                <option value="general">📢 {{ t('communication.typeGeneral') }}</option>
+                <option value="academic">📚 {{ t('communication.typeAcademic') }}</option>
+                <option value="event">🎉 {{ t('communication.typeEvent') }}</option>
+                <option value="urgent">🚨 {{ t('communication.typeUrgent') }}</option>
+                <option value="holiday">🏖 {{ t('communication.typeHoliday') }}</option>
+                <option value="exam">📝 {{ t('communication.typeExam') }}</option>
               </select>
             </div>
             <div class="mo-field">
-              <label class="mo-label">Target</label>
+              <label class="mo-label">{{ t('communication.targetLabel') }}</label>
               <select v-model="form.targetRole" class="mo-input">
-                <option value="all">Everyone</option>
-                <option value="students">Students</option>
-                <option value="teachers">Teachers</option>
-                <option value="parents">Parents</option>
+                <option value="all">{{ t('communication.everyone') }}</option>
+                <option value="students">{{ t('communication.targetStudents') }}</option>
+                <option value="teachers">{{ t('communication.targetTeachers') }}</option>
+                <option value="parents">{{ t('communication.targetParents') }}</option>
               </select>
             </div>
           </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">Cancel</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.title || !form.content">📢 Publish</button>
+            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
+            <button class="mo-save" @click="saveItem" :disabled="!form.title || !form.content">📢 {{ t('communication.publish') }}</button>
           </div>
         </div>
       </div>
@@ -139,12 +139,12 @@ const showModal = ref(false)
 const toastMsg  = ref('')
 const form = ref({ title:'', content:'', type:'general', targetRole:'all' })
 
-const tabs = [
-  { val:'all',      icon:'🔔', label:'All'     },
-  { val:'urgent',   icon:'🚨', label:'Urgent'  },
-  { val:'academic', icon:'📚', label:'Academic' },
-  { val:'event',    icon:'🎉', label:'Event'   },
-]
+const tabs = computed(() => [
+  { val:'all',      icon:'🔔', label: t('communication.all')      },
+  { val:'urgent',   icon:'🚨', label: t('communication.urgent')   },
+  { val:'academic', icon:'📚', label: t('communication.academic') },
+  { val:'event',    icon:'🎉', label: t('communication.event')    },
+])
 
 const filtered = computed(() => {
   if (activeTab.value === 'all') return announcements.value
@@ -155,6 +155,17 @@ const unreadCount = computed(() => announcements.value.filter(a => !a.read).leng
 
 function tabCount(val: string) { return announcements.value.filter(a=>a.type===val).length }
 
+function typeLabel(type: string) {
+  const map: Record<string, string> = {
+    general:  t('communication.typeGeneral'),
+    academic: t('communication.typeAcademic'),
+    event:    t('communication.typeEvent'),
+    urgent:   t('communication.typeUrgent'),
+    holiday:  t('communication.typeHoliday'),
+    exam:     t('communication.typeExam'),
+  }
+  return map[type] || type
+}
 function typeIcon(type: string) {
   return ({general:'📢',academic:'📚',event:'🎉',urgent:'🚨',holiday:'🏖',exam:'📝'} as any)[type] || '🔔'
 }
@@ -191,7 +202,7 @@ function markRead(item: any) {
 function markAllRead() {
   announcements.value.forEach(a => a.read = true)
   LocalStorageService.set('announcements', announcements.value)
-  showToast('All notifications marked as read')
+  showToast(t('communication.allMarkedRead'))
 }
 
 function deleteItem(id: string) {
@@ -214,7 +225,7 @@ function saveItem() {
   })
   LocalStorageService.set('announcements', announcements.value)
   closeModal()
-  showToast('📢 Announcement published!')
+  showToast('📢 ' + t('communication.published'))
 }
 
 function showToast(msg: string) { toastMsg.value=msg; setTimeout(()=>toastMsg.value='',2500) }

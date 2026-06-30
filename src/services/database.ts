@@ -1,57 +1,62 @@
-import { Capacitor } from '@capacitor/core'
+import {Capacitor} from '@capacitor/core';
 
-let SQLiteConnection: any = null
-let CapacitorSQLite: any = null
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let SQLiteConnection: any = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let CapacitorSQLite: any = null;
 
 // Only import SQLite for mobile platforms
 if (Capacitor.isNativePlatform()) {
   try {
-    const sqlite = require('@capacitor-community/sqlite')
-    CapacitorSQLite = sqlite.CapacitorSQLite
-    SQLiteConnection = sqlite.SQLiteConnection
-  } catch (e) {
-    console.warn('SQLite not available')
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const sqlite = require('@capacitor-community/sqlite');
+    CapacitorSQLite = sqlite.CapacitorSQLite;
+    SQLiteConnection = sqlite.SQLiteConnection;
+  } catch {
+    console.warn('SQLite not available');
   }
 }
 
 class Database {
-  private db: any = null
-  private sqlite: any = null
-  private isNative = Capacitor.isNativePlatform()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private db: any = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private sqlite: any = null;
+  private isNative = Capacitor.isNativePlatform();
 
   async initialize(dbName: string = 'vichealai.db') {
     try {
       // Skip SQLite for web platform, use localStorage fallback
       if (!this.isNative) {
-        console.log('Web platform detected - using localStorage fallback for offline data')
-        return
+        console.log('Web platform detected - using localStorage fallback for offline data');
+        return;
       }
 
       // For native platforms, use SQLite
       if (!SQLiteConnection || !CapacitorSQLite) {
-        console.warn('SQLite not available on this platform')
-        return
+        console.warn('SQLite not available on this platform');
+        return;
       }
 
-      this.sqlite = new SQLiteConnection(CapacitorSQLite)
+      this.sqlite = new SQLiteConnection(CapacitorSQLite);
       this.db = await this.sqlite.createConnection(
         dbName,
         false,
         'no-encryption',
         1,
         false
-      )
-      await this.db.open()
-      await this.createTables()
-      console.log('SQLite database initialized')
+      );
+      await this.db.open();
+      await this.createTables();
+      console.log('SQLite database initialized');
     } catch (error) {
-      console.warn('Database initialization warning:', error)
+      console.warn('Database initialization warning:', error);
       // Don't throw - allow app to continue with localStorage fallback
     }
   }
 
   private async createTables() {
-    if (!this.db) return
+    if (!this.db) return;
 
     const tables = [
       `CREATE TABLE IF NOT EXISTS schools (
@@ -134,34 +139,34 @@ class Database {
         FOREIGN KEY (school_id) REFERENCES schools(id),
         FOREIGN KEY (author_id) REFERENCES users(id)
       )`
-    ]
+    ];
 
     for (const sql of tables) {
-      await this.db.execute(sql)
+      await this.db.execute(sql);
     }
   }
 
-  async execute(sql: string, values?: any[]) {
+  async execute(sql: string, values?: unknown[]) {
     if (!this.db) {
-      console.warn('Database not available - using localStorage fallback')
-      return { changes: { changes: 0 } }
+      console.warn('Database not available - using localStorage fallback');
+      return {changes: {changes: 0}};
     }
-    return await this.db.run(sql, values)
+    return await this.db.run(sql, values);
   }
 
-  async query(sql: string, values?: any[]) {
+  async query(sql: string, values?: unknown[]) {
     if (!this.db) {
-      console.warn('Database not available - using localStorage fallback')
-      return { values: [] }
+      console.warn('Database not available - using localStorage fallback');
+      return {values: []};
     }
-    return await this.db.query(sql, values)
+    return await this.db.query(sql, values);
   }
 
   async close() {
     if (this.db) {
-      await this.db.close()
+      await this.db.close();
     }
   }
 }
 
-export default new Database()
+export default new Database();

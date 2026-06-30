@@ -1,4 +1,4 @@
-import { toastController } from '@ionic/vue'
+import {toastController} from '@ionic/vue';
 
 export function useAppToast() {
   async function showError(message: string) {
@@ -7,8 +7,8 @@ export function useAppToast() {
       duration: 4000,
       position: 'top',
       color: 'danger'
-    })
-    await toast.present()
+    });
+    await toast.present();
   }
 
   async function showWarning(message: string) {
@@ -17,8 +17,8 @@ export function useAppToast() {
       duration: 4000,
       position: 'top',
       color: 'warning'
-    })
-    await toast.present()
+    });
+    await toast.present();
   }
 
   async function showSuccess(message: string) {
@@ -27,8 +27,8 @@ export function useAppToast() {
       duration: 2000,
       position: 'top',
       color: 'success'
-    })
-    await toast.present()
+    });
+    await toast.present();
   }
 
   async function showInfo(message: string) {
@@ -37,8 +37,8 @@ export function useAppToast() {
       duration: 3000,
       position: 'top',
       color: 'primary'
-    })
-    await toast.present()
+    });
+    await toast.present();
   }
 
   return {
@@ -46,5 +46,5 @@ export function useAppToast() {
     showWarning,
     showSuccess,
     showInfo
-  }
+  };
 }

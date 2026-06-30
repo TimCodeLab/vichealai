@@ -25,8 +25,8 @@
 
         <div v-if="filtered.length === 0" class="pg-empty">
           <div style="font-size:52px;margin-bottom:12px">📊</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">No exams found</div>
-          <button class="pg-empty-btn" @click="openCreate">+ Schedule Exam</button>
+          <div style="font-size:16px;font-weight:600;color:#374151">{{ t('exams.notFound') }}</div>
+          <button class="pg-empty-btn" @click="openCreate">+ {{ t('exams.add') }}</button>
         </div>
 
         <div v-for="exam in filtered" :key="exam.id" class="pg-card">
@@ -35,8 +35,8 @@
             <div class="pg-name">{{ exam.name }}</div>
             <div class="pg-row" v-if="exam.description"><span style="color:#6b7280;font-size:12px">{{ exam.description }}</span></div>
             <div class="pg-row"><span>📅</span><span class="pg-val">{{ formatDate(exam.startDate) }} – {{ formatDate(exam.endDate) }}</span></div>
-            <div class="pg-row" v-if="exam.totalMarks"><span>🎯</span><span class="pg-val">Total: {{ exam.totalMarks }} marks</span></div>
-            <span class="pg-badge" :class="examBadge(exam.status)">{{ exam.status || 'scheduled' }}</span>
+            <div class="pg-row" v-if="exam.totalMarks"><span>🎯</span><span class="pg-val">{{ t('exams.totalMarks') }}: {{ exam.totalMarks }} {{ t('exams.marks') }}</span></div>
+            <span class="pg-badge" :class="examBadge(exam.status)">{{ t('exams.' + (exam.status || 'scheduled')) }}</span>
           </div>
           <div class="pg-actions">
             <button class="pg-btn pg-btn-edit" @click="editItem(exam)">
@@ -56,24 +56,24 @@
       <div class="mo-wrap">
         <div class="mo-handle"></div>
         <div class="mo-head">
-          <span class="mo-title">{{ editing ? '✏️ Edit Exam' : '📊 New Exam' }}</span>
+          <span class="mo-title">{{ editing ? '✏️ ' + t('exams.editTitle') : '📊 ' + t('exams.newTitle') }}</span>
           <button class="mo-close" @click="closeModal">✕</button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">Exam Name *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Mid-Term Examination" /></div>
-          <div class="mo-field"><label class="mo-label">Description</label><input v-model="form.description" class="mo-input" placeholder="Optional" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('exams.examName') }} *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Mid-Term Examination" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('forms.description') }}</label><input v-model="form.description" class="mo-input" placeholder="Optional" /></div>
           <div class="mo-row2">
-            <div class="mo-field"><label class="mo-label">Start Date</label><input v-model="form.startDate" type="date" class="mo-input" /></div>
-            <div class="mo-field"><label class="mo-label">End Date</label><input v-model="form.endDate" type="date" class="mo-input" /></div>
+            <div class="mo-field"><label class="mo-label">{{ t('exams.startDate') }}</label><input v-model="form.startDate" type="date" class="mo-input" /></div>
+            <div class="mo-field"><label class="mo-label">{{ t('exams.endDate') }}</label><input v-model="form.endDate" type="date" class="mo-input" /></div>
           </div>
           <div class="mo-row2">
-            <div class="mo-field"><label class="mo-label">Total Marks</label><input v-model="form.totalMarks" type="number" class="mo-input" placeholder="100" /></div>
+            <div class="mo-field"><label class="mo-label">{{ t('exams.totalMarks') }}</label><input v-model="form.totalMarks" type="number" class="mo-input" placeholder="100" /></div>
             <div class="mo-field">
-              <label class="mo-label">Status</label>
+              <label class="mo-label">{{ t('exams.status') }}</label>
               <select v-model="form.status" class="mo-input">
-                <option value="scheduled">Scheduled</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
+                <option value="scheduled">{{ t('exams.scheduled') }}</option>
+                <option value="ongoing">{{ t('exams.ongoing') }}</option>
+                <option value="completed">{{ t('exams.completed') }}</option>
               </select>
             </div>
           </div>
@@ -102,12 +102,12 @@ const activeTab = ref('all')
 const items = ref<any[]>(LocalStorageService.get<any[]>('exams', []) || [])
 const form = ref({ name:'', description:'', startDate:'', endDate:'', totalMarks:'', status:'scheduled' })
 
-const tabs = [
-  { value:'all',       label:'All'       },
-  { value:'scheduled', label:'Scheduled' },
-  { value:'ongoing',   label:'Ongoing'   },
-  { value:'completed', label:'Completed' },
-]
+const tabs = computed(() => [
+  { value:'all',       label: t('exams.all')       },
+  { value:'scheduled', label: t('exams.scheduled') },
+  { value:'ongoing',   label: t('exams.ongoing')   },
+  { value:'completed', label: t('exams.completed') },
+])
 
 const filtered = computed(() => activeTab.value==='all' ? items.value : items.value.filter(e=>e.status===activeTab.value))
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString() : '—' }

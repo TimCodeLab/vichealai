@@ -238,7 +238,6 @@ const features = computed(() => [
   { id:'timetable',     icon:'📚',  label: t('nav.timetable'),     path:'/classes',       color: featureColors.timetable     },
   { id:'homework',      icon:'📝',  label: t('nav.homework'),      path:'/homework',      color: featureColors.homework      },
   { id:'exams',         icon:'📊',  label: t('nav.exams'),         path:'/exams',         color: featureColors.exams         },
-  { id:'marks',         icon:'📈',  label: t('nav.marks'),         path:'/exams',         color: featureColors.marks         },
   { id:'finance',       icon:'💳',  label: t('nav.finance'),       path:'/finance',       color: featureColors.finance       },
   { id:'announcements', icon:'📢',  label: t('nav.announcements'), path:'/communication', color: featureColors.announcements },
   { id:'reports',       icon:'📄',  label: t('nav.reports'),       path:'/reports',       color: featureColors.reports       },

@@ -8,7 +8,7 @@
         <span class="pg-title">{{ t('nav.finance') }}</span>
         <button class="pg-new" @click="openCreate">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
-          Add Fee
+          {{ t('finance.addFee') }}
         </button>
       </div>
     </ion-header>
@@ -20,7 +20,7 @@
         <div class="hero-card">
           <div class="hero-top">
             <div>
-              <div class="hero-lbl">Total Fees</div>
+              <div class="hero-lbl">{{ t('finance.totalFees') }}</div>
               <div class="hero-amount">${{ totalFees.toFixed(2) }}</div>
             </div>
             <div class="hero-icon">💰</div>
@@ -29,22 +29,22 @@
             <div class="hero-progress-bar">
               <div class="hero-progress-fill" :style="{ width: collectedPct + '%' }"></div>
             </div>
-            <div class="hero-progress-lbl">{{ collectedPct }}% collected</div>
+            <div class="hero-progress-lbl">{{ collectedPct }}% {{ t('finance.collectedPct') }}</div>
           </div>
           <div class="hero-stats">
             <div class="hero-stat">
               <div class="hero-stat-val hero-green">${{ totalCollected.toFixed(2) }}</div>
-              <div class="hero-stat-lbl">Collected</div>
+              <div class="hero-stat-lbl">{{ t('finance.collected') }}</div>
             </div>
             <div class="hero-divider"></div>
             <div class="hero-stat">
               <div class="hero-stat-val hero-orange">${{ totalOutstanding.toFixed(2) }}</div>
-              <div class="hero-stat-lbl">Outstanding</div>
+              <div class="hero-stat-lbl">{{ t('finance.outstanding') }}</div>
             </div>
             <div class="hero-divider"></div>
             <div class="hero-stat">
               <div class="hero-stat-val hero-blue">{{ fees.length }}</div>
-              <div class="hero-stat-lbl">Fee Types</div>
+              <div class="hero-stat-lbl">{{ t('finance.feeTypes') }}</div>
             </div>
           </div>
         </div>
@@ -59,15 +59,15 @@
         <!-- Fee list -->
         <div v-if="activeTab === 'fees'">
           <div class="sec-head">
-            <span class="sec-title">Fee Structure</span>
-            <span class="sec-count">{{ fees.length }} items</span>
+            <span class="sec-title">{{ t('finance.feeStructure') }}</span>
+            <span class="sec-count">{{ fees.length }} {{ t('finance.items') }}</span>
           </div>
 
           <div v-if="fees.length === 0" class="pg-empty">
             <div style="font-size:52px;margin-bottom:12px">💸</div>
-            <div style="font-size:16px;font-weight:600;color:#374151">No fees added yet</div>
-            <div style="font-size:13px;color:#9ca3af;margin-top:4px">Set up your fee structure</div>
-            <button class="pg-empty-btn" @click="openCreate">+ Add Fee</button>
+            <div style="font-size:16px;font-weight:600;color:#374151">{{ t('finance.noFees') }}</div>
+            <div style="font-size:13px;color:#9ca3af;margin-top:4px">{{ t('finance.noFeesSub') }}</div>
+            <button class="pg-empty-btn" @click="openCreate">+ {{ t('finance.addFee') }}</button>
           </div>
 
           <div v-for="fee in fees" :key="fee.id" class="fee-card">
@@ -79,7 +79,7 @@
               <div class="fee-desc" v-if="fee.description">{{ fee.description }}</div>
               <div class="fee-meta-row">
                 <span class="fee-meta">📅 {{ fmtDate(fee.dueDate) }}</span>
-                <span class="fee-badge" :class="statusBadge(fee.status)">{{ fee.status || 'pending' }}</span>
+                <span class="fee-badge" :class="statusBadge(fee.status)">{{ t('finance.' + (fee.status || 'pending')) }}</span>
               </div>
             </div>
             <div class="fee-right">
@@ -99,14 +99,14 @@
         <!-- Payments tab -->
         <div v-if="activeTab === 'payments'">
           <div class="sec-head">
-            <span class="sec-title">Payment Records</span>
-            <button class="sec-add" @click="openPayment">+ Record</button>
+            <span class="sec-title">{{ t('finance.paymentRecords') }}</span>
+            <button class="sec-add" @click="openPayment">+ {{ t('finance.record') }}</button>
           </div>
 
           <div v-if="payments.length === 0" class="pg-empty">
             <div style="font-size:52px;margin-bottom:12px">🧾</div>
-            <div style="font-size:16px;font-weight:600;color:#374151">No payments recorded</div>
-            <button class="pg-empty-btn" @click="openPayment">+ Record Payment</button>
+            <div style="font-size:16px;font-weight:600;color:#374151">{{ t('finance.noPayments') }}</div>
+            <button class="pg-empty-btn" @click="openPayment">+ {{ t('finance.recordPay') }}</button>
           </div>
 
           <div v-for="pay in payments" :key="pay.id" class="pay-card">
@@ -114,48 +114,48 @@
               {{ (pay.studentName||'?').charAt(0).toUpperCase() }}
             </div>
             <div class="pay-info">
-              <div class="pay-name">{{ pay.studentName || 'Unknown Student' }}</div>
+              <div class="pay-name">{{ pay.studentName || t('finance.unknownStudent') }}</div>
               <div class="pay-fee">{{ pay.feeName }}</div>
-              <div class="pay-date">{{ fmtDate(pay.date) }} · {{ pay.method || 'Cash' }}</div>
+              <div class="pay-date">{{ fmtDate(pay.date) }} · {{ pay.method || t('finance.cash') }}</div>
             </div>
             <div class="pay-right">
               <div class="pay-amount">+${{ pay.amount }}</div>
-              <span class="pay-badge">Paid</span>
+              <span class="pay-badge">{{ t('finance.paid') }}</span>
             </div>
           </div>
         </div>
 
         <!-- Analytics tab -->
         <div v-if="activeTab === 'analytics'">
-          <div class="sec-head"><span class="sec-title">Collection Summary</span></div>
+          <div class="sec-head"><span class="sec-title">{{ t('finance.collectionSummary') }}</span></div>
 
           <div class="analytics-grid">
             <div class="an-card an-blue">
               <div class="an-icon">📊</div>
               <div class="an-val">${{ totalFees.toFixed(0) }}</div>
-              <div class="an-lbl">Total Billed</div>
+              <div class="an-lbl">{{ t('finance.totalBilled') }}</div>
             </div>
             <div class="an-card an-green">
               <div class="an-icon">✅</div>
               <div class="an-val">${{ totalCollected.toFixed(0) }}</div>
-              <div class="an-lbl">Collected</div>
+              <div class="an-lbl">{{ t('finance.collected') }}</div>
             </div>
             <div class="an-card an-orange">
               <div class="an-icon">⏳</div>
               <div class="an-val">${{ totalOutstanding.toFixed(0) }}</div>
-              <div class="an-lbl">Outstanding</div>
+              <div class="an-lbl">{{ t('finance.outstanding') }}</div>
             </div>
             <div class="an-card an-purple">
               <div class="an-icon">💳</div>
               <div class="an-val">{{ payments.length }}</div>
-              <div class="an-lbl">Transactions</div>
+              <div class="an-lbl">{{ t('finance.transactions') }}</div>
             </div>
           </div>
 
           <!-- Per-fee breakdown -->
           <div class="breakdown-card">
-            <div class="breakdown-title">Fee Breakdown</div>
-            <div v-if="fees.length === 0" style="text-align:center;padding:24px;color:#9ca3af;font-size:13px">No fees to analyze</div>
+            <div class="breakdown-title">{{ t('finance.feeBreakdown') }}</div>
+            <div v-if="fees.length === 0" style="text-align:center;padding:24px;color:#9ca3af;font-size:13px">{{ t('finance.noFeeAnalyze') }}</div>
             <div v-for="fee in fees" :key="fee.id" class="breakdown-row">
               <div class="breakdown-left">
                 <span class="breakdown-name">{{ fee.name }}</span>
@@ -179,19 +179,19 @@
       <div class="mo-wrap">
         <div class="mo-handle"></div>
         <div class="mo-head">
-          <span class="mo-title">{{ editing ? '✏️ Edit Fee' : '➕ New Fee' }}</span>
+          <span class="mo-title">{{ editing ? '✏️ ' + t('finance.editFee') : '➕ ' + t('finance.newFee') }}</span>
           <button class="mo-close" @click="closeModal">✕</button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">Fee Name *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Tuition Fee" /></div>
-          <div class="mo-field"><label class="mo-label">Description</label><input v-model="form.description" class="mo-input" placeholder="Optional description" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('finance.feeName') }} *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Tuition Fee" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('forms.description') }}</label><input v-model="form.description" class="mo-input" placeholder="Optional" /></div>
           <div class="mo-row2">
             <div class="mo-field">
-              <label class="mo-label">Amount</label>
+              <label class="mo-label">{{ t('finance.amount') }}</label>
               <input v-model="form.amount" type="number" class="mo-input" placeholder="0.00" />
             </div>
             <div class="mo-field">
-              <label class="mo-label">Currency</label>
+              <label class="mo-label">{{ t('finance.currency') }}</label>
               <select v-model="form.currency" class="mo-input">
                 <option value="$">USD ($)</option>
                 <option value="KHR">KHR (រ)</option>
@@ -200,29 +200,29 @@
           </div>
           <div class="mo-row2">
             <div class="mo-field">
-              <label class="mo-label">Category</label>
+              <label class="mo-label">{{ t('finance.category') }}</label>
               <select v-model="form.category" class="mo-input">
-                <option value="tuition">Tuition</option>
-                <option value="activity">Activity</option>
-                <option value="library">Library</option>
-                <option value="transport">Transport</option>
-                <option value="exam">Exam</option>
-                <option value="other">Other</option>
+                <option value="tuition">{{ t('finance.tuition') }}</option>
+                <option value="activity">{{ t('finance.activity') }}</option>
+                <option value="library">{{ t('finance.library') }}</option>
+                <option value="transport">{{ t('finance.transport') }}</option>
+                <option value="exam">{{ t('finance.exam') }}</option>
+                <option value="other">{{ t('finance.other') }}</option>
               </select>
             </div>
             <div class="mo-field">
-              <label class="mo-label">Status</label>
+              <label class="mo-label">{{ t('finance.status') }}</label>
               <select v-model="form.status" class="mo-input">
-                <option value="active">Active</option>
-                <option value="pending">Pending</option>
-                <option value="inactive">Inactive</option>
+                <option value="active">{{ t('finance.active') }}</option>
+                <option value="pending">{{ t('finance.pending') }}</option>
+                <option value="inactive">{{ t('finance.inactive') }}</option>
               </select>
             </div>
           </div>
-          <div class="mo-field"><label class="mo-label">Due Date</label><input v-model="form.dueDate" type="date" class="mo-input" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('finance.dueDate') }}</label><input v-model="form.dueDate" type="date" class="mo-input" /></div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">Cancel</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.name">Save Fee</button>
+            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
+            <button class="mo-save" @click="saveItem" :disabled="!form.name">{{ t('finance.saveFee') }}</button>
           </div>
         </div>
       </div>
@@ -233,40 +233,40 @@
       <div class="mo-wrap">
         <div class="mo-handle"></div>
         <div class="mo-head">
-          <span class="mo-title">🧾 Record Payment</span>
+          <span class="mo-title">🧾 {{ t('finance.recordPay') }}</span>
           <button class="mo-close" @click="showPayModal = false">✕</button>
         </div>
         <div class="mo-body">
           <div class="mo-field">
-            <label class="mo-label">Student Name</label>
+            <label class="mo-label">{{ t('finance.studentName') }}</label>
             <input v-model="payForm.studentName" class="mo-input" placeholder="Student name" />
           </div>
           <div class="mo-field">
-            <label class="mo-label">Fee</label>
+            <label class="mo-label">{{ t('finance.fees') }}</label>
             <select v-model="payForm.feeName" class="mo-input">
-              <option value="">-- Select Fee --</option>
+              <option value="">-- {{ t('finance.selectFee') }} --</option>
               <option v-for="f in fees" :key="f.id" :value="f.name">{{ f.name }}</option>
             </select>
           </div>
           <div class="mo-row2">
             <div class="mo-field">
-              <label class="mo-label">Amount</label>
+              <label class="mo-label">{{ t('finance.amount') }}</label>
               <input v-model="payForm.amount" type="number" class="mo-input" placeholder="0.00" />
             </div>
             <div class="mo-field">
-              <label class="mo-label">Method</label>
+              <label class="mo-label">{{ t('finance.method') }}</label>
               <select v-model="payForm.method" class="mo-input">
-                <option value="Cash">Cash</option>
-                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cash">{{ t('finance.cash') }}</option>
+                <option value="Bank Transfer">{{ t('finance.bankTransfer') }}</option>
                 <option value="ABA">ABA</option>
                 <option value="Wing">Wing</option>
               </select>
             </div>
           </div>
-          <div class="mo-field"><label class="mo-label">Date</label><input v-model="payForm.date" type="date" class="mo-input" /></div>
+          <div class="mo-field"><label class="mo-label">{{ t('forms.date') }}</label><input v-model="payForm.date" type="date" class="mo-input" /></div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="showPayModal = false">Cancel</button>
-            <button class="mo-save" @click="savePayment" :disabled="!payForm.studentName || !payForm.amount">Save Payment</button>
+            <button class="mo-cancel" @click="showPayModal = false">{{ t('actions.cancel') }}</button>
+            <button class="mo-save" @click="savePayment" :disabled="!payForm.studentName || !payForm.amount">{{ t('finance.savePayment') }}</button>
           </div>
         </div>
       </div>
@@ -300,11 +300,11 @@ const toastMsg   = ref('')
 const form = ref({ name:'', description:'', amount:0, currency:'$', category:'tuition', status:'active', dueDate:'' })
 const payForm = ref({ studentName:'', feeName:'', amount:0, method:'Cash', date:new Date().toISOString().split('T')[0] })
 
-const tabs = [
-  { val:'fees',      icon:'💳', label:'Fees'     },
-  { val:'payments',  icon:'🧾', label:'Payments' },
-  { val:'analytics', icon:'📊', label:'Analytics' },
-]
+const tabs = computed(() => [
+  { val:'fees',      icon:'💳', label: t('finance.fees')      },
+  { val:'payments',  icon:'🧾', label: t('finance.payments')  },
+  { val:'analytics', icon:'📊', label: t('finance.analytics') },
+])
 
 const totalFees        = computed(() => fees.value.reduce((s,f)=>s+Number(f.amount||0),0))
 const totalCollected   = computed(() => payments.value.reduce((s,p)=>s+Number(p.amount||0),0))
@@ -330,22 +330,23 @@ function closeModal()     { showModal.value=false; editing.value=null }
 function openPayment()    { payForm.value={studentName:'',feeName:'',amount:0,method:'Cash',date:new Date().toISOString().split('T')[0]}; showPayModal.value=true }
 
 function deleteItem(id: string) {
-  if (confirm('Delete this fee?')) { fees.value=fees.value.filter(f=>f.id!==id); LocalStorageService.set('fees',fees.value); showToast('Fee deleted') }
+  if (confirm(t('finance.deleteFee'))) { fees.value=fees.value.filter(f=>f.id!==id); LocalStorageService.set('fees',fees.value); showToast(t('messages.deletedSuccessfully')) }
 }
 function saveItem() {
   if (!form.value.name) return
+  const wasEditing = editing.value
   if (editing.value) {
     const i=fees.value.findIndex(f=>f.id===editing.value.id)
     if (i!==-1) fees.value[i]={...fees.value[i],...form.value}
   } else {
     fees.value.push({id:`fee_${Date.now()}`,schoolId:'school_1',...form.value})
   }
-  LocalStorageService.set('fees',fees.value); closeModal(); showToast(editing.value?'Fee updated':'Fee added')
+  LocalStorageService.set('fees',fees.value); closeModal(); showToast(wasEditing ? t('messages.updatedSuccessfully') : t('messages.createdSuccessfully'))
 }
 function savePayment() {
   if (!payForm.value.studentName || !payForm.value.amount) return
   payments.value.unshift({id:`pay_${Date.now()}`,...payForm.value})
-  LocalStorageService.set('payments',payments.value); showPayModal.value=false; showToast('✅ Payment recorded!')
+  LocalStorageService.set('payments',payments.value); showPayModal.value=false; showToast(t('finance.paymentRecorded'))
 }
 </script>
 

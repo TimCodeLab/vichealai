@@ -18,50 +18,50 @@
           <div class="stat-card" style="background:linear-gradient(135deg,#1565c0,#1976d2)">
             <div class="stat-icon">👥</div>
             <div class="stat-num">{{ stats.students }}</div>
-            <div class="stat-lbl">Students</div>
+            <div class="stat-lbl">{{ t('nav.students') }}</div>
           </div>
           <div class="stat-card" style="background:linear-gradient(135deg,#2e7d32,#43a047)">
             <div class="stat-icon">👩‍🏫</div>
             <div class="stat-num">{{ stats.teachers }}</div>
-            <div class="stat-lbl">Teachers</div>
+            <div class="stat-lbl">{{ t('nav.teachers') }}</div>
           </div>
           <div class="stat-card" style="background:linear-gradient(135deg,#e65100,#f57c00)">
             <div class="stat-icon">🏫</div>
             <div class="stat-num">{{ stats.classes }}</div>
-            <div class="stat-lbl">Classes</div>
+            <div class="stat-lbl">{{ t('nav.classes') }}</div>
           </div>
           <div class="stat-card" style="background:linear-gradient(135deg,#6a1b9a,#8e24aa)">
             <div class="stat-icon">📊</div>
             <div class="stat-num">{{ stats.exams }}</div>
-            <div class="stat-lbl">Exams</div>
+            <div class="stat-lbl">{{ t('nav.exams') }}</div>
           </div>
         </div>
 
         <!-- Attendance overview -->
         <div class="section-card">
           <div class="section-head">
-            <span class="section-title">📋 Attendance Overview</span>
-            <span class="section-sub">Today</span>
+            <span class="section-title">📋 {{ t('reports.attOverview') }}</span>
+            <span class="section-sub">{{ t('reports.today') }}</span>
           </div>
           <div class="att-bar-wrap">
             <div class="att-row">
-              <span class="att-lbl att-present">Present</span>
+              <span class="att-lbl att-present">{{ t('attendance.present') }}</span>
               <div class="att-track"><div class="att-fill" style="background:#22c55e" :style="{ width: attPct('present') + '%' }"></div></div>
               <span class="att-val">{{ countAtt('present') }}</span>
             </div>
             <div class="att-row">
-              <span class="att-lbl att-absent">Absent</span>
+              <span class="att-lbl att-absent">{{ t('attendance.absent') }}</span>
               <div class="att-track"><div class="att-fill" style="background:#ef4444" :style="{ width: attPct('absent') + '%' }"></div></div>
               <span class="att-val">{{ countAtt('absent') }}</span>
             </div>
             <div class="att-row">
-              <span class="att-lbl att-late">Late</span>
+              <span class="att-lbl att-late">{{ t('attendance.late') }}</span>
               <div class="att-track"><div class="att-fill" style="background:#f97316" :style="{ width: attPct('late') + '%' }"></div></div>
               <span class="att-val">{{ countAtt('late') }}</span>
             </div>
           </div>
           <div class="att-pct-row">
-            <span class="att-pct-label">Attendance Rate</span>
+            <span class="att-pct-label">{{ t('reports.attRate') }}</span>
             <span class="att-pct-value">{{ attendanceRate }}%</span>
           </div>
         </div>
@@ -69,11 +69,11 @@
         <!-- Generate Report -->
         <div class="section-card">
           <div class="section-head">
-            <span class="section-title">📄 Generate Report</span>
+            <span class="section-title">📄 {{ t('reports.generate') }}</span>
           </div>
 
           <div class="gen-field">
-            <label class="gen-label">Report Type</label>
+            <label class="gen-label">{{ t('reports.type') }}</label>
             <div class="type-grid">
               <button v-for="rt in reportTypes" :key="rt.value" class="type-btn" :class="{ active: selectedType === rt.value }" @click="selectedType = rt.value">
                 <span class="type-icon">{{ rt.icon }}</span>
@@ -84,17 +84,17 @@
 
           <div class="gen-row2">
             <div class="gen-field">
-              <label class="gen-label">From</label>
+              <label class="gen-label">{{ t('reports.dateFrom') }}</label>
               <input v-model="dateFrom" type="date" class="gen-input" />
             </div>
             <div class="gen-field">
-              <label class="gen-label">To</label>
+              <label class="gen-label">{{ t('reports.dateTo') }}</label>
               <input v-model="dateTo" type="date" class="gen-input" />
             </div>
           </div>
 
           <div class="gen-field">
-            <label class="gen-label">Format</label>
+            <label class="gen-label">{{ t('reports.format') }}</label>
             <div style="display:flex;gap:6px">
               <button v-for="f in formats" :key="f" class="fmt-btn" :class="{ active: selectedFormat === f }" @click="selectedFormat = f">{{ f }}</button>
             </div>
@@ -103,17 +103,17 @@
           <button class="gen-btn" @click="generateReport" :disabled="generating">
             <span v-if="!generating">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:-3px;margin-right:6px"><path d="M12 2v10m0 0l-3-3m3 3l3-3M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Generate {{ selectedType ? reportTypes.find(r=>r.value===selectedType)?.label : '' }} Report
+              {{ t('reports.generateBtn') }} {{ selectedType ? reportTypes.find(r=>r.value===selectedType)?.label : '' }}
             </span>
-            <span v-else>⏳ Generating...</span>
+            <span v-else>⏳ {{ t('reports.generating') }}</span>
           </button>
         </div>
 
         <!-- Recent Reports -->
         <div class="section-card" v-if="recentReports.length > 0">
           <div class="section-head">
-            <span class="section-title">🗂 Recent Reports</span>
-            <button class="clear-btn" @click="clearReports">Clear all</button>
+            <span class="section-title">🗂 {{ t('reports.recent') }}</span>
+            <button class="clear-btn" @click="clearReports">{{ t('reports.clearAll') }}</button>
           </div>
           <div v-for="rep in recentReports" :key="rep.id" class="report-row">
             <div class="report-icon" :style="{ background: typeColor(rep.type) }">{{ typeIcon(rep.type) }}</div>
@@ -134,8 +134,8 @@
 
         <div class="section-card" v-else style="text-align:center;padding:32px 20px">
           <div style="font-size:40px;margin-bottom:8px">📂</div>
-          <div style="font-size:14px;font-weight:600;color:#374151">No reports yet</div>
-          <div style="font-size:12px;color:#9ca3af;margin-top:4px">Generate your first report above</div>
+          <div style="font-size:14px;font-weight:600;color:#374151">{{ t('reports.noReports') }}</div>
+          <div style="font-size:12px;color:#9ca3af;margin-top:4px">{{ t('reports.noReportsSub') }}</div>
         </div>
 
         <div style="height:28px"></div>
@@ -192,14 +192,14 @@ const dateTo         = ref(todayStr)
 const generating     = ref(false)
 const toastMsg       = ref('')
 
-const reportTypes = [
-  { value:'students',   label:'Students',   icon:'👥' },
-  { value:'teachers',   label:'Teachers',   icon:'👩‍🏫' },
-  { value:'attendance', label:'Attendance', icon:'📋' },
-  { value:'exams',      label:'Exams',      icon:'📊' },
-  { value:'homework',   label:'Homework',   icon:'📝' },
-  { value:'finance',    label:'Finance',    icon:'💰' },
-]
+const reportTypes = computed(() => [
+  { value:'students',   label: t('nav.students'),   icon:'👥' },
+  { value:'teachers',   label: t('nav.teachers'),   icon:'👩‍🏫' },
+  { value:'attendance', label: t('nav.attendance'), icon:'📋' },
+  { value:'exams',      label: t('nav.exams'),      icon:'📊' },
+  { value:'homework',   label: t('nav.homework'),   icon:'📝' },
+  { value:'finance',    label: t('nav.finance'),    icon:'💰' },
+])
 const formats = ['PDF', 'Excel', 'CSV']
 
 function typeColor(type: string) {
@@ -214,7 +214,7 @@ function showToast(msg: string) { toastMsg.value=msg; setTimeout(()=>toastMsg.va
 function generateReport() {
   generating.value = true
   setTimeout(() => {
-    const typeName = reportTypes.find(r=>r.value===selectedType.value)?.label || selectedType.value
+    const typeName = reportTypes.value.find(r=>r.value===selectedType.value)?.label || selectedType.value
     const rep = {
       id:     `rep_${Date.now()}`,
       type:   selectedType.value,
@@ -237,7 +237,7 @@ function deleteReport(id: string) {
   LocalStorageService.set('reports', recentReports.value)
 }
 function clearReports() {
-  if (confirm('Clear all recent reports?')) { recentReports.value=[]; LocalStorageService.set('reports',[]) }
+  if (confirm(t('reports.clearConfirm'))) { recentReports.value=[]; LocalStorageService.set('reports',[]) }
 }
 </script>
 
