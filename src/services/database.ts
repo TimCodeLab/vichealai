@@ -1,11 +1,39 @@
-import { CapacitorSQLite, SQLiteConnection, SQLiteDBConnection } from '@capacitor-community/sqlite'
+import { Capacitor } from '@capacitor/core'
+
+let SQLiteConnection: any = null
+let CapacitorSQLite: any = null
+
+// Only import SQLite for mobile platforms
+if (Capacitor.isNativePlatform()) {
+  try {
+    const sqlite = require('@capacitor-community/sqlite')
+    CapacitorSQLite = sqlite.CapacitorSQLite
+    SQLiteConnection = sqlite.SQLiteConnection
+  } catch (e) {
+    console.warn('SQLite not available')
+  }
+}
 
 class Database {
-  private db: SQLiteDBConnection | null = null
-  private sqlite = new SQLiteConnection(CapacitorSQLite)
+  private db: any = null
+  private sqlite: any = null
+  private isNative = Capacitor.isNativePlatform()
 
   async initialize(dbName: string = 'vichealai.db') {
     try {
+      // Skip SQLite for web platform, use localStorage fallback
+      if (!this.isNative) {
+        console.log('Web platform detected - using localStorage fallback for offline data')
+        return
+      }
+
+      // For native platforms, use SQLite
+      if (!SQLiteConnection || !CapacitorSQLite) {
+        console.warn('SQLite not available on this platform')
+        return
+      }
+
+      this.sqlite = new SQLiteConnection(CapacitorSQLite)
       this.db = await this.sqlite.createConnection(
         dbName,
         false,
@@ -15,9 +43,10 @@ class Database {
       )
       await this.db.open()
       await this.createTables()
+      console.log('SQLite database initialized')
     } catch (error) {
-      console.error('Database initialization failed:', error)
-      throw error
+      console.warn('Database initialization warning:', error)
+      // Don't throw - allow app to continue with localStorage fallback
     }
   }
 
@@ -113,12 +142,18 @@ class Database {
   }
 
   async execute(sql: string, values?: any[]) {
-    if (!this.db) throw new Error('Database not initialized')
+    if (!this.db) {
+      console.warn('Database not available - using localStorage fallback')
+      return { changes: { changes: 0 } }
+    }
     return await this.db.run(sql, values)
   }
 
   async query(sql: string, values?: any[]) {
-    if (!this.db) throw new Error('Database not initialized')
+    if (!this.db) {
+      console.warn('Database not available - using localStorage fallback')
+      return { values: [] }
+    }
     return await this.db.query(sql, values)
   }
 

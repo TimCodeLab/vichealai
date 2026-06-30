@@ -1,11 +1,15 @@
 <template>
   <ion-app>
-    <ion-router-outlet />
+    <app-header />
+    <user-greeting-card />
+    <router-view />
   </ion-app>
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet } from '@ionic/vue'
+import { IonApp } from '@ionic/vue'
+import AppHeader from '@/components/layouts/AppHeader.vue'
+import UserGreetingCard from '@/components/layouts/UserGreetingCard.vue'
 </script>
 
 <style scoped>

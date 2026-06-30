@@ -3,6 +3,8 @@ import { IonicVue } from '@ionic/vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import offlineService from './services/offlineService'
+import syncService from './services/syncService'
 
 /* Ionic CSS Framework */
 import '@ionic/vue/css/core.css'
@@ -26,6 +28,30 @@ app.use(pinia)
 app.use(IonicVue)
 app.use(router)
 
-router.isReady().then(() => {
+// Initialize offline and sync services
+async function initializeServices() {
+  try {
+    // Initialize offline service (graceful fallback for web)
+    await offlineService.initialize()
+
+    // Initialize sync service (will sync when app comes online)
+    const user = localStorage.getItem('user')
+    if (user) {
+      try {
+        const userData = JSON.parse(user)
+        await syncService.initializeSync(userData.schoolId)
+      } catch (syncError) {
+        console.warn('Sync service initialization warning:', syncError)
+        // Continue - sync will work when user is authenticated
+      }
+    }
+  } catch (error) {
+    console.warn('Service initialization warning (non-fatal):', error)
+    // App continues to work - services degrade gracefully
+  }
+}
+
+router.isReady().then(async () => {
+  await initializeServices()
   app.mount('#app')
 })

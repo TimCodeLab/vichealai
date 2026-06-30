@@ -10,7 +10,26 @@ class APIClient {
     }
   }
 
+  private getOfflineStore() {
+    try {
+      // Lazy import to avoid circular dependencies
+      const { useOfflineModeStore } = require('@/stores/offlineModeStore')
+      return useOfflineModeStore()
+    } catch {
+      return null
+    }
+  }
+
   async request(method: string, endpoint: string, data?: any) {
+    // Check if user is in offline mode
+    const offlineStore = this.getOfflineStore()
+    if (offlineStore && !offlineStore.canUseAPI) {
+      const errorMessage = offlineStore.getErrorMessage(endpoint.split('/').pop() || 'Action')
+      const error = new Error(errorMessage)
+      ;(error as any).isOfflineError = true
+      throw error
+    }
+
     const url = `${API_URL}${endpoint}`
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT)
@@ -30,8 +49,18 @@ class APIClient {
       }
 
       return await response.json()
-    } catch (error) {
+    } catch (error: any) {
       clearTimeout(timeoutId)
+
+      // Add offline context to error
+      if (error.name === 'AbortError') {
+        error.message = 'Request timeout - check your connection'
+        error.isNetworkError = true
+      } else if (error.message.includes('Failed to fetch') || error.message.includes('ERR_CONNECTION')) {
+        error.isNetworkError = true
+        error.message = 'Unable to reach server - check your internet connection'
+      }
+
       throw error
     }
   }

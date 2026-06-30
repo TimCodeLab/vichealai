@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -8,7 +9,8 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    component: () => import('@/pages/auth/LoginPage.vue')
+    component: () => import('@/pages/auth/LoginPage.vue'),
+    meta: { requiresAuth: false }
   },
   {
     path: '/dashboard',
@@ -73,11 +75,20 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  // Initialize from storage on first check
+  if (!authStore.user && localStorage.getItem('user')) {
+    authStore.initializeFromStorage()
+  }
+
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthenticated = !!localStorage.getItem('authToken')
+  const isAuthenticated = authStore.isAuthenticated
 
   if (requiresAuth && !isAuthenticated) {
     next('/login')
+  } else if (to.path === '/login' && isAuthenticated) {
+    next('/dashboard')
   } else {
     next()
   }
