@@ -83,37 +83,35 @@ const quickActions = computed(() => {
   const defaultActions = [
     {id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes'},
     {id: 'students', icon: '👥', label: t('roles.student'), path: '/students'},
-    {id: 'teachers', icon: '👨‍🏫', label: t('roles.teacher'), path: '/teachers'}
+    {id: 'teachers', icon: '👨‍🏫', label: t('roles.teacher'), path: '/teachers'},
   ];
-
   const roleActions: Record<string, any[]> = {
     teacher: [
       {id: 'attendance', icon: '📋', label: t('nav.attendance'), path: '/attendance'},
       {id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework'},
-      {id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes'}
+      {id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes'},
     ],
     student: [
       {id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework'},
       {id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes'},
-      {id: 'exams', icon: '📊', label: t('nav.exams'), path: '/exams'}
+      {id: 'exams', icon: '📊', label: t('nav.exams'), path: '/exams'},
     ],
     parent: [
       {id: 'students', icon: '👥', label: t('roles.student'), path: '/students'},
       {id: 'attendance', icon: '📋', label: t('nav.attendance'), path: '/attendance'},
-      {id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework'}
+      {id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework'},
     ],
     accountant: [
       {id: 'finance', icon: '💰', label: t('nav.finance'), path: '/finance'},
       {id: 'students', icon: '👥', label: t('roles.student'), path: '/students'},
-      {id: 'reports', icon: '📊', label: t('nav.dashboard'), path: '/reports'}
+      {id: 'reports', icon: '📊', label: t('nav.reports'), path: '/reports'},
     ],
     librarian: [
       {id: 'library', icon: '📖', label: t('nav.library'), path: '/library'},
       {id: 'students', icon: '👥', label: t('roles.student'), path: '/students'},
-      {id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes'}
-    ]
+      {id: 'classes', icon: '📚', label: t('nav.academics'), path: '/classes'},
+    ],
   };
-
   return roleActions[role || ''] || defaultActions;
 });
 
@@ -128,7 +126,7 @@ function getRoleLabel(role?: string): string {
     accountant: '💰 ' + t('roles.accountant'),
     librarian: '📖 ' + t('roles.librarian'),
     receptionist: '📞 ' + t('roles.receptionist'),
-    security: '🔒 ' + t('roles.security')
+    security: '🔒 ' + t('roles.security'),
   };
   return labels[role || ''] || 'User';
 }

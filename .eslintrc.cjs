@@ -25,7 +25,11 @@ module.exports = {
   rules: {
     quotes: ['error', 'single', { avoidEscape: true }],
     'no-multi-spaces': ['error'],
-    'keyword-spacing': ['error', { before: true, after: true }],
+    'key-spacing': ['error', {
+      beforeColon: false,
+      afterColon: true,
+      mode: 'strict'
+    }],
     'space-in-parens': ['error', 'never'],
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'never'],
