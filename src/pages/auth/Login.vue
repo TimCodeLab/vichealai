@@ -1,42 +1,71 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" style="--background:transparent">
-
+    <ion-content
+      :fullscreen="true"
+      style="--background:transparent"
+    >
       <!-- Animated background -->
       <div class="bg-wrap">
-        <div class="bg-orb orb1"></div>
-        <div class="bg-orb orb2"></div>
-        <div class="bg-orb orb3"></div>
+        <div class="bg-orb orb1" />
+        <div class="bg-orb orb2" />
+        <div class="bg-orb orb3" />
       </div>
 
       <div class="page-center">
         <!-- Logo -->
         <div class="logo-wrap">
-          <div class="logo-icon">🎓</div>
-          <h1 class="logo-title">techocam</h1>
-          <p class="logo-sub">School Management System</p>
+          <div class="logo-icon">
+            🎓
+          </div>
+          <h1 class="logo-title">
+            techocam
+          </h1>
+          <p class="logo-sub">
+            School Management System
+          </p>
         </div>
 
         <!-- Login Card -->
         <div class="card">
-
           <div class="card-head">
-            <div class="card-head-icon">👋</div>
+            <div class="card-head-icon">
+              👋
+            </div>
             <div>
-              <div class="card-head-title">Welcome back</div>
-              <div class="card-head-sub">Sign in to your account</div>
+              <div class="card-head-title">
+                Welcome back
+              </div>
+              <div class="card-head-sub">
+                Sign in to your account
+              </div>
             </div>
           </div>
 
           <form @submit.prevent="handleLogin">
-
             <!-- Email / Login Code -->
             <div class="field">
               <label class="field-label">Email or Login Code</label>
               <div class="field-wrap">
-                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                  class="field-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <polyline
+                    points="22,6 12,13 2,6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
                 <input
                   v-model="email"
@@ -44,7 +73,7 @@
                   placeholder="you@school.com or TCH-2024-001"
                   autocomplete="username"
                   required
-                />
+                >
               </div>
             </div>
 
@@ -52,9 +81,28 @@
             <div class="field">
               <label class="field-label">Password</label>
               <div class="field-wrap">
-                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2"/>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <svg
+                  class="field-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M7 11V7a5 5 0 0 1 10 0v4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
                 </svg>
                 <input
                   v-model="password"
@@ -63,15 +111,55 @@
                   placeholder="••••••••"
                   autocomplete="current-password"
                   required
-                />
-                <button type="button" class="field-eye" @click="showPassword = !showPassword" tabindex="-1">
-                  <svg v-if="!showPassword" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/>
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                >
+                <button
+                  type="button"
+                  class="field-eye"
+                  tabindex="-1"
+                  @click="showPassword = !showPassword"
+                >
+                  <svg
+                    v-if="!showPassword"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    />
                   </svg>
-                  <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <svg
+                    v-else
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  >
+                    <path
+                      d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1="1"
+                      y1="1"
+                      x2="23"
+                      y2="23"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -81,9 +169,27 @@
             <div class="field">
               <label class="field-label">School Code</label>
               <div class="field-wrap">
-                <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  <polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg
+                  class="field-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <polyline
+                    points="9 22 9 12 15 12 15 22"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
                 </svg>
                 <input
                   v-model="schoolCode"
@@ -91,29 +197,92 @@
                   placeholder="e.g. SCHOOL001"
                   autocomplete="off"
                   required
-                />
+                >
               </div>
             </div>
 
             <!-- Error -->
-            <div v-if="error" class="error-box">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <div
+              v-if="error"
+              class="error-box"
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="2"
+              /><line
+                x1="12"
+                y1="8"
+                x2="12"
+                y2="12"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><line
+                x1="12"
+                y1="16"
+                x2="12.01"
+                y2="16"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              /></svg>
               {{ error }}
             </div>
 
             <!-- Submit -->
-            <button type="submit" class="btn-login" :disabled="loading">
+            <button
+              type="submit"
+              class="btn-login"
+              :disabled="loading"
+            >
               <span class="btn-login-inner">
-                <span v-if="loading" class="spinner"></span>
-                <svg v-else width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" stroke="white" stroke-width="2.2" stroke-linecap="round"/><polyline points="10 17 15 12 10 7" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="15" y1="12" x2="3" y2="12" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+                <span
+                  v-if="loading"
+                  class="spinner"
+                />
+                <svg
+                  v-else
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                ><path
+                  d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"
+                  stroke="white"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                /><polyline
+                  points="10 17 15 12 10 7"
+                  stroke="white"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                /><line
+                  x1="15"
+                  y1="12"
+                  x2="3"
+                  y2="12"
+                  stroke="white"
+                  stroke-width="2.2"
+                  stroke-linecap="round"
+                /></svg>
                 {{ loading ? 'Signing in...' : 'Sign In' }}
               </span>
             </button>
-
           </form>
 
           <!-- Divider -->
-          <div class="divider"><span>Quick test login</span></div>
+          <div class="divider">
+            <span>Quick test login</span>
+          </div>
 
           <!-- Test account chips -->
           <div class="chips">
@@ -130,91 +299,98 @@
             </button>
           </div>
 
-          <div class="hint">Password: <strong>test123</strong> · Code: <strong>SCHOOL001</strong></div>
+          <div class="hint">
+            Password: <strong>test123</strong> · Code: <strong>SCHOOL001</strong>
+          </div>
 
-          <button class="register-link" type="button" @click="router.push('/school-register')">
+          <button
+            class="register-link"
+            type="button"
+            @click="router.push('/school-register')"
+          >
             🏫 Register your school
           </button>
         </div>
 
-        <div class="footer-note">© 2026 techocam · School Management System</div>
+        <div class="footer-note">
+          © 2026 techocam · School Management System
+        </div>
       </div>
-
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { IonPage, IonContent } from '@ionic/vue'
-import { useAuth } from '@/stores/auth'
+import {ref} from 'vue';
+import {useRouter} from 'vue-router';
+import {IonPage, IonContent} from '@ionic/vue';
+import {useAuth} from '@/stores/auth';
 
-const router = useRouter()
-const authStore = useAuth()
+const router = useRouter();
+const authStore = useAuth();
 
-const email        = ref('')
-const password     = ref('')
-const schoolCode   = ref('')
-const loading      = ref(false)
-const error        = ref('')
-const showPassword = ref(false)
+const email = ref('');
+const password = ref('');
+const schoolCode = ref('');
+const loading = ref(false);
+const error = ref('');
+const showPassword = ref(false);
 
 const testAccounts = [
-  { email: 'superadmin@school.com', label: 'Super Admin', icon: '👑', color: '#7c3aed', role: 'super_admin',  name: 'Super Administrator' },
-  { email: 'admin@school.com',      label: 'Admin',       icon: '🏫', color: '#1565c0', role: 'school_admin', name: 'School Administrator' },
-  { email: 'teacher@school.com',    label: 'Teacher',     icon: '👩‍🏫', color: '#2e7d32', role: 'teacher',      name: 'John Teacher' },
-  { email: 'student@school.com',    label: 'Student',     icon: '🎒', color: '#e65100', role: 'student',      name: 'Jane Student' },
-  { email: 'parent@school.com',     label: 'Parent',      icon: '👨‍👩‍👧', color: '#c62828', role: 'parent',       name: 'Parent User' },
-  { email: 'accountant@school.com', label: 'Accountant',  icon: '💰', color: '#00838f', role: 'school_admin', name: 'Finance Accountant' },
-]
+  {email: 'superadmin@school.com', label: 'Super Admin', icon: '👑', color: '#7c3aed', role: 'super_admin', name: 'Super Administrator'},
+  {email: 'admin@school.com', label: 'Admin', icon: '🏫', color: '#1565c0', role: 'school_admin', name: 'School Administrator'},
+  {email: 'teacher@school.com', label: 'Teacher', icon: '👩‍🏫', color: '#2e7d32', role: 'teacher', name: 'John Teacher'},
+  {email: 'student@school.com', label: 'Student', icon: '🎒', color: '#e65100', role: 'student', name: 'Jane Student'},
+  {email: 'parent@school.com', label: 'Parent', icon: '👨‍👩‍👧', color: '#c62828', role: 'parent', name: 'Parent User'},
+  {email: 'accountant@school.com', label: 'Accountant', icon: '💰', color: '#00838f', role: 'school_admin', name: 'Finance Accountant'},
+];
 
 const roleMap: Record<string, string> = {
-  superadmin:   'super_admin',
-  admin:        'school_admin',
-  vp:           'school_admin',
-  teacher:      'teacher',
-  student:      'student',
-  parent:       'parent',
-  accountant:   'school_admin',
-  librarian:    'school_admin',
+  superadmin: 'super_admin',
+  admin: 'school_admin',
+  vp: 'school_admin',
+  teacher: 'teacher',
+  student: 'student',
+  parent: 'parent',
+  accountant: 'school_admin',
+  librarian: 'school_admin',
   receptionist: 'school_admin',
-  security:     'school_admin',
-}
+  security: 'school_admin',
+};
 
 const validEmails = [
   'superadmin@school.com', 'admin@school.com', 'vp@school.com',
   'teacher@school.com', 'student@school.com', 'parent@school.com',
   'accountant@school.com', 'librarian@school.com', 'receptionist@school.com', 'security@school.com',
-]
+];
 
 function fillCredentials(acc: string) {
-  email.value      = acc
-  password.value   = 'test123'
-  schoolCode.value = 'SCHOOL001'
-  error.value      = ''
+  email.value = acc;
+  password.value = 'test123';
+  schoolCode.value = 'SCHOOL001';
+  error.value = '';
 }
 
 async function handleLogin() {
-  error.value = ''
+  error.value = '';
   if (!email.value || !password.value || !schoolCode.value) {
-    error.value = 'Please fill in all fields.'
-    return
+    error.value = 'Please fill in all fields.';
+    return;
   }
 
-  loading.value = true
-  await new Promise(r => setTimeout(r, 800))
+  loading.value = true;
+  await new Promise(r => setTimeout(r, 800));
 
   try {
     // ── Check stored users (teachers/students with login codes) ──
-    const storedTeachers: any[] = JSON.parse(localStorage.getItem('teachers') || '[]')
-    const storedStudents: any[] = JSON.parse(localStorage.getItem('students') || '[]')
-    const allStoredUsers = [...storedTeachers, ...storedStudents]
+    const storedTeachers: any[] = JSON.parse(localStorage.getItem('teachers') || '[]');
+    const storedStudents: any[] = JSON.parse(localStorage.getItem('students') || '[]');
+    const allStoredUsers = [...storedTeachers, ...storedStudents];
 
     const storedMatch = allStoredUsers.find(u =>
       (u.loginCode && u.loginCode === email.value) ||
       (u.email && u.email === email.value)
-    )
+    );
 
     if (storedMatch && storedMatch.loginPassword === password.value) {
       authStore.setAuth(`token_${Date.now()}`, {
@@ -225,21 +401,21 @@ async function handleLogin() {
         role: storedMatch.role || (storedMatch.loginCode?.startsWith('TCH') ? 'teacher' : 'student'),
         loginCode: storedMatch.loginCode,
         mustChangePassword: storedMatch.mustChangePassword ?? false,
-      })
+      });
       if (storedMatch.mustChangePassword) {
-        router.push('/change-password')
+        router.push('/change-password');
       } else {
-        router.push('/dashboard')
+        router.push('/dashboard');
       }
-      return
+      return;
     }
 
     // ── Check hardcoded test accounts ──
     if (validEmails.includes(email.value) && password.value === 'test123' && schoolCode.value === 'SCHOOL001') {
-      const prefix  = email.value.split('@')[0].toLowerCase()
-      const matched = testAccounts.find(a => a.email === email.value)
-      const role    = matched?.role || roleMap[prefix] || 'school_admin'
-      const name    = matched?.name || prefix.charAt(0).toUpperCase() + prefix.slice(1) + ' User'
+      const prefix = email.value.split('@')[0].toLowerCase();
+      const matched = testAccounts.find(a => a.email === email.value);
+      const role = matched?.role || roleMap[prefix] || 'school_admin';
+      const name = matched?.name || prefix.charAt(0).toUpperCase() + prefix.slice(1) + ' User';
 
       authStore.setAuth(`token_${Date.now()}`, {
         id: `user_${prefix}`,
@@ -247,13 +423,13 @@ async function handleLogin() {
         email: email.value,
         name,
         role: role as any,
-      })
-      router.push('/dashboard')
+      });
+      router.push('/dashboard');
     } else {
-      error.value = 'Invalid credentials. Try a quick login below or check your details.'
+      error.value = 'Invalid credentials. Try a quick login below or check your details.';
     }
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>

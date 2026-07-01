@@ -1,26 +1,51 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" style="--background:#f0f5ff">
-
+    <ion-content
+      :fullscreen="true"
+      style="--background:#f0f5ff"
+    >
       <!-- Header -->
       <div class="reg-header">
-        <div class="reg-logo">🏫</div>
-        <h1 class="reg-title">techocam</h1>
-        <p class="reg-sub">{{ t('register.title') }}</p>
-        <p class="reg-desc">{{ t('register.subtitle') }}</p>
+        <div class="reg-logo">
+          🏫
+        </div>
+        <h1 class="reg-title">
+          techocam
+        </h1>
+        <p class="reg-sub">
+          {{ t('register.title') }}
+        </p>
+        <p class="reg-desc">
+          {{ t('register.subtitle') }}
+        </p>
       </div>
 
-      <div class="reg-card" v-if="!submitted">
-
+      <div
+        v-if="!submitted"
+        class="reg-card"
+      >
         <!-- Step indicator -->
         <div class="steps">
-          <div class="step" :class="{ active: step >= 1, done: step > 1 }">
-            <div class="step-num">{{ step > 1 ? '✓' : '1' }}</div>
+          <div
+            class="step"
+            :class="{ active: step >= 1, done: step > 1 }"
+          >
+            <div class="step-num">
+              {{ step > 1 ? '✓' : '1' }}
+            </div>
             <span class="step-lbl">{{ t('register.schoolInfo') }}</span>
           </div>
-          <div class="step-line" :class="{ done: step > 1 }"></div>
-          <div class="step" :class="{ active: step >= 2 }">
-            <div class="step-num">2</div>
+          <div
+            class="step-line"
+            :class="{ done: step > 1 }"
+          />
+          <div
+            class="step"
+            :class="{ active: step >= 2 }"
+          >
+            <div class="step-num">
+              2
+            </div>
             <span class="step-lbl">{{ t('register.contactInfo') }}</span>
           </div>
         </div>
@@ -29,12 +54,20 @@
         <div v-if="step === 1">
           <div class="field-group">
             <label class="field-label">{{ t('register.schoolNameKh') }} *</label>
-            <input v-model="form.schoolNameKh" class="field-input" :placeholder="t('register.namePlaceholder')" />
+            <input
+              v-model="form.schoolNameKh"
+              class="field-input"
+              :placeholder="t('register.namePlaceholder')"
+            >
           </div>
 
           <div class="field-group">
             <label class="field-label">{{ t('register.schoolNameEn') }} *</label>
-            <input v-model="form.schoolNameEn" class="field-input" :placeholder="t('register.nameEnPlaceholder')" />
+            <input
+              v-model="form.schoolNameEn"
+              class="field-input"
+              :placeholder="t('register.nameEnPlaceholder')"
+            >
           </div>
 
           <div class="row2">
@@ -47,19 +80,36 @@
                   class="type-btn"
                   :class="{ active: form.schoolType === type.val }"
                   @click="form.schoolType = type.val"
-                >{{ type.label }}</button>
+                >
+                  {{ type.label }}
+                </button>
               </div>
             </div>
 
             <div class="field-group">
               <label class="field-label">{{ t('register.level') }} *</label>
-              <select v-model="form.level" class="field-input">
-                <option value="">--</option>
-                <option value="primary">{{ t('register.levelPrimary') }}</option>
-                <option value="lower_secondary">{{ t('register.levelLower') }}</option>
-                <option value="upper_secondary">{{ t('register.levelUpper') }}</option>
-                <option value="university">{{ t('register.levelUniversity') }}</option>
-                <option value="integrated">{{ t('register.levelIntegrated') }}</option>
+              <select
+                v-model="form.level"
+                class="field-input"
+              >
+                <option value="">
+                  --
+                </option>
+                <option value="primary">
+                  {{ t('register.levelPrimary') }}
+                </option>
+                <option value="lower_secondary">
+                  {{ t('register.levelLower') }}
+                </option>
+                <option value="upper_secondary">
+                  {{ t('register.levelUpper') }}
+                </option>
+                <option value="university">
+                  {{ t('register.levelUniversity') }}
+                </option>
+                <option value="integrated">
+                  {{ t('register.levelIntegrated') }}
+                </option>
               </select>
             </div>
           </div>
@@ -67,30 +117,63 @@
           <div class="row2">
             <div class="field-group">
               <label class="field-label">{{ t('register.province') }} *</label>
-              <select v-model="form.province" class="field-input">
-                <option value="">--</option>
-                <option v-for="p in provinces" :key="p" :value="p">{{ p }}</option>
+              <select
+                v-model="form.province"
+                class="field-input"
+              >
+                <option value="">
+                  --
+                </option>
+                <option
+                  v-for="p in provinces"
+                  :key="p"
+                  :value="p"
+                >
+                  {{ p }}
+                </option>
               </select>
             </div>
             <div class="field-group">
               <label class="field-label">{{ t('register.district') }}</label>
-              <input v-model="form.district" class="field-input" placeholder="ស្រុក / ខណ្ឌ" />
+              <input
+                v-model="form.district"
+                class="field-input"
+                placeholder="ស្រុក / ខណ្ឌ"
+              >
             </div>
           </div>
 
           <div class="field-group">
             <label class="field-label">{{ t('register.address') }} *</label>
-            <textarea v-model="form.address" class="field-input field-textarea" :placeholder="t('register.addressPlaceholder')" rows="2"></textarea>
+            <textarea
+              v-model="form.address"
+              class="field-input field-textarea"
+              :placeholder="t('register.addressPlaceholder')"
+              rows="2"
+            />
           </div>
 
           <div class="field-group">
             <label class="field-label">{{ t('register.totalStudents') }}</label>
-            <input v-model="form.totalStudents" type="number" class="field-input" placeholder="e.g. 500" />
+            <input
+              v-model="form.totalStudents"
+              type="number"
+              class="field-input"
+              placeholder="e.g. 500"
+            >
           </div>
 
-          <div v-if="stepError" class="error-msg">⚠ {{ stepError }}</div>
+          <div
+            v-if="stepError"
+            class="error-msg"
+          >
+            ⚠ {{ stepError }}
+          </div>
 
-          <button class="btn-next" @click="nextStep">
+          <button
+            class="btn-next"
+            @click="nextStep"
+          >
             {{ t('register.next') }}
           </button>
         </div>
@@ -99,133 +182,184 @@
         <div v-if="step === 2">
           <div class="field-group">
             <label class="field-label">{{ t('register.principalName') }} *</label>
-            <input v-model="form.principalName" class="field-input" placeholder="ឈ្មោះពេញ" />
+            <input
+              v-model="form.principalName"
+              class="field-input"
+              placeholder="ឈ្មោះពេញ"
+            >
           </div>
 
           <div class="row2">
             <div class="field-group">
               <label class="field-label">{{ t('register.principalPhone') }} *</label>
-              <input v-model="form.principalPhone" class="field-input" placeholder="012 345 678" />
+              <input
+                v-model="form.principalPhone"
+                class="field-input"
+                placeholder="012 345 678"
+              >
             </div>
             <div class="field-group">
               <label class="field-label">{{ t('register.schoolPhone') }}</label>
-              <input v-model="form.schoolPhone" class="field-input" placeholder="023 456 789" />
+              <input
+                v-model="form.schoolPhone"
+                class="field-input"
+                placeholder="023 456 789"
+              >
             </div>
           </div>
 
           <div class="field-group">
             <label class="field-label">{{ t('register.principalEmail') }} *</label>
-            <input v-model="form.principalEmail" type="email" class="field-input" placeholder="principal@school.edu.kh" />
+            <input
+              v-model="form.principalEmail"
+              type="email"
+              class="field-input"
+              placeholder="principal@school.edu.kh"
+            >
           </div>
 
-          <div v-if="stepError" class="error-msg">⚠ {{ stepError }}</div>
+          <div
+            v-if="stepError"
+            class="error-msg"
+          >
+            ⚠ {{ stepError }}
+          </div>
 
           <div class="btn-row">
-            <button class="btn-back" @click="step = 1">← {{ t('actions.back') }}</button>
-            <button class="btn-submit" @click="submit" :disabled="loading">
-              <span v-if="loading" class="spinner"></span>
+            <button
+              class="btn-back"
+              @click="step = 1"
+            >
+              ← {{ t('actions.back') }}
+            </button>
+            <button
+              class="btn-submit"
+              :disabled="loading"
+              @click="submit"
+            >
+              <span
+                v-if="loading"
+                class="spinner"
+              />
               <span v-else>📨 {{ t('register.submit') }}</span>
             </button>
           </div>
         </div>
-
       </div>
 
       <!-- Success screen -->
-      <div v-else class="success-card">
-        <div class="success-icon">🎉</div>
-        <h2 class="success-title">{{ t('messages.success') }}</h2>
-        <p class="success-msg">{{ t('register.success') }}</p>
+      <div
+        v-else
+        class="success-card"
+      >
+        <div class="success-icon">
+          🎉
+        </div>
+        <h2 class="success-title">
+          {{ t('messages.success') }}
+        </h2>
+        <p class="success-msg">
+          {{ t('register.success') }}
+        </p>
         <div class="success-ref">
           <span class="ref-label">Reference ID</span>
           <span class="ref-code">{{ refId }}</span>
         </div>
-        <button class="btn-login" @click="router.push('/login')">{{ t('register.backToLogin') }}</button>
+        <button
+          class="btn-login"
+          @click="router.push('/login')"
+        >
+          {{ t('register.backToLogin') }}
+        </button>
       </div>
 
       <!-- Footer -->
       <p class="reg-footer">
         {{ t('register.alreadyAccount') }}
-        <button class="footer-link" @click="router.push('/login')">{{ t('auth.login') }}</button>
+        <button
+          class="footer-link"
+          @click="router.push('/login')"
+        >
+          {{ t('auth.login') }}
+        </button>
       </p>
-
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonContent } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonContent} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t }  = useI18n()
+const router = useRouter();
+const {t} = useI18n();
 
-const step      = ref(1)
-const loading   = ref(false)
-const submitted = ref(false)
-const stepError = ref('')
-const refId     = ref('')
+const step = ref(1);
+const loading = ref(false);
+const submitted = ref(false);
+const stepError = ref('');
+const refId = ref('');
 
 const form = ref({
-  schoolNameKh:   '',
-  schoolNameEn:   '',
-  schoolType:     'public',
-  level:          '',
-  province:       '',
-  district:       '',
-  address:        '',
-  totalStudents:  '',
-  principalName:  '',
+  schoolNameKh: '',
+  schoolNameEn: '',
+  schoolType: 'public',
+  level: '',
+  province: '',
+  district: '',
+  address: '',
+  totalStudents: '',
+  principalName: '',
   principalPhone: '',
   principalEmail: '',
-  schoolPhone:    '',
-})
+  schoolPhone: '',
+});
 
 const schoolTypes = computed(() => [
-  { val:'public',  label: t('register.public')  },
-  { val:'private', label: t('register.private') },
-])
+  {val: 'public', label: t('register.public')},
+  {val: 'private', label: t('register.private')},
+]);
 
 const provinces = [
-  'ភ្នំពេញ','កណ្ដាល','កំពង់ចាម','កំពង់ឆ្នាំង','កំពង់ស្ពឺ',
-  'កំពង់ធំ','កំពត','កោះកុង','ក្រចេះ','មណ្ឌលគិរី',
-  'ឧត្ដរមានជ័យ','បន្ទាយមានជ័យ','បាត់ដំបង','ពោធិ៍សាត់',
-  'ព្រៃវែង','ព្រះវិហារ','ព្រះសីហនុ','រតនគីរី','សៀមរាប',
-  'ស្ទឹងត្រែង','ស្វាយរៀង','តាកែវ','ត្បូងឃ្មុំ','ឯករាជ',
-]
+  'ភ្នំពេញ', 'កណ្ដាល', 'កំពង់ចាម', 'កំពង់ឆ្នាំង', 'កំពង់ស្ពឺ',
+  'កំពង់ធំ', 'កំពត', 'កោះកុង', 'ក្រចេះ', 'មណ្ឌលគិរី',
+  'ឧត្ដរមានជ័យ', 'បន្ទាយមានជ័យ', 'បាត់ដំបង', 'ពោធិ៍សាត់',
+  'ព្រៃវែង', 'ព្រះវិហារ', 'ព្រះសីហនុ', 'រតនគីរី', 'សៀមរាប',
+  'ស្ទឹងត្រែង', 'ស្វាយរៀង', 'តាកែវ', 'ត្បូងឃ្មុំ', 'ឯករាជ',
+];
 
 function nextStep() {
-  stepError.value = ''
+  stepError.value = '';
   if (!form.value.schoolNameKh || !form.value.schoolNameEn || !form.value.level || !form.value.province || !form.value.address) {
-    stepError.value = t('register.required')
-    return
+    stepError.value = t('register.required');
+    return;
   }
-  step.value = 2
+  step.value = 2;
 }
 
 async function submit() {
-  stepError.value = ''
+  stepError.value = '';
   if (!form.value.principalName || !form.value.principalPhone || !form.value.principalEmail) {
-    stepError.value = t('register.required')
-    return
+    stepError.value = t('register.required');
+    return;
   }
-  loading.value = true
-  await new Promise(r => setTimeout(r, 900))
-  const id = `REG-${Date.now()}`
-  refId.value = id
-  const registrations = LocalStorageService.get<any[]>('pending_registrations', []) || []
+  loading.value = true;
+  await new Promise(r => setTimeout(r, 900));
+  const id = `REG-${Date.now()}`;
+  refId.value = id;
+  const registrations = LocalStorageService.get<any[]>('pending_registrations', []) || [];
   registrations.push({
     id,
     status: 'pending',
     submittedAt: new Date().toISOString(),
     ...form.value,
-  })
-  LocalStorageService.set('pending_registrations', registrations)
-  loading.value = false
-  submitted.value = true
+  });
+  LocalStorageService.set('pending_registrations', registrations);
+  loading.value = false;
+  submitted.value = true;
 }
 </script>
 

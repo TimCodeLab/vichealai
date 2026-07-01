@@ -1,37 +1,55 @@
 <template>
   <ion-page>
-    <ion-content :fullscreen="true" style="--background:transparent">
-
+    <ion-content
+      :fullscreen="true"
+      style="--background:transparent"
+    >
       <!-- Background -->
       <div class="bg-wrap">
-        <div class="bg-orb orb1"></div>
-        <div class="bg-orb orb2"></div>
+        <div class="bg-orb orb1" />
+        <div class="bg-orb orb2" />
       </div>
 
       <div class="page-center">
-
-        <div class="icon-wrap">🔐</div>
-        <h1 class="page-title">{{ t('changePass.title') }}</h1>
-        <p class="page-sub">{{ t('changePass.subtitle') }}</p>
+        <div class="icon-wrap">
+          🔐
+        </div>
+        <h1 class="page-title">
+          {{ t('changePass.title') }}
+        </h1>
+        <p class="page-sub">
+          {{ t('changePass.subtitle') }}
+        </p>
 
         <div class="card">
-
           <!-- User info banner (if first login) -->
-          <div v-if="isFirstLogin" class="first-login-banner">
+          <div
+            v-if="isFirstLogin"
+            class="first-login-banner"
+          >
             <span class="fli-icon">⚠️</span>
             <span>{{ t('changePass.firstLoginMsg') }}</span>
           </div>
 
           <!-- Current credentials info -->
-          <div v-if="user?.loginCode" class="code-info">
-            <div class="code-label">{{ t('credentials.yourCode') }}</div>
-            <div class="code-val">{{ user.loginCode }}</div>
+          <div
+            v-if="user?.loginCode"
+            class="code-info"
+          >
+            <div class="code-label">
+              {{ t('credentials.yourCode') }}
+            </div>
+            <div class="code-val">
+              {{ user.loginCode }}
+            </div>
           </div>
 
           <!-- Form -->
           <form @submit.prevent="submit">
-
-            <div class="field" v-if="!isFirstLogin">
+            <div
+              v-if="!isFirstLogin"
+              class="field"
+            >
               <label class="field-label">{{ t('changePass.current') }}</label>
               <div class="field-wrap">
                 <input
@@ -40,8 +58,13 @@
                   class="field-input"
                   placeholder="••••••••"
                   required
-                />
-                <button type="button" class="eye-btn" @click="showCurrent = !showCurrent" tabindex="-1">
+                >
+                <button
+                  type="button"
+                  class="eye-btn"
+                  tabindex="-1"
+                  @click="showCurrent = !showCurrent"
+                >
                   {{ showCurrent ? '🙈' : '👁' }}
                 </button>
               </div>
@@ -57,16 +80,30 @@
                   placeholder="••••••••"
                   required
                   minlength="8"
-                />
-                <button type="button" class="eye-btn" @click="showNew = !showNew" tabindex="-1">
+                >
+                <button
+                  type="button"
+                  class="eye-btn"
+                  tabindex="-1"
+                  @click="showNew = !showNew"
+                >
                   {{ showNew ? '🙈' : '👁' }}
                 </button>
               </div>
               <!-- Strength bar -->
               <div class="strength-bar">
-                <div class="sb-fill" :class="strengthClass" :style="{ width: strengthPct + '%' }"></div>
+                <div
+                  class="sb-fill"
+                  :class="strengthClass"
+                  :style="{ width: strengthPct + '%' }"
+                />
               </div>
-              <div class="strength-label" :class="strengthClass">{{ strengthLabel }}</div>
+              <div
+                class="strength-label"
+                :class="strengthClass"
+              >
+                {{ strengthLabel }}
+              </div>
             </div>
 
             <div class="field">
@@ -79,124 +116,146 @@
                   :class="{ mismatch: confirmPwd && confirmPwd !== newPwd }"
                   placeholder="••••••••"
                   required
-                />
-                <button type="button" class="eye-btn" @click="showConfirm = !showConfirm" tabindex="-1">
+                >
+                <button
+                  type="button"
+                  class="eye-btn"
+                  tabindex="-1"
+                  @click="showConfirm = !showConfirm"
+                >
                   {{ showConfirm ? '🙈' : '👁' }}
                 </button>
               </div>
-              <div v-if="confirmPwd && confirmPwd !== newPwd" class="mismatch-msg">{{ t('changePass.mismatch') }}</div>
+              <div
+                v-if="confirmPwd && confirmPwd !== newPwd"
+                class="mismatch-msg"
+              >
+                {{ t('changePass.mismatch') }}
+              </div>
             </div>
 
-            <div v-if="error" class="error-box">⚠ {{ error }}</div>
+            <div
+              v-if="error"
+              class="error-box"
+            >
+              ⚠ {{ error }}
+            </div>
 
-            <button type="submit" class="btn-submit" :disabled="loading || (confirmPwd !== newPwd)">
+            <button
+              type="submit"
+              class="btn-submit"
+              :disabled="loading || (confirmPwd !== newPwd)"
+            >
               <span class="btn-inner">
-                <span v-if="loading" class="spinner"></span>
+                <span
+                  v-if="loading"
+                  class="spinner"
+                />
                 <span v-else>🔐 {{ t('changePass.submit') }}</span>
               </span>
             </button>
-
           </form>
 
           <!-- Cancel (only for non-first-login) -->
-          <button v-if="!isFirstLogin" class="btn-cancel" @click="router.back()">
+          <button
+            v-if="!isFirstLogin"
+            class="btn-cancel"
+            @click="router.back()"
+          >
             {{ t('actions.cancel') }}
           </button>
-
         </div>
-
       </div>
-
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonContent } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '@/stores/auth'
-import { useI18n } from '@/composables/useI18n'
+import {ref, computed} from 'vue';
+import {IonPage, IonContent} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useAuth} from '@/stores/auth';
+import {useI18n} from '@/composables/useI18n';
 
-const router    = useRouter()
-const authStore = useAuth()
-const { t }     = useI18n()
+const router = useRouter();
+const authStore = useAuth();
+const {t} = useI18n();
 
-const user = computed(() => authStore.user)
+const user = computed(() => authStore.user);
 
 // Detect first-login scenario
-const isFirstLogin = computed(() => user.value?.mustChangePassword === true)
+const isFirstLogin = computed(() => user.value?.mustChangePassword === true);
 
-const currentPwd  = ref('')
-const newPwd      = ref('')
-const confirmPwd  = ref('')
-const showCurrent = ref(false)
-const showNew     = ref(false)
-const showConfirm = ref(false)
-const error       = ref('')
-const loading     = ref(false)
+const currentPwd = ref('');
+const newPwd = ref('');
+const confirmPwd = ref('');
+const showCurrent = ref(false);
+const showNew = ref(false);
+const showConfirm = ref(false);
+const error = ref('');
+const loading = ref(false);
 
 // ── Password strength ──
 const strength = computed(() => {
-  const p = newPwd.value
-  if (!p) return 0
-  let s = 0
-  if (p.length >= 8)               s++
-  if (/[A-Z]/.test(p))             s++
-  if (/[0-9]/.test(p))             s++
-  if (/[^A-Za-z0-9]/.test(p))     s++
-  return s
-})
-const strengthPct = computed(() => [0,25,50,75,100][strength.value])
-const strengthClass = computed(() => ['','weak','fair','good','strong'][strength.value])
+  const p = newPwd.value;
+  if (!p) return 0;
+  let s = 0;
+  if (p.length >= 8) s++;
+  if (/[A-Z]/.test(p)) s++;
+  if (/[0-9]/.test(p)) s++;
+  if (/[^A-Za-z0-9]/.test(p)) s++;
+  return s;
+});
+const strengthPct = computed(() => [0, 25, 50, 75, 100][strength.value]);
+const strengthClass = computed(() => ['', 'weak', 'fair', 'good', 'strong'][strength.value]);
 const strengthLabel = computed(() => {
-  return ['', t('changePass.weak'), t('changePass.fair'), t('changePass.good'), t('changePass.strong')][strength.value]
-})
+  return ['', t('changePass.weak'), t('changePass.fair'), t('changePass.good'), t('changePass.strong')][strength.value];
+});
 
 // ── Submit ──
 async function submit() {
-  error.value = ''
-  if (newPwd.value.length < 8) { error.value = t('changePass.minLength'); return }
-  if (newPwd.value !== confirmPwd.value) { error.value = t('changePass.mismatch'); return }
+  error.value = '';
+  if (newPwd.value.length < 8) { error.value = t('changePass.minLength'); return; }
+  if (newPwd.value !== confirmPwd.value) { error.value = t('changePass.mismatch'); return; }
 
-  loading.value = true
-  await new Promise(r => setTimeout(r, 700))
+  loading.value = true;
+  await new Promise(r => setTimeout(r, 700));
 
   try {
-    const u = user.value
-    if (!u) return
+    const u = user.value;
+    if (!u) return;
 
     if (!isFirstLogin.value) {
       // Verify current password against stored data
-      const storedTeachers: any[] = JSON.parse(localStorage.getItem('teachers') || '[]')
-      const storedStudents: any[] = JSON.parse(localStorage.getItem('students') || '[]')
-      const all = [...storedTeachers, ...storedStudents]
-      const found = all.find(x => x.id === u.id)
+      const storedTeachers: any[] = JSON.parse(localStorage.getItem('teachers') || '[]');
+      const storedStudents: any[] = JSON.parse(localStorage.getItem('students') || '[]');
+      const all = [...storedTeachers, ...storedStudents];
+      const found = all.find(x => x.id === u.id);
       if (found && found.loginPassword !== currentPwd.value && currentPwd.value !== 'test123') {
-        error.value = t('changePass.wrongCurrent')
-        loading.value = false
-        return
+        error.value = t('changePass.wrongCurrent');
+        loading.value = false;
+        return;
       }
     }
 
     // Update password in stored users
     for (const key of ['teachers', 'students']) {
-      const arr: any[] = JSON.parse(localStorage.getItem(key) || '[]')
-      const idx = arr.findIndex((x: any) => x.id === u.id)
+      const arr: any[] = JSON.parse(localStorage.getItem(key) || '[]');
+      const idx = arr.findIndex((x: any) => x.id === u.id);
       if (idx !== -1) {
-        arr[idx].loginPassword      = newPwd.value
-        arr[idx].mustChangePassword = false
-        localStorage.setItem(key, JSON.stringify(arr))
+        arr[idx].loginPassword = newPwd.value;
+        arr[idx].mustChangePassword = false;
+        localStorage.setItem(key, JSON.stringify(arr));
       }
     }
 
     // Update in-session user
-    const updatedUser = { ...u, mustChangePassword: false }
-    authStore.setAuth(localStorage.getItem('authToken') || '', updatedUser)
+    const updatedUser = {...u, mustChangePassword: false};
+    authStore.setAuth(localStorage.getItem('authToken') || '', updatedUser);
 
-    router.push('/dashboard')
+    router.push('/dashboard');
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>

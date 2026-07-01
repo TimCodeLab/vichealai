@@ -1,17 +1,37 @@
 <template>
   <ion-page style="--background:#f5f7fa">
-
     <!-- ── Header ── -->
     <ion-header class="dashboard-header">
       <div class="header-bar">
         <div class="header-left">
-          <ion-menu-button class="menu-btn"></ion-menu-button>
+          <ion-menu-button class="menu-btn" />
           <div class="brand anim-fade-in">
             <div class="brand-logo">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <rect width="28" height="28" rx="8" fill="rgba(255,255,255,0.22)"/>
-                <path d="M7 20L14 8L21 20" stroke="white" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9.5 16H18.5" stroke="white" stroke-width="2.3" stroke-linecap="round"/>
+              <svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+              >
+                <rect
+                  width="28"
+                  height="28"
+                  rx="8"
+                  fill="rgba(255,255,255,0.22)"
+                />
+                <path
+                  d="M7 20L14 8L21 20"
+                  stroke="white"
+                  stroke-width="2.3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9.5 16H18.5"
+                  stroke="white"
+                  stroke-width="2.3"
+                  stroke-linecap="round"
+                />
               </svg>
             </div>
             <div class="brand-text">
@@ -22,25 +42,61 @@
         </div>
 
         <div class="header-right">
-          <button class="lang-btn ripple-wrap" @click="toggleLanguage">
-            <img class="lang-flag" :src="`https://flagcdn.com/20x15/${currentLang === 'km' ? 'kh' : 'gb'}.png`" :alt="currentLangCode" width="20" height="15" />
+          <button
+            class="lang-btn ripple-wrap"
+            @click="toggleLanguage"
+          >
+            <img
+              class="lang-flag"
+              :src="`https://flagcdn.com/20x15/${currentLang === 'km' ? 'kh' : 'gb'}.png`"
+              :alt="currentLangCode"
+              width="20"
+              height="15"
+            >
             <span class="lang-code">{{ currentLangCode }}</span>
           </button>
 
-          <button class="icon-btn anim-bell" @click="router.push('/communication')">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <button
+            class="icon-btn anim-bell"
+            @click="router.push('/communication')"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M13.73 21a2 2 0 0 1-3.46 0"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
             </svg>
-            <span class="notif-dot notif-pulse"></span>
+            <span class="notif-dot notif-pulse" />
           </button>
 
-          <div class="avatar press-lift" @click="toggleProfileMenu">{{ userInitial }}</div>
+          <div
+            class="avatar press-lift"
+            @click="toggleProfileMenu"
+          >
+            {{ userInitial }}
+          </div>
         </div>
       </div>
 
       <!-- Greeting -->
-      <div class="header-greeting anim-fade-up" style="animation-delay:.1s">
+      <div
+        class="header-greeting anim-fade-up"
+        style="animation-delay:.1s"
+      >
         <span class="greeting-text">{{ greetingEmoji }} {{ t('dashboard.welcome') }}, <strong>{{ userName }}</strong></span>
         <span class="greeting-role">{{ getRoleLabel(user?.role) }}</span>
       </div>
@@ -48,40 +104,110 @@
 
     <!-- Profile dropdown -->
     <transition name="dropdown">
-      <div v-if="showProfileMenu" class="profile-dropdown">
+      <div
+        v-if="showProfileMenu"
+        class="profile-dropdown"
+      >
         <div class="profile-dropdown-user">
-          <div class="profile-dropdown-avatar">{{ userInitial }}</div>
+          <div class="profile-dropdown-avatar">
+            {{ userInitial }}
+          </div>
           <div>
-            <div class="profile-dropdown-name">{{ userName }}</div>
-            <div class="profile-dropdown-role">{{ getRoleLabel(user?.role) }}</div>
+            <div class="profile-dropdown-name">
+              {{ userName }}
+            </div>
+            <div class="profile-dropdown-role">
+              {{ getRoleLabel(user?.role) }}
+            </div>
           </div>
         </div>
-        <div class="profile-dropdown-divider"></div>
-        <button class="profile-dropdown-item" @click="goToProfile">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <div class="profile-dropdown-divider" />
+        <button
+          class="profile-dropdown-item"
+          @click="goToProfile"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><circle
+            cx="12"
+            cy="8"
+            r="4"
+            stroke="currentColor"
+            stroke-width="2"
+          /><path
+            d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
           Profile
         </button>
-        <button class="profile-dropdown-item profile-dropdown-logout" @click="handleLogout">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <button
+          class="profile-dropdown-item profile-dropdown-logout"
+          @click="handleLogout"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /><polyline
+            points="16 17 21 12 16 7"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /><line
+            x1="21"
+            y1="12"
+            x2="9"
+            y2="12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
           {{ t('nav.logout') }}
         </button>
       </div>
     </transition>
-    <div v-if="showProfileMenu" class="dropdown-backdrop" @click="showProfileMenu = false"></div>
+    <div
+      v-if="showProfileMenu"
+      class="dropdown-backdrop"
+      @click="showProfileMenu = false"
+    />
 
     <!-- ── Content ── -->
     <ion-content style="--background:#f5f7fa">
       <div class="dash-body">
-
         <!-- Search -->
-        <div class="search-wrap anim-fade-up" style="animation-delay:.12s">
+        <div
+          class="search-wrap anim-fade-up"
+          style="animation-delay:.12s"
+        >
           <span class="search-icon">🔍</span>
-          <input v-model="searchQuery" class="search-input" :placeholder="t('dashboard.searchModules')" />
+          <input
+            v-model="searchQuery"
+            class="search-input"
+            :placeholder="t('dashboard.searchModules')"
+          >
         </div>
 
         <!-- Categorized modules -->
         <template v-if="!searchQuery">
-          <div v-for="cat in moduleCategories" :key="cat.key" class="anim-fade-up" style="animation-delay:.16s">
+          <div
+            v-for="cat in moduleCategories"
+            :key="cat.key"
+            class="anim-fade-up"
+            style="animation-delay:.16s"
+          >
             <div class="cat-head">
               <span class="cat-icon">{{ cat.icon }}</span>
               <span class="cat-title">{{ cat.label }}</span>
@@ -93,7 +219,10 @@
                 class="mod-item press-lift"
                 @click="navigate(mod.path)"
               >
-                <div class="mod-icon-wrap" :style="{ background: mod.color }">
+                <div
+                  class="mod-icon-wrap"
+                  :style="{ background: mod.color }"
+                >
                   <span class="mod-icon">{{ mod.icon }}</span>
                 </div>
                 <span class="mod-label">{{ mod.label }}</span>
@@ -115,7 +244,10 @@
               class="mod-item press-lift"
               @click="navigate(mod.path)"
             >
-              <div class="mod-icon-wrap" :style="{ background: mod.color }">
+              <div
+                class="mod-icon-wrap"
+                :style="{ background: mod.color }"
+              >
                 <span class="mod-icon">{{ mod.icon }}</span>
               </div>
               <span class="mod-label">{{ mod.label }}</span>
@@ -124,7 +256,10 @@
         </template>
 
         <!-- Today card -->
-        <div class="today-card anim-fade-up" style="animation-delay:.24s">
+        <div
+          class="today-card anim-fade-up"
+          style="animation-delay:.24s"
+        >
           <div class="today-head">
             <span class="today-title">📅 {{ todayLabel }}</span>
             <span class="today-badge">{{ t('reports.today') }}</span>
@@ -134,17 +269,17 @@
               <span class="ts-num ts-blue">{{ liveData.students }}</span>
               <span class="ts-lbl">{{ t('nav.students') }}</span>
             </div>
-            <div class="ts-div"></div>
+            <div class="ts-div" />
             <div class="today-stat">
               <span class="ts-num ts-green">{{ liveData.teachers }}</span>
               <span class="ts-lbl">{{ t('nav.teachers') }}</span>
             </div>
-            <div class="ts-div"></div>
+            <div class="ts-div" />
             <div class="today-stat">
               <span class="ts-num ts-orange">{{ liveData.classes }}</span>
               <span class="ts-lbl">{{ t('nav.classes') }}</span>
             </div>
-            <div class="ts-div"></div>
+            <div class="ts-div" />
             <div class="today-stat">
               <span class="ts-num ts-purple">{{ liveData.homework }}</span>
               <span class="ts-lbl">{{ t('nav.homework') }}</span>
@@ -152,142 +287,142 @@
           </div>
         </div>
 
-        <div style="height:24px"></div>
+        <div style="height:24px" />
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { IonPage, IonHeader, IonContent, IonMenuButton } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '@/stores/auth'
-import { useI18nStore } from '@/stores/i18n'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {computed, ref} from 'vue';
+import {IonPage, IonHeader, IonContent, IonMenuButton} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useAuth} from '@/stores/auth';
+import {useI18nStore} from '@/stores/i18n';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router    = useRouter()
-const authStore = useAuth()
-const i18nStore = useI18nStore()
-const { t }     = useI18n()
+const router = useRouter();
+const authStore = useAuth();
+const i18nStore = useI18nStore();
+const {t} = useI18n();
 
-const currentLang     = computed(() => i18nStore.locale)
-const currentLangCode = computed(() => currentLang.value === 'km' ? 'KM' : 'EN')
-function toggleLanguage() { i18nStore.setLocale(currentLang.value === 'km' ? 'en' : 'km') }
+const currentLang = computed(() => i18nStore.locale);
+const currentLangCode = computed(() => currentLang.value === 'km' ? 'KM' : 'EN');
+function toggleLanguage() { i18nStore.setLocale(currentLang.value === 'km' ? 'en' : 'km'); }
 
-const user        = computed(() => authStore.user)
-const userName    = computed(() => user.value?.name || user.value?.email?.split('@')[0] || 'User')
-const userInitial = computed(() => userName.value.charAt(0).toUpperCase())
-const userRole    = computed(() => user.value?.role || '')
+const user = computed(() => authStore.user);
+const userName = computed(() => user.value?.name || user.value?.email?.split('@')[0] || 'User');
+const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
+const userRole = computed(() => user.value?.role || '');
 
-const showProfileMenu = ref(false)
-const searchQuery     = ref('')
+const showProfileMenu = ref(false);
+const searchQuery = ref('');
 
-function toggleProfileMenu() { showProfileMenu.value = !showProfileMenu.value }
-function goToProfile()       { showProfileMenu.value = false; router.push('/profile') }
-function handleLogout()      { showProfileMenu.value = false; authStore.logout(); router.replace('/login').catch(() => { window.location.replace('/login') }) }
-function navigate(path: string) { router.push(path) }
+function toggleProfileMenu() { showProfileMenu.value = !showProfileMenu.value; }
+function goToProfile() { showProfileMenu.value = false; router.push('/profile'); }
+function handleLogout() { showProfileMenu.value = false; authStore.logout(); router.replace('/login').catch(() => { window.location.replace('/login'); }); }
+function navigate(path: string) { router.push(path); }
 
-function getRoleLabel(role?: string) { return role ? (t(`roles.${role}`) || role) : 'User' }
+function getRoleLabel(role?: string) { return role ? (t(`roles.${role}`) || role) : 'User'; }
 
 const greetingEmoji = computed(() => {
-  const h = new Date().getHours()
-  if (h < 12) return '🌅'
-  if (h < 17) return '☀️'
-  return '🌙'
-})
+  const h = new Date().getHours();
+  if (h < 12) return '🌅';
+  if (h < 17) return '☀️';
+  return '🌙';
+});
 
-const DAY_KEYS   = ['sun','mon','tue','wed','thu','fri','sat'] as const
-const MONTH_KEYS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'] as const
+const DAY_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
+const MONTH_KEYS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'] as const;
 
 const todayLabel = computed(() => {
-  const now  = new Date()
-  const day  = t(`dates.${DAY_KEYS[now.getDay()]}`)
-  const mon  = t(`dates.${MONTH_KEYS[now.getMonth()]}`)
-  return `${day}, ${mon} ${now.getDate()}`
-})
+  const now = new Date();
+  const day = t(`dates.${DAY_KEYS[now.getDay()]}`);
+  const mon = t(`dates.${MONTH_KEYS[now.getMonth()]}`);
+  return `${day}, ${mon} ${now.getDate()}`;
+});
 
 const liveData = computed(() => ({
   students: (LocalStorageService.get<any[]>('students', []) || []).length,
   teachers: (LocalStorageService.get<any[]>('teachers', []) || []).length,
-  classes:  (LocalStorageService.get<any[]>('classes',  []) || []).length,
+  classes: (LocalStorageService.get<any[]>('classes', []) || []).length,
   homework: (LocalStorageService.get<any[]>('homework', []) || []).length,
-}))
+}));
 
 const C: Record<string, string> = {
-  students:     'linear-gradient(135deg,#1565c0,#1976d2)',
-  teachers:     'linear-gradient(135deg,#2e7d32,#43a047)',
-  classes:      'linear-gradient(135deg,#e65100,#f57c00)',
-  subjects:     'linear-gradient(135deg,#00838f,#0097a7)',
-  attendance:   'linear-gradient(135deg,#1565c0,#29b6f6)',
-  timetable:    'linear-gradient(135deg,#4527a0,#7e57c2)',
-  homework:     'linear-gradient(135deg,#c62828,#e53935)',
-  exams:        'linear-gradient(135deg,#6a1b9a,#ab47bc)',
-  library:      'linear-gradient(135deg,#558b2f,#8bc34a)',
-  reports:      'linear-gradient(135deg,#37474f,#78909c)',
-  finance:      'linear-gradient(135deg,#2e7d32,#66bb6a)',
-  communication:'linear-gradient(135deg,#e65100,#ff7043)',
-  calendar:     'linear-gradient(135deg,#0277bd,#039be5)',
-  parents:      'linear-gradient(135deg,#c62828,#ef9a9a)',
-  roles:        'linear-gradient(135deg,#4a148c,#7b1fa2)',
-  approvals:    'linear-gradient(135deg,#e65100,#ffa726)',
-  settings:     'linear-gradient(135deg,#455a64,#607d8b)',
-}
+  students: 'linear-gradient(135deg,#1565c0,#1976d2)',
+  teachers: 'linear-gradient(135deg,#2e7d32,#43a047)',
+  classes: 'linear-gradient(135deg,#e65100,#f57c00)',
+  subjects: 'linear-gradient(135deg,#00838f,#0097a7)',
+  attendance: 'linear-gradient(135deg,#1565c0,#29b6f6)',
+  timetable: 'linear-gradient(135deg,#4527a0,#7e57c2)',
+  homework: 'linear-gradient(135deg,#c62828,#e53935)',
+  exams: 'linear-gradient(135deg,#6a1b9a,#ab47bc)',
+  library: 'linear-gradient(135deg,#558b2f,#8bc34a)',
+  reports: 'linear-gradient(135deg,#37474f,#78909c)',
+  finance: 'linear-gradient(135deg,#2e7d32,#66bb6a)',
+  communication: 'linear-gradient(135deg,#e65100,#ff7043)',
+  calendar: 'linear-gradient(135deg,#0277bd,#039be5)',
+  parents: 'linear-gradient(135deg,#c62828,#ef9a9a)',
+  roles: 'linear-gradient(135deg,#4a148c,#7b1fa2)',
+  approvals: 'linear-gradient(135deg,#e65100,#ffa726)',
+  settings: 'linear-gradient(135deg,#455a64,#607d8b)',
+};
 
 const moduleCategories = computed(() => {
-  const isAdmin      = ['super_admin','school_admin'].includes(userRole.value)
-  const isSuperAdmin = userRole.value === 'super_admin'
+  const isAdmin = ['super_admin', 'school_admin'].includes(userRole.value);
+  const isSuperAdmin = userRole.value === 'super_admin';
   return [
     {
       key: 'academic', icon: '📚', label: t('dashboard.catAcademic'),
       modules: [
-        { id:'students',   icon:'👥',  label: t('nav.students'),   path:'/students',   color: C.students   },
-        { id:'teachers',   icon:'👩‍🏫', label: t('nav.teachers'),   path:'/teachers',   color: C.teachers   },
-        { id:'classes',    icon:'🏫',  label: t('nav.classes'),    path:'/classes',    color: C.classes    },
-        { id:'subjects',   icon:'📖',  label: t('nav.subjects'),   path:'/subjects',   color: C.subjects   },
-        { id:'attendance', icon:'✅',  label: t('nav.attendance'), path:'/attendance', color: C.attendance },
-        { id:'timetable',  icon:'🗓️',  label: t('nav.timetable'),  path:'/timetable',  color: C.timetable  },
+        {id: 'students', icon: '👥', label: t('nav.students'), path: '/students', color: C.students},
+        {id: 'teachers', icon: '👩‍🏫', label: t('nav.teachers'), path: '/teachers', color: C.teachers},
+        {id: 'classes', icon: '🏫', label: t('nav.classes'), path: '/classes', color: C.classes},
+        {id: 'subjects', icon: '📖', label: t('nav.subjects'), path: '/subjects', color: C.subjects},
+        {id: 'attendance', icon: '✅', label: t('nav.attendance'), path: '/attendance', color: C.attendance},
+        {id: 'timetable', icon: '🗓️', label: t('nav.timetable'), path: '/timetable', color: C.timetable},
       ]
     },
     {
       key: 'learning', icon: '🎓', label: t('dashboard.catLearning'),
       modules: [
-        { id:'homework', icon:'📝', label: t('nav.homework'), path:'/homework', color: C.homework },
-        { id:'exams',    icon:'📊', label: t('nav.exams'),    path:'/exams',    color: C.exams    },
-        { id:'library',  icon:'📚', label: t('nav.library'),  path:'/library',  color: C.library  },
-        { id:'reports',  icon:'📄', label: t('nav.reports'),  path:'/reports',  color: C.reports  },
+        {id: 'homework', icon: '📝', label: t('nav.homework'), path: '/homework', color: C.homework},
+        {id: 'exams', icon: '📊', label: t('nav.exams'), path: '/exams', color: C.exams},
+        {id: 'library', icon: '📚', label: t('nav.library'), path: '/library', color: C.library},
+        {id: 'reports', icon: '📄', label: t('nav.reports'), path: '/reports', color: C.reports},
       ]
     },
     {
       key: 'admin', icon: '🏢', label: t('dashboard.catAdmin'),
       modules: [
-        { id:'finance',       icon:'💳', label: t('nav.finance'),       path:'/finance',       color: C.finance       },
-        { id:'communication', icon:'📢', label: t('nav.announcements'), path:'/communication', color: C.communication },
-        { id:'calendar',      icon:'📅', label: t('nav.calendar'),      path:'/calendar',      color: C.calendar      },
-        { id:'parents',       icon:'👨‍👩‍👧', label: t('nav.parents'),       path:'/parents',       color: C.parents       },
+        {id: 'finance', icon: '💳', label: t('nav.finance'), path: '/finance', color: C.finance},
+        {id: 'communication', icon: '📢', label: t('nav.announcements'), path: '/communication', color: C.communication},
+        {id: 'calendar', icon: '📅', label: t('nav.calendar'), path: '/calendar', color: C.calendar},
+        {id: 'parents', icon: '👨‍👩‍👧', label: t('nav.parents'), path: '/parents', color: C.parents},
       ]
     },
     ...(isAdmin ? [{
       key: 'system', icon: '⚙️', label: t('dashboard.catSystem'),
       modules: [
-        { id:'roles',    icon:'🛡️', label: t('nav.roles'),    path:'/roles',    color: C.roles    },
-        ...(isSuperAdmin ? [{ id:'approvals', icon:'🏫', label: t('nav.approvals'), path:'/school-approvals', color: C.approvals }] : []),
-        { id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings },
+        {id: 'roles', icon: '🛡️', label: t('nav.roles'), path: '/roles', color: C.roles},
+        ...(isSuperAdmin ? [{id: 'approvals', icon: '🏫', label: t('nav.approvals'), path: '/school-approvals', color: C.approvals}] : []),
+        {id: 'settings', icon: '⚙️', label: t('nav.settings'), path: '/settings', color: C.settings},
       ]
     }] : [{
-      key:'settings-only', icon:'⚙️', label: t('dashboard.catSystem'),
-      modules: [{ id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings }]
+      key: 'settings-only', icon: '⚙️', label: t('dashboard.catSystem'),
+      modules: [{id: 'settings', icon: '⚙️', label: t('nav.settings'), path: '/settings', color: C.settings}]
     }])
-  ]
-})
+  ];
+});
 
-const allModules    = computed(() => moduleCategories.value.flatMap(c => c.modules))
+const allModules = computed(() => moduleCategories.value.flatMap(c => c.modules));
 const searchResults = computed(() => {
-  if (!searchQuery.value) return []
-  const q = searchQuery.value.toLowerCase()
-  return allModules.value.filter(m => m.label.toLowerCase().includes(q))
-})
+  if (!searchQuery.value) return [];
+  const q = searchQuery.value.toLowerCase();
+  return allModules.value.filter(m => m.label.toLowerCase().includes(q));
+});
 </script>
 
 <style scoped>

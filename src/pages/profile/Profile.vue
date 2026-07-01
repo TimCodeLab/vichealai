@@ -1,16 +1,33 @@
 <template>
   <ion-page class="profile-page">
-
     <!-- Header -->
     <ion-header class="profile-header">
       <div class="profile-header-bar">
-        <button class="back-btn" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <button
+          class="back-btn"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M19 12H5M5 12L12 19M5 12L12 5"
+              stroke="white"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </button>
         <span class="header-title">{{ t('profile.title') }}</span>
-        <button class="save-header-btn" :disabled="!isDirty || isSaving" @click="saveProfile">
+        <button
+          class="save-header-btn"
+          :disabled="!isDirty || isSaving"
+          @click="saveProfile"
+        >
           {{ isSaving ? '...' : t('actions.save') }}
         </button>
       </div>
@@ -18,25 +35,52 @@
       <!-- Avatar section inside header -->
       <div class="avatar-section">
         <div class="avatar-ring">
-          <div class="avatar-circle">{{ userInitial }}</div>
-          <button class="avatar-edit-btn" @click="triggerAvatarChange">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <div class="avatar-circle">
+            {{ userInitial }}
+          </div>
+          <button
+            class="avatar-edit-btn"
+            @click="triggerAvatarChange"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                stroke="white"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                stroke="white"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </button>
         </div>
-        <div class="avatar-name">{{ form.name || userName }}</div>
-        <div class="avatar-role">{{ getRoleLabel(user?.role) }}</div>
+        <div class="avatar-name">
+          {{ form.name || userName }}
+        </div>
+        <div class="avatar-role">
+          {{ getRoleLabel(user?.role) }}
+        </div>
       </div>
     </ion-header>
 
     <ion-content class="profile-content">
       <div class="profile-body anim-fade-up">
-
         <!-- Toast notification -->
         <transition name="toast">
-          <div v-if="toast.show" :class="['toast', `toast-${toast.type}`]">
+          <div
+            v-if="toast.show"
+            :class="['toast', `toast-${toast.type}`]"
+          >
             {{ toast.message }}
           </div>
         </transition>
@@ -44,7 +88,23 @@
         <!-- Personal Info -->
         <div class="section-card">
           <div class="section-header">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#1976d2" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#1976d2" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+            ><circle
+              cx="12"
+              cy="8"
+              r="4"
+              stroke="#1976d2"
+              stroke-width="2"
+            /><path
+              d="M4 20c0-4 3.6-7 8-7s8 3 8 7"
+              stroke="#1976d2"
+              stroke-width="2"
+              stroke-linecap="round"
+            /></svg>
             <span>{{ t('profile.personalInfo') }}</span>
           </div>
 
@@ -55,7 +115,7 @@
               class="field-input"
               :placeholder="t('forms.name')"
               @input="isDirty = true"
-            />
+            >
           </div>
 
           <div class="field-group">
@@ -66,7 +126,7 @@
               type="email"
               :placeholder="t('forms.email')"
               @input="isDirty = true"
-            />
+            >
           </div>
 
           <div class="field-group">
@@ -77,14 +137,32 @@
               type="tel"
               placeholder="+855 __ ___ ___"
               @input="isDirty = true"
-            />
+            >
           </div>
         </div>
 
         <!-- Account Info (read-only) -->
         <div class="section-card">
           <div class="section-header">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" stroke="#1976d2" stroke-width="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="#1976d2" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+            ><rect
+              x="3"
+              y="11"
+              width="18"
+              height="11"
+              rx="2"
+              stroke="#1976d2"
+              stroke-width="2"
+            /><path
+              d="M7 11V7a5 5 0 0 1 10 0v4"
+              stroke="#1976d2"
+              stroke-width="2"
+              stroke-linecap="round"
+            /></svg>
             <span>{{ t('profile.accountInfo') }}</span>
           </div>
 
@@ -108,54 +186,170 @@
 
         <!-- Change Password -->
         <div class="section-card">
-          <div class="section-header" @click="showPasswordSection = !showPasswordSection" style="cursor:pointer; user-select:none">
+          <div
+            class="section-header"
+            style="cursor:pointer; user-select:none"
+            @click="showPasswordSection = !showPasswordSection"
+          >
             <div style="display:flex;align-items:center;gap:8px">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" stroke="#1976d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><path
+                d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"
+                stroke="#1976d2"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg>
               <span>{{ t('profile.changePassword') }}</span>
             </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" :style="{ transform: showPasswordSection ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }">
-              <path d="M6 9l6 6 6-6" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              :style="{ transform: showPasswordSection ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }"
+            >
+              <path
+                d="M6 9l6 6 6-6"
+                stroke="#9ca3af"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
             </svg>
           </div>
 
           <transition name="expand">
-            <div v-if="showPasswordSection" class="password-fields">
+            <div
+              v-if="showPasswordSection"
+              class="password-fields"
+            >
               <div class="field-group">
                 <label class="field-label">{{ t('profile.currentPassword') }}</label>
                 <div class="password-wrapper">
-                  <input v-model="passwordForm.current" :type="showPw.current ? 'text' : 'password'" class="field-input" placeholder="••••••••" />
-                  <button class="pw-toggle" @click="showPw.current = !showPw.current">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#9ca3af" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="#9ca3af" stroke-width="2"/></svg>
+                  <input
+                    v-model="passwordForm.current"
+                    :type="showPw.current ? 'text' : 'password'"
+                    class="field-input"
+                    placeholder="••••••••"
+                  >
+                  <button
+                    class="pw-toggle"
+                    @click="showPw.current = !showPw.current"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    ><path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      stroke="#9ca3af"
+                      stroke-width="2"
+                    /><circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      stroke="#9ca3af"
+                      stroke-width="2"
+                    /></svg>
                   </button>
                 </div>
               </div>
               <div class="field-group">
                 <label class="field-label">{{ t('profile.newPassword') }}</label>
                 <div class="password-wrapper">
-                  <input v-model="passwordForm.new" :type="showPw.new ? 'text' : 'password'" class="field-input" placeholder="••••••••" />
-                  <button class="pw-toggle" @click="showPw.new = !showPw.new">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#9ca3af" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="#9ca3af" stroke-width="2"/></svg>
+                  <input
+                    v-model="passwordForm.new"
+                    :type="showPw.new ? 'text' : 'password'"
+                    class="field-input"
+                    placeholder="••••••••"
+                  >
+                  <button
+                    class="pw-toggle"
+                    @click="showPw.new = !showPw.new"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    ><path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      stroke="#9ca3af"
+                      stroke-width="2"
+                    /><circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      stroke="#9ca3af"
+                      stroke-width="2"
+                    /></svg>
                   </button>
                 </div>
                 <!-- Strength bar -->
-                <div v-if="passwordForm.new" class="strength-bar-wrap">
+                <div
+                  v-if="passwordForm.new"
+                  class="strength-bar-wrap"
+                >
                   <div class="strength-bar">
-                    <div class="strength-fill" :style="{ width: strengthPercent + '%', background: strengthColor }"></div>
+                    <div
+                      class="strength-fill"
+                      :style="{ width: strengthPercent + '%', background: strengthColor }"
+                    />
                   </div>
-                  <span class="strength-label" :style="{ color: strengthColor }">{{ strengthLabel }}</span>
+                  <span
+                    class="strength-label"
+                    :style="{ color: strengthColor }"
+                  >{{ strengthLabel }}</span>
                 </div>
               </div>
               <div class="field-group">
                 <label class="field-label">{{ t('profile.confirmPassword') }}</label>
                 <div class="password-wrapper">
-                  <input v-model="passwordForm.confirm" :type="showPw.confirm ? 'text' : 'password'" class="field-input" :class="{ 'input-error': passwordForm.confirm && passwordForm.new !== passwordForm.confirm }" placeholder="••••••••" />
-                  <button class="pw-toggle" @click="showPw.confirm = !showPw.confirm">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#9ca3af" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="#9ca3af" stroke-width="2"/></svg>
+                  <input
+                    v-model="passwordForm.confirm"
+                    :type="showPw.confirm ? 'text' : 'password'"
+                    class="field-input"
+                    :class="{ 'input-error': passwordForm.confirm && passwordForm.new !== passwordForm.confirm }"
+                    placeholder="••••••••"
+                  >
+                  <button
+                    class="pw-toggle"
+                    @click="showPw.confirm = !showPw.confirm"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    ><path
+                      d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
+                      stroke="#9ca3af"
+                      stroke-width="2"
+                    /><circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      stroke="#9ca3af"
+                      stroke-width="2"
+                    /></svg>
                   </button>
                 </div>
-                <span v-if="passwordForm.confirm && passwordForm.new !== passwordForm.confirm" class="error-text">Passwords do not match</span>
+                <span
+                  v-if="passwordForm.confirm && passwordForm.new !== passwordForm.confirm"
+                  class="error-text"
+                >Passwords do not match</span>
               </div>
-              <button class="btn-change-pw" @click="changePassword" :disabled="!canChangePassword">
+              <button
+                class="btn-change-pw"
+                :disabled="!canChangePassword"
+                @click="changePassword"
+              >
                 {{ t('profile.updatePassword') }}
               </button>
             </div>
@@ -163,120 +357,147 @@
         </div>
 
         <!-- Logout -->
-        <button class="btn-logout" @click="handleLogout">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <button
+          class="btn-logout"
+          @click="handleLogout"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /><polyline
+            points="16 17 21 12 16 7"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /><line
+            x1="21"
+            y1="12"
+            x2="9"
+            y2="12"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
           {{ t('nav.logout') }}
         </button>
 
-        <div style="height: 32px"></div>
+        <div style="height: 32px" />
       </div>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive, onMounted } from 'vue'
-import { IonPage, IonHeader, IonContent } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useAuth } from '@/stores/auth'
-import { useI18n } from '@/composables/useI18n'
+import {ref, computed, reactive, onMounted} from 'vue';
+import {IonPage, IonHeader, IonContent} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useAuth} from '@/stores/auth';
+import {useI18n} from '@/composables/useI18n';
 
-const router = useRouter()
-const authStore = useAuth()
-const { t } = useI18n()
+const router = useRouter();
+const authStore = useAuth();
+const {t} = useI18n();
 
-const user = computed(() => authStore.user)
-const userName = computed(() => user.value?.name || user.value?.email?.split('@')[0] || 'User')
-const userInitial = computed(() => userName.value.charAt(0).toUpperCase())
+const user = computed(() => authStore.user);
+const userName = computed(() => user.value?.name || user.value?.email?.split('@')[0] || 'User');
+const userInitial = computed(() => userName.value.charAt(0).toUpperCase());
 
 // Form state
-const isDirty = ref(false)
-const isSaving = ref(false)
+const isDirty = ref(false);
+const isSaving = ref(false);
 
 const form = reactive({
   name: '',
   email: '',
   phone: '',
-})
+});
 
 onMounted(() => {
-  form.name  = user.value?.name  || ''
-  form.email = user.value?.email || ''
-  form.phone = ''
-})
+  form.name = user.value?.name || '';
+  form.email = user.value?.email || '';
+  form.phone = '';
+});
 
 // Password
-const showPasswordSection = ref(false)
-const passwordForm = reactive({ current: '', new: '', confirm: '' })
-const showPw = reactive({ current: false, new: false, confirm: false })
+const showPasswordSection = ref(false);
+const passwordForm = reactive({current: '', new: '', confirm: ''});
+const showPw = reactive({current: false, new: false, confirm: false});
 
 const passwordStrength = computed(() => {
-  const pw = passwordForm.new
-  if (!pw) return 0
-  let score = 0
-  if (pw.length >= 8) score++
-  if (/[A-Z]/.test(pw)) score++
-  if (/[0-9]/.test(pw)) score++
-  if (/[^A-Za-z0-9]/.test(pw)) score++
-  return score
-})
+  const pw = passwordForm.new;
+  if (!pw) return 0;
+  let score = 0;
+  if (pw.length >= 8) score++;
+  if (/[A-Z]/.test(pw)) score++;
+  if (/[0-9]/.test(pw)) score++;
+  if (/[^A-Za-z0-9]/.test(pw)) score++;
+  return score;
+});
 
-const strengthPercent = computed(() => (passwordStrength.value / 4) * 100)
-const strengthColor = computed(() => ['#ef4444','#f97316','#eab308','#22c55e'][passwordStrength.value - 1] || '#e5e7eb')
-const strengthLabel = computed(() => ['','Weak','Fair','Good','Strong'][passwordStrength.value] || '')
+const strengthPercent = computed(() => (passwordStrength.value / 4) * 100);
+const strengthColor = computed(() => ['#ef4444', '#f97316', '#eab308', '#22c55e'][passwordStrength.value - 1] || '#e5e7eb');
+const strengthLabel = computed(() => ['', 'Weak', 'Fair', 'Good', 'Strong'][passwordStrength.value] || '');
 
 const canChangePassword = computed(() =>
   passwordForm.current.length > 0 &&
   passwordForm.new.length >= 8 &&
   passwordForm.new === passwordForm.confirm
-)
+);
 
 // Toast
-const toast = reactive({ show: false, message: '', type: 'success' as 'success' | 'error' })
+const toast = reactive({show: false, message: '', type: 'success' as 'success' | 'error'});
 
 function showToast(message: string, type: 'success' | 'error' = 'success') {
-  toast.message = message
-  toast.type = type
-  toast.show = true
-  setTimeout(() => { toast.show = false }, 2800)
+  toast.message = message;
+  toast.type = type;
+  toast.show = true;
+  setTimeout(() => { toast.show = false; }, 2800);
 }
 
 function getRoleLabel(role?: string): string {
-  if (!role) return 'User'
-  return t(`roles.${role}`) || role
+  if (!role) return 'User';
+  return t(`roles.${role}`) || role;
 }
 
 async function saveProfile() {
-  if (!isDirty.value || isSaving.value) return
-  isSaving.value = true
-  await new Promise(r => setTimeout(r, 700)) // simulate API
+  if (!isDirty.value || isSaving.value) return;
+  isSaving.value = true;
+  await new Promise(r => setTimeout(r, 700)); // simulate API
   authStore.setAuth(authStore.token!, {
     ...user.value!,
     name: form.name,
     email: form.email,
-  })
-  isDirty.value = false
-  isSaving.value = false
-  showToast(t('messages.updatedSuccessfully'))
+  });
+  isDirty.value = false;
+  isSaving.value = false;
+  showToast(t('messages.updatedSuccessfully'));
 }
 
 function changePassword() {
-  if (!canChangePassword.value) return
+  if (!canChangePassword.value) return;
   // Mock — reset form and show success
-  passwordForm.current = ''
-  passwordForm.new = ''
-  passwordForm.confirm = ''
-  showPasswordSection.value = false
-  showToast(t('profile.passwordUpdated'))
+  passwordForm.current = '';
+  passwordForm.new = '';
+  passwordForm.confirm = '';
+  showPasswordSection.value = false;
+  showToast(t('profile.passwordUpdated'));
 }
 
 function triggerAvatarChange() {
-  showToast('Avatar upload coming soon', 'success')
+  showToast('Avatar upload coming soon', 'success');
 }
 
 function handleLogout() {
-  authStore.logout()
-  router.replace('/login').catch(() => { window.location.replace('/login') })
+  authStore.logout();
+  router.replace('/login').catch(() => { window.location.replace('/login'); });
 }
 </script>
 

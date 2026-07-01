@@ -114,7 +114,6 @@ import {
   IonModal,
   IonContent
 } from '@ionic/vue';
-import {close} from 'ionicons/icons';
 import {useOfflineModeStore} from '@/stores/offlineMode';
 import {useAuth} from '@/stores/auth';
 import {watch} from 'vue';
@@ -128,13 +127,7 @@ const authStore = useAuth();
 
 const showNoInternetModal = ref(false);
 
-const appTitle = computed(() => {
-  const user = authStore.user;
-  return user ? `${t('app.title')} - ${user.name}` : t('app.title');
-});
-
 const isOfflineMode = computed(() => offlineModeStore.isOfflineMode);
-const statusMessage = computed(() => offlineModeStore.statusMessages[offlineModeStore.status]);
 
 
 function switchToOfflineMode() {

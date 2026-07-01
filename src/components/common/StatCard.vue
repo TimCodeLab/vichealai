@@ -1,18 +1,18 @@
 <template>
-  <div class="stat-card" :style="{ background: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` }">
-    <div class="stat-value">{{ value }}</div>
-    <div class="stat-label">{{ label }}</div>
+  <div
+    class="stat-card"
+    :style="{ background: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` }"
+  >
+    <div class="stat-value">
+      {{ value }}
+    </div>
+    <div class="stat-label">
+      {{ label }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  value: string | number
-  label: string
-  color1?: string
-  color2?: string
-}>()
-
 withDefaults(defineProps<{
   value: string | number
   label: string
@@ -21,7 +21,7 @@ withDefaults(defineProps<{
 }>(), {
   color1: '#667eea',
   color2: '#764ba2'
-})
+});
 </script>
 
 <style scoped>

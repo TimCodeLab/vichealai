@@ -2,12 +2,39 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('nav.teachers') }}</span>
-        <button class="pg-new" @click="openCreate">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <button
+          class="pg-new"
+          @click="openCreate"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M12 5v14M5 12h14"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          /></svg>
           {{ t('actions.create') }}
         </button>
       </div>
@@ -16,98 +43,284 @@
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
         <div class="pg-search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
-          <input v-model="searchQuery" class="pg-search-input" :placeholder="t('actions.search') + '...'" />
-          <span v-if="searchQuery" class="pg-search-clear" @click="searchQuery = ''">✕</span>
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><circle
+            cx="11"
+            cy="11"
+            r="8"
+            stroke="#9ca3af"
+            stroke-width="2"
+          /><path
+            d="M21 21l-4.35-4.35"
+            stroke="#9ca3af"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
+          <input
+            v-model="searchQuery"
+            class="pg-search-input"
+            :placeholder="t('actions.search') + '...'"
+          >
+          <span
+            v-if="searchQuery"
+            class="pg-search-clear"
+            @click="searchQuery = ''"
+          >✕</span>
         </div>
 
         <div class="pg-meta">
           <span class="pg-count">{{ filtered.length }} {{ t('nav.teachers') }}</span>
         </div>
 
-        <div v-if="filtered.length === 0" class="pg-empty">
-          <div style="font-size:52px;margin-bottom:12px">👩‍🏫</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">No teachers found</div>
-          <div style="font-size:13px;color:#9ca3af;margin-top:4px">Add a teacher to get started</div>
-          <button class="pg-empty-btn" @click="openCreate">+ Add Teacher</button>
+        <div
+          v-if="filtered.length === 0"
+          class="pg-empty"
+        >
+          <div style="font-size:52px;margin-bottom:12px">
+            👩‍🏫
+          </div>
+          <div style="font-size:16px;font-weight:600;color:#374151">
+            No teachers found
+          </div>
+          <div style="font-size:13px;color:#9ca3af;margin-top:4px">
+            Add a teacher to get started
+          </div>
+          <button
+            class="pg-empty-btn"
+            @click="openCreate"
+          >
+            + Add Teacher
+          </button>
         </div>
 
-        <div v-for="teacher in filtered" :key="teacher.id" class="pg-card">
-          <div class="pg-avatar" :style="{ background: aColor(teacher.name) }">{{ aInitial(teacher.name) }}</div>
+        <div
+          v-for="teacher in filtered"
+          :key="teacher.id"
+          class="pg-card"
+        >
+          <div
+            class="pg-avatar"
+            :style="{ background: aColor(teacher.name) }"
+          >
+            {{ aInitial(teacher.name) }}
+          </div>
           <div class="pg-info">
-            <div class="pg-name">{{ teacher.name }}</div>
-            <div class="pg-row"><span class="pg-lbl">✉️</span><span class="pg-val">{{ teacher.email || '—' }}</span></div>
-            <div class="pg-row"><span class="pg-lbl">📱</span><span class="pg-val">{{ teacher.phone || '—' }}</span></div>
-            <div class="pg-row" v-if="teacher.subject"><span class="pg-lbl">📚</span><span class="pg-val">{{ teacher.subject }}</span></div>
-            <div v-if="teacher.loginCode" class="pg-row"><span class="pg-lbl">🔑</span><span class="pg-val" style="font-family:monospace;font-weight:700;font-size:12px;">{{ teacher.loginCode }}</span></div>
+            <div class="pg-name">
+              {{ teacher.name }}
+            </div>
+            <div class="pg-row">
+              <span class="pg-lbl">✉️</span><span class="pg-val">{{ teacher.email || '—' }}</span>
+            </div>
+            <div class="pg-row">
+              <span class="pg-lbl">📱</span><span class="pg-val">{{ teacher.phone || '—' }}</span>
+            </div>
+            <div
+              v-if="teacher.subject"
+              class="pg-row"
+            >
+              <span class="pg-lbl">📚</span><span class="pg-val">{{ teacher.subject }}</span>
+            </div>
+            <div
+              v-if="teacher.loginCode"
+              class="pg-row"
+            >
+              <span class="pg-lbl">🔑</span><span
+                class="pg-val"
+                style="font-family:monospace;font-weight:700;font-size:12px;"
+              >{{ teacher.loginCode }}</span>
+            </div>
             <div class="pg-badges">
               <span class="pg-badge pg-green">● Active</span>
-              <span v-if="teacher.qualification" class="pg-badge pg-blue">{{ teacher.qualification }}</span>
+              <span
+                v-if="teacher.qualification"
+                class="pg-badge pg-blue"
+              >{{ teacher.qualification }}</span>
             </div>
           </div>
           <div class="pg-actions">
-            <button class="pg-btn pg-btn-edit" @click="editItem(teacher)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <button
+              class="pg-btn pg-btn-edit"
+              @click="editItem(teacher)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /></svg>
             </button>
-            <button class="pg-btn pg-btn-del" @click="deleteItem(teacher.id)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <button
+              class="pg-btn pg-btn-del"
+              @click="deleteItem(teacher.id)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><polyline
+                points="3 6 5 6 21 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M10 11v6M14 11v6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /></svg>
             </button>
           </div>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
     <!-- Credentials popup -->
-    <ion-modal :is-open="!!newCredentials" @did-dismiss="newCredentials = null">
+    <ion-modal
+      :is-open="!!newCredentials"
+      @did-dismiss="newCredentials = null"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">🔑 {{ t('credentials.title') }}</span>
-          <button class="mo-close" @click="newCredentials = null">✕</button>
+          <button
+            class="mo-close"
+            @click="newCredentials = null"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
           <div class="cred-banner">
-            <div class="cred-notice">{{ t('credentials.saveNote') }}</div>
-            <div class="cred-name">{{ newCredentials?.name }}</div>
+            <div class="cred-notice">
+              {{ t('credentials.saveNote') }}
+            </div>
+            <div class="cred-name">
+              {{ newCredentials?.name }}
+            </div>
           </div>
           <div class="cred-box">
             <div class="cred-row">
               <span class="cred-lbl">{{ t('credentials.loginCode') }}</span>
               <span class="cred-val code">{{ newCredentials?.loginCode }}</span>
             </div>
-            <div class="cred-divider"></div>
+            <div class="cred-divider" />
             <div class="cred-row">
               <span class="cred-lbl">{{ t('credentials.tempPassword') }}</span>
               <span class="cred-val">{{ newCredentials?.loginPassword }}</span>
             </div>
           </div>
-          <div class="cred-hint">{{ t('credentials.changeHint') }}</div>
-          <button class="mo-save" style="width:100%" @click="newCredentials = null">{{ t('actions.ok') }}</button>
+          <div class="cred-hint">
+            {{ t('credentials.changeHint') }}
+          </div>
+          <button
+            class="mo-save"
+            style="width:100%"
+            @click="newCredentials = null"
+          >
+            {{ t('actions.ok') }}
+          </button>
         </div>
       </div>
     </ion-modal>
 
-    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+    <ion-modal
+      :is-open="showModal"
+      @did-dismiss="closeModal"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">{{ editing ? '✏️ Edit Teacher' : '➕ New Teacher' }}</span>
-          <button class="mo-close" @click="closeModal">✕</button>
+          <button
+            class="mo-close"
+            @click="closeModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">Full Name *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Dara Sok" /></div>
-          <div class="mo-field"><label class="mo-label">Email</label><input v-model="form.email" type="email" class="mo-input" placeholder="teacher@school.edu.kh" /></div>
-          <div class="mo-row2">
-            <div class="mo-field"><label class="mo-label">Phone</label><input v-model="form.phone" class="mo-input" placeholder="012 xxx xxx" /></div>
-            <div class="mo-field"><label class="mo-label">Qualification</label><input v-model="form.qualification" class="mo-input" placeholder="B.Ed, M.Ed..." /></div>
+          <div class="mo-field">
+            <label class="mo-label">Full Name *</label><input
+              v-model="form.name"
+              class="mo-input"
+              placeholder="e.g. Dara Sok"
+            >
           </div>
-          <div class="mo-field"><label class="mo-label">Subject Specialization</label><input v-model="form.subject" class="mo-input" placeholder="e.g. Mathematics" /></div>
-          <div class="mo-field"><label class="mo-label">Date of Birth</label><input v-model="form.dateOfBirth" type="date" class="mo-input" /></div>
+          <div class="mo-field">
+            <label class="mo-label">Email</label><input
+              v-model="form.email"
+              type="email"
+              class="mo-input"
+              placeholder="teacher@school.edu.kh"
+            >
+          </div>
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">Phone</label><input
+                v-model="form.phone"
+                class="mo-input"
+                placeholder="012 xxx xxx"
+              >
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">Qualification</label><input
+                v-model="form.qualification"
+                class="mo-input"
+                placeholder="B.Ed, M.Ed..."
+              >
+            </div>
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Subject Specialization</label><input
+              v-model="form.subject"
+              class="mo-input"
+              placeholder="e.g. Mathematics"
+            >
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Date of Birth</label><input
+              v-model="form.dateOfBirth"
+              type="date"
+              class="mo-input"
+            >
+          </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.name">{{ t('actions.save') }}</button>
+            <button
+              class="mo-cancel"
+              @click="closeModal"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!form.name"
+              @click="saveItem"
+            >
+              {{ t('actions.save') }}
+            </button>
           </div>
         </div>
       </div>
@@ -116,67 +329,67 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t } = useI18n()
-const searchQuery = ref('')
-const showModal = ref(false)
-const editing = ref<any>(null)
-const teachers = ref<any[]>(LocalStorageService.get<any[]>('teachers', []) || [])
-const form = ref({ name:'', email:'', phone:'', qualification:'', subject:'', dateOfBirth:'' })
+const router = useRouter();
+const {t} = useI18n();
+const searchQuery = ref('');
+const showModal = ref(false);
+const editing = ref<any>(null);
+const teachers = ref<any[]>(LocalStorageService.get<any[]>('teachers', []) || []);
+const form = ref({name: '', email: '', phone: '', qualification: '', subject: '', dateOfBirth: ''});
 
 const filtered = computed(() => {
-  if (!searchQuery.value) return teachers.value
-  const q = searchQuery.value.toLowerCase()
-  return teachers.value.filter(t => t.name?.toLowerCase().includes(q) || t.email?.toLowerCase().includes(q) || t.subject?.toLowerCase().includes(q))
-})
+  if (!searchQuery.value) return teachers.value;
+  const q = searchQuery.value.toLowerCase();
+  return teachers.value.filter(t => t.name?.toLowerCase().includes(q) || t.email?.toLowerCase().includes(q) || t.subject?.toLowerCase().includes(q));
+});
 
-const palette = ['#1976d2','#2e7d32','#e65100','#6a1b9a','#c62828','#00838f','#4527a0','#558b2f']
-function aColor(n: string)   { return palette[(n?.charCodeAt(0)||0) % palette.length] }
-function aInitial(n: string) { return (n||'?').charAt(0).toUpperCase() }
+const palette = ['#1976d2', '#2e7d32', '#e65100', '#6a1b9a', '#c62828', '#00838f', '#4527a0', '#558b2f'];
+function aColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
+function aInitial(n: string) { return (n || '?').charAt(0).toUpperCase(); }
 
-function openCreate() { form.value={name:'',email:'',phone:'',qualification:'',subject:'',dateOfBirth:''}; editing.value=null; showModal.value=true }
-function editItem(t: any)    { editing.value=t; form.value={...t}; showModal.value=true }
-function closeModal()        { showModal.value=false; editing.value=null }
+function openCreate() { form.value = {name: '', email: '', phone: '', qualification: '', subject: '', dateOfBirth: ''}; editing.value = null; showModal.value = true; }
+function editItem(t: any) { editing.value = t; form.value = {...t}; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; }
 
 function deleteItem(id: string) {
-  if (confirm(t('messages.confirmDelete'))) { teachers.value=teachers.value.filter(t=>t.id!==id); LocalStorageService.set('teachers',teachers.value) }
+  if (confirm(t('messages.confirmDelete'))) { teachers.value = teachers.value.filter(t=>t.id !== id); LocalStorageService.set('teachers', teachers.value); }
 }
 function genTeacherCode() {
-  const year = new Date().getFullYear()
-  const existing = teachers.value.filter(t => t.loginCode?.startsWith(`TCH-${year}-`))
-  const num = String(existing.length + 1).padStart(3, '0')
-  return `TCH-${year}-${num}`
+  const year = new Date().getFullYear();
+  const existing = teachers.value.filter(t => t.loginCode?.startsWith(`TCH-${year}-`));
+  const num = String(existing.length + 1).padStart(3, '0');
+  return `TCH-${year}-${num}`;
 }
 function genPassword() {
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!'
-  return Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('')
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!';
+  return Array.from({length: 8}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
 }
 
-const newCredentials = ref<{loginCode:string; loginPassword:string; name:string} | null>(null)
+const newCredentials = ref<{loginCode:string; loginPassword:string; name:string} | null>(null);
 
 function saveItem() {
-  if (!form.value.name) return
+  if (!form.value.name) return;
   if (editing.value) {
-    const i = teachers.value.findIndex(t=>t.id===editing.value.id)
-    if (i!==-1) teachers.value[i]={...teachers.value[i],...form.value}
-    newCredentials.value = null
+    const i = teachers.value.findIndex(t=>t.id === editing.value.id);
+    if (i !== -1) teachers.value[i] = {...teachers.value[i], ...form.value};
+    newCredentials.value = null;
   } else {
-    const loginCode     = genTeacherCode()
-    const loginPassword = genPassword()
+    const loginCode = genTeacherCode();
+    const loginPassword = genPassword();
     teachers.value.push({
-      id:`tch_${Date.now()}`, schoolId:'school_1', status:'active',
-      loginCode, loginPassword, mustChangePassword:true, role:'teacher',
+      id: `tch_${Date.now()}`, schoolId: 'school_1', status: 'active',
+      loginCode, loginPassword, mustChangePassword: true, role: 'teacher',
       ...form.value
-    })
-    newCredentials.value = { loginCode, loginPassword, name: form.value.name }
+    });
+    newCredentials.value = {loginCode, loginPassword, name: form.value.name};
   }
-  LocalStorageService.set('teachers',teachers.value); closeModal()
+  LocalStorageService.set('teachers', teachers.value); closeModal();
 }
 </script>
 

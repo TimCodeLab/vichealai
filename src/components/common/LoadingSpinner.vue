@@ -1,17 +1,25 @@
 <template>
-  <div class="loading-container" v-if="visible">
-    <ion-spinner color="primary"></ion-spinner>
-    <p v-if="message" class="loading-message">{{ message }}</p>
+  <div
+    v-if="visible"
+    class="loading-container"
+  >
+    <ion-spinner color="primary" />
+    <p
+      v-if="message"
+      class="loading-message"
+    >
+      {{ message }}
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IonSpinner } from '@ionic/vue'
+import {IonSpinner} from '@ionic/vue';
 
 defineProps<{
   visible: boolean
   message?: string
-}>()
+}>();
 </script>
 
 <style scoped>

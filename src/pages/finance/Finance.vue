@@ -2,12 +2,39 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('nav.finance') }}</span>
-        <button class="pg-new" @click="openCreate">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <button
+          class="pg-new"
+          @click="openCreate"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M12 5v14M5 12h14"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          /></svg>
           {{ t('finance.addFee') }}
         </button>
       </div>
@@ -15,43 +42,71 @@
 
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
-
         <!-- Hero summary card -->
         <div class="hero-card">
           <div class="hero-top">
             <div>
-              <div class="hero-lbl">{{ t('finance.totalFees') }}</div>
-              <div class="hero-amount">${{ totalFees.toFixed(2) }}</div>
+              <div class="hero-lbl">
+                {{ t('finance.totalFees') }}
+              </div>
+              <div class="hero-amount">
+                ${{ totalFees.toFixed(2) }}
+              </div>
             </div>
-            <div class="hero-icon">💰</div>
+            <div class="hero-icon">
+              💰
+            </div>
           </div>
           <div class="hero-progress-wrap">
             <div class="hero-progress-bar">
-              <div class="hero-progress-fill" :style="{ width: collectedPct + '%' }"></div>
+              <div
+                class="hero-progress-fill"
+                :style="{ width: collectedPct + '%' }"
+              />
             </div>
-            <div class="hero-progress-lbl">{{ collectedPct }}% {{ t('finance.collectedPct') }}</div>
+            <div class="hero-progress-lbl">
+              {{ collectedPct }}% {{ t('finance.collectedPct') }}
+            </div>
           </div>
           <div class="hero-stats">
             <div class="hero-stat">
-              <div class="hero-stat-val hero-green">${{ totalCollected.toFixed(2) }}</div>
-              <div class="hero-stat-lbl">{{ t('finance.collected') }}</div>
+              <div class="hero-stat-val hero-green">
+                ${{ totalCollected.toFixed(2) }}
+              </div>
+              <div class="hero-stat-lbl">
+                {{ t('finance.collected') }}
+              </div>
             </div>
-            <div class="hero-divider"></div>
+            <div class="hero-divider" />
             <div class="hero-stat">
-              <div class="hero-stat-val hero-orange">${{ totalOutstanding.toFixed(2) }}</div>
-              <div class="hero-stat-lbl">{{ t('finance.outstanding') }}</div>
+              <div class="hero-stat-val hero-orange">
+                ${{ totalOutstanding.toFixed(2) }}
+              </div>
+              <div class="hero-stat-lbl">
+                {{ t('finance.outstanding') }}
+              </div>
             </div>
-            <div class="hero-divider"></div>
+            <div class="hero-divider" />
             <div class="hero-stat">
-              <div class="hero-stat-val hero-blue">{{ fees.length }}</div>
-              <div class="hero-stat-lbl">{{ t('finance.feeTypes') }}</div>
+              <div class="hero-stat-val hero-blue">
+                {{ fees.length }}
+              </div>
+              <div class="hero-stat-lbl">
+                {{ t('finance.feeTypes') }}
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Quick action tabs -->
         <div class="tab-row">
-          <button v-for="tab in tabs" :key="tab.val" class="tab-btn" :class="{ active: activeTab === tab.val }" @click="activeTab = tab.val">
+          <button
+            v-for="tab in tabs"
+            :key="tab.val"
+            class="tab-btn"
+            :class="{ active: activeTab === tab.val }"
+            @click="activeTab = tab.val"
+          >
             {{ tab.icon }} {{ tab.label }}
           </button>
         </div>
@@ -63,33 +118,107 @@
             <span class="sec-count">{{ fees.length }} {{ t('finance.items') }}</span>
           </div>
 
-          <div v-if="fees.length === 0" class="pg-empty">
-            <div style="font-size:52px;margin-bottom:12px">💸</div>
-            <div style="font-size:16px;font-weight:600;color:#374151">{{ t('finance.noFees') }}</div>
-            <div style="font-size:13px;color:#9ca3af;margin-top:4px">{{ t('finance.noFeesSub') }}</div>
-            <button class="pg-empty-btn" @click="openCreate">+ {{ t('finance.addFee') }}</button>
+          <div
+            v-if="fees.length === 0"
+            class="pg-empty"
+          >
+            <div style="font-size:52px;margin-bottom:12px">
+              💸
+            </div>
+            <div style="font-size:16px;font-weight:600;color:#374151">
+              {{ t('finance.noFees') }}
+            </div>
+            <div style="font-size:13px;color:#9ca3af;margin-top:4px">
+              {{ t('finance.noFeesSub') }}
+            </div>
+            <button
+              class="pg-empty-btn"
+              @click="openCreate"
+            >
+              + {{ t('finance.addFee') }}
+            </button>
           </div>
 
-          <div v-for="fee in fees" :key="fee.id" class="fee-card">
-            <div class="fee-icon-wrap" :style="{ background: feeColor(fee.name) }">
+          <div
+            v-for="fee in fees"
+            :key="fee.id"
+            class="fee-card"
+          >
+            <div
+              class="fee-icon-wrap"
+              :style="{ background: feeColor(fee.name) }"
+            >
               {{ feeEmoji(fee.category) }}
             </div>
             <div class="fee-info">
-              <div class="fee-name">{{ fee.name }}</div>
-              <div class="fee-desc" v-if="fee.description">{{ fee.description }}</div>
+              <div class="fee-name">
+                {{ fee.name }}
+              </div>
+              <div
+                v-if="fee.description"
+                class="fee-desc"
+              >
+                {{ fee.description }}
+              </div>
               <div class="fee-meta-row">
                 <span class="fee-meta">📅 {{ fmtDate(fee.dueDate) }}</span>
-                <span class="fee-badge" :class="statusBadge(fee.status)">{{ t('finance.' + (fee.status || 'pending')) }}</span>
+                <span
+                  class="fee-badge"
+                  :class="statusBadge(fee.status)"
+                >{{ t('finance.' + (fee.status || 'pending')) }}</span>
               </div>
             </div>
             <div class="fee-right">
-              <div class="fee-amount">{{ fee.currency || '$' }}{{ fee.amount }}</div>
+              <div class="fee-amount">
+                {{ fee.currency || '$' }}{{ fee.amount }}
+              </div>
               <div class="fee-acts">
-                <button class="fa-btn fa-edit" @click="editItem(fee)">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <button
+                  class="fa-btn fa-edit"
+                  @click="editItem(fee)"
+                >
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  ><path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  /><path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  /></svg>
                 </button>
-                <button class="fa-btn fa-del" @click="deleteItem(fee.id)">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <button
+                  class="fa-btn fa-del"
+                  @click="deleteItem(fee.id)"
+                >
+                  <svg
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                  ><polyline
+                    points="3 6 5 6 21 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  /><path
+                    d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  /><path
+                    d="M10 11v6M14 11v6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  /></svg>
                 </button>
               </div>
             </div>
@@ -100,26 +229,58 @@
         <div v-if="activeTab === 'payments'">
           <div class="sec-head">
             <span class="sec-title">{{ t('finance.paymentRecords') }}</span>
-            <button class="sec-add" @click="openPayment">+ {{ t('finance.record') }}</button>
+            <button
+              class="sec-add"
+              @click="openPayment"
+            >
+              + {{ t('finance.record') }}
+            </button>
           </div>
 
-          <div v-if="payments.length === 0" class="pg-empty">
-            <div style="font-size:52px;margin-bottom:12px">🧾</div>
-            <div style="font-size:16px;font-weight:600;color:#374151">{{ t('finance.noPayments') }}</div>
-            <button class="pg-empty-btn" @click="openPayment">+ {{ t('finance.recordPay') }}</button>
+          <div
+            v-if="payments.length === 0"
+            class="pg-empty"
+          >
+            <div style="font-size:52px;margin-bottom:12px">
+              🧾
+            </div>
+            <div style="font-size:16px;font-weight:600;color:#374151">
+              {{ t('finance.noPayments') }}
+            </div>
+            <button
+              class="pg-empty-btn"
+              @click="openPayment"
+            >
+              + {{ t('finance.recordPay') }}
+            </button>
           </div>
 
-          <div v-for="pay in payments" :key="pay.id" class="pay-card">
-            <div class="pay-avatar" :style="{ background: payColor(pay.studentName) }">
+          <div
+            v-for="pay in payments"
+            :key="pay.id"
+            class="pay-card"
+          >
+            <div
+              class="pay-avatar"
+              :style="{ background: payColor(pay.studentName) }"
+            >
               {{ (pay.studentName||'?').charAt(0).toUpperCase() }}
             </div>
             <div class="pay-info">
-              <div class="pay-name">{{ pay.studentName || t('finance.unknownStudent') }}</div>
-              <div class="pay-fee">{{ pay.feeName }}</div>
-              <div class="pay-date">{{ fmtDate(pay.date) }} · {{ pay.method || t('finance.cash') }}</div>
+              <div class="pay-name">
+                {{ pay.studentName || t('finance.unknownStudent') }}
+              </div>
+              <div class="pay-fee">
+                {{ pay.feeName }}
+              </div>
+              <div class="pay-date">
+                {{ fmtDate(pay.date) }} · {{ pay.method || t('finance.cash') }}
+              </div>
             </div>
             <div class="pay-right">
-              <div class="pay-amount">+${{ pay.amount }}</div>
+              <div class="pay-amount">
+                +${{ pay.amount }}
+              </div>
               <span class="pay-badge">{{ t('finance.paid') }}</span>
             </div>
           </div>
@@ -127,41 +288,81 @@
 
         <!-- Analytics tab -->
         <div v-if="activeTab === 'analytics'">
-          <div class="sec-head"><span class="sec-title">{{ t('finance.collectionSummary') }}</span></div>
+          <div class="sec-head">
+            <span class="sec-title">{{ t('finance.collectionSummary') }}</span>
+          </div>
 
           <div class="analytics-grid">
             <div class="an-card an-blue">
-              <div class="an-icon">📊</div>
-              <div class="an-val">${{ totalFees.toFixed(0) }}</div>
-              <div class="an-lbl">{{ t('finance.totalBilled') }}</div>
+              <div class="an-icon">
+                📊
+              </div>
+              <div class="an-val">
+                ${{ totalFees.toFixed(0) }}
+              </div>
+              <div class="an-lbl">
+                {{ t('finance.totalBilled') }}
+              </div>
             </div>
             <div class="an-card an-green">
-              <div class="an-icon">✅</div>
-              <div class="an-val">${{ totalCollected.toFixed(0) }}</div>
-              <div class="an-lbl">{{ t('finance.collected') }}</div>
+              <div class="an-icon">
+                ✅
+              </div>
+              <div class="an-val">
+                ${{ totalCollected.toFixed(0) }}
+              </div>
+              <div class="an-lbl">
+                {{ t('finance.collected') }}
+              </div>
             </div>
             <div class="an-card an-orange">
-              <div class="an-icon">⏳</div>
-              <div class="an-val">${{ totalOutstanding.toFixed(0) }}</div>
-              <div class="an-lbl">{{ t('finance.outstanding') }}</div>
+              <div class="an-icon">
+                ⏳
+              </div>
+              <div class="an-val">
+                ${{ totalOutstanding.toFixed(0) }}
+              </div>
+              <div class="an-lbl">
+                {{ t('finance.outstanding') }}
+              </div>
             </div>
             <div class="an-card an-purple">
-              <div class="an-icon">💳</div>
-              <div class="an-val">{{ payments.length }}</div>
-              <div class="an-lbl">{{ t('finance.transactions') }}</div>
+              <div class="an-icon">
+                💳
+              </div>
+              <div class="an-val">
+                {{ payments.length }}
+              </div>
+              <div class="an-lbl">
+                {{ t('finance.transactions') }}
+              </div>
             </div>
           </div>
 
           <!-- Per-fee breakdown -->
           <div class="breakdown-card">
-            <div class="breakdown-title">{{ t('finance.feeBreakdown') }}</div>
-            <div v-if="fees.length === 0" style="text-align:center;padding:24px;color:#9ca3af;font-size:13px">{{ t('finance.noFeeAnalyze') }}</div>
-            <div v-for="fee in fees" :key="fee.id" class="breakdown-row">
+            <div class="breakdown-title">
+              {{ t('finance.feeBreakdown') }}
+            </div>
+            <div
+              v-if="fees.length === 0"
+              style="text-align:center;padding:24px;color:#9ca3af;font-size:13px"
+            >
+              {{ t('finance.noFeeAnalyze') }}
+            </div>
+            <div
+              v-for="fee in fees"
+              :key="fee.id"
+              class="breakdown-row"
+            >
               <div class="breakdown-left">
                 <span class="breakdown-name">{{ fee.name }}</span>
                 <div class="breakdown-bar-wrap">
                   <div class="breakdown-bar">
-                    <div class="breakdown-fill" :style="{ width: (fee.amount / (totalFees || 1) * 100) + '%' }"></div>
+                    <div
+                      class="breakdown-fill"
+                      :style="{ width: (fee.amount / (totalFees || 1) * 100) + '%' }"
+                    />
                   </div>
                 </div>
               </div>
@@ -170,103 +371,232 @@
           </div>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
     <!-- Add/Edit Fee Modal -->
-    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+    <ion-modal
+      :is-open="showModal"
+      @did-dismiss="closeModal"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">{{ editing ? '✏️ ' + t('finance.editFee') : '➕ ' + t('finance.newFee') }}</span>
-          <button class="mo-close" @click="closeModal">✕</button>
+          <button
+            class="mo-close"
+            @click="closeModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">{{ t('finance.feeName') }} *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Tuition Fee" /></div>
-          <div class="mo-field"><label class="mo-label">{{ t('forms.description') }}</label><input v-model="form.description" class="mo-input" placeholder="Optional" /></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('finance.feeName') }} *</label><input
+              v-model="form.name"
+              class="mo-input"
+              placeholder="e.g. Tuition Fee"
+            >
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('forms.description') }}</label><input
+              v-model="form.description"
+              class="mo-input"
+              placeholder="Optional"
+            >
+          </div>
           <div class="mo-row2">
             <div class="mo-field">
               <label class="mo-label">{{ t('finance.amount') }}</label>
-              <input v-model="form.amount" type="number" class="mo-input" placeholder="0.00" />
+              <input
+                v-model="form.amount"
+                type="number"
+                class="mo-input"
+                placeholder="0.00"
+              >
             </div>
             <div class="mo-field">
               <label class="mo-label">{{ t('finance.currency') }}</label>
-              <select v-model="form.currency" class="mo-input">
-                <option value="$">USD ($)</option>
-                <option value="KHR">KHR (រ)</option>
+              <select
+                v-model="form.currency"
+                class="mo-input"
+              >
+                <option value="$">
+                  USD ($)
+                </option>
+                <option value="KHR">
+                  KHR (រ)
+                </option>
               </select>
             </div>
           </div>
           <div class="mo-row2">
             <div class="mo-field">
               <label class="mo-label">{{ t('finance.category') }}</label>
-              <select v-model="form.category" class="mo-input">
-                <option value="tuition">{{ t('finance.tuition') }}</option>
-                <option value="activity">{{ t('finance.activity') }}</option>
-                <option value="library">{{ t('finance.library') }}</option>
-                <option value="transport">{{ t('finance.transport') }}</option>
-                <option value="exam">{{ t('finance.exam') }}</option>
-                <option value="other">{{ t('finance.other') }}</option>
+              <select
+                v-model="form.category"
+                class="mo-input"
+              >
+                <option value="tuition">
+                  {{ t('finance.tuition') }}
+                </option>
+                <option value="activity">
+                  {{ t('finance.activity') }}
+                </option>
+                <option value="library">
+                  {{ t('finance.library') }}
+                </option>
+                <option value="transport">
+                  {{ t('finance.transport') }}
+                </option>
+                <option value="exam">
+                  {{ t('finance.exam') }}
+                </option>
+                <option value="other">
+                  {{ t('finance.other') }}
+                </option>
               </select>
             </div>
             <div class="mo-field">
               <label class="mo-label">{{ t('finance.status') }}</label>
-              <select v-model="form.status" class="mo-input">
-                <option value="active">{{ t('finance.active') }}</option>
-                <option value="pending">{{ t('finance.pending') }}</option>
-                <option value="inactive">{{ t('finance.inactive') }}</option>
+              <select
+                v-model="form.status"
+                class="mo-input"
+              >
+                <option value="active">
+                  {{ t('finance.active') }}
+                </option>
+                <option value="pending">
+                  {{ t('finance.pending') }}
+                </option>
+                <option value="inactive">
+                  {{ t('finance.inactive') }}
+                </option>
               </select>
             </div>
           </div>
-          <div class="mo-field"><label class="mo-label">{{ t('finance.dueDate') }}</label><input v-model="form.dueDate" type="date" class="mo-input" /></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('finance.dueDate') }}</label><input
+              v-model="form.dueDate"
+              type="date"
+              class="mo-input"
+            >
+          </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.name">{{ t('finance.saveFee') }}</button>
+            <button
+              class="mo-cancel"
+              @click="closeModal"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!form.name"
+              @click="saveItem"
+            >
+              {{ t('finance.saveFee') }}
+            </button>
           </div>
         </div>
       </div>
     </ion-modal>
 
     <!-- Record Payment Modal -->
-    <ion-modal :is-open="showPayModal" @did-dismiss="showPayModal = false">
+    <ion-modal
+      :is-open="showPayModal"
+      @did-dismiss="showPayModal = false"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">🧾 {{ t('finance.recordPay') }}</span>
-          <button class="mo-close" @click="showPayModal = false">✕</button>
+          <button
+            class="mo-close"
+            @click="showPayModal = false"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
           <div class="mo-field">
             <label class="mo-label">{{ t('finance.studentName') }}</label>
-            <input v-model="payForm.studentName" class="mo-input" placeholder="Student name" />
+            <input
+              v-model="payForm.studentName"
+              class="mo-input"
+              placeholder="Student name"
+            >
           </div>
           <div class="mo-field">
             <label class="mo-label">{{ t('finance.fees') }}</label>
-            <select v-model="payForm.feeName" class="mo-input">
-              <option value="">-- {{ t('finance.selectFee') }} --</option>
-              <option v-for="f in fees" :key="f.id" :value="f.name">{{ f.name }}</option>
+            <select
+              v-model="payForm.feeName"
+              class="mo-input"
+            >
+              <option value="">
+                -- {{ t('finance.selectFee') }} --
+              </option>
+              <option
+                v-for="f in fees"
+                :key="f.id"
+                :value="f.name"
+              >
+                {{ f.name }}
+              </option>
             </select>
           </div>
           <div class="mo-row2">
             <div class="mo-field">
               <label class="mo-label">{{ t('finance.amount') }}</label>
-              <input v-model="payForm.amount" type="number" class="mo-input" placeholder="0.00" />
+              <input
+                v-model="payForm.amount"
+                type="number"
+                class="mo-input"
+                placeholder="0.00"
+              >
             </div>
             <div class="mo-field">
               <label class="mo-label">{{ t('finance.method') }}</label>
-              <select v-model="payForm.method" class="mo-input">
-                <option value="Cash">{{ t('finance.cash') }}</option>
-                <option value="Bank Transfer">{{ t('finance.bankTransfer') }}</option>
-                <option value="ABA">ABA</option>
-                <option value="Wing">Wing</option>
+              <select
+                v-model="payForm.method"
+                class="mo-input"
+              >
+                <option value="Cash">
+                  {{ t('finance.cash') }}
+                </option>
+                <option value="Bank Transfer">
+                  {{ t('finance.bankTransfer') }}
+                </option>
+                <option value="ABA">
+                  ABA
+                </option>
+                <option value="Wing">
+                  Wing
+                </option>
               </select>
             </div>
           </div>
-          <div class="mo-field"><label class="mo-label">{{ t('forms.date') }}</label><input v-model="payForm.date" type="date" class="mo-input" /></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('forms.date') }}</label><input
+              v-model="payForm.date"
+              type="date"
+              class="mo-input"
+            >
+          </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="showPayModal = false">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="savePayment" :disabled="!payForm.studentName || !payForm.amount">{{ t('finance.savePayment') }}</button>
+            <button
+              class="mo-cancel"
+              @click="showPayModal = false"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!payForm.studentName || !payForm.amount"
+              @click="savePayment"
+            >
+              {{ t('finance.savePayment') }}
+            </button>
           </div>
         </div>
       </div>
@@ -274,79 +604,84 @@
 
     <!-- Toast -->
     <transition name="toast">
-      <div v-if="toastMsg" class="toast">{{ toastMsg }}</div>
+      <div
+        v-if="toastMsg"
+        class="toast"
+      >
+        {{ toastMsg }}
+      </div>
     </transition>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t } = useI18n()
+const router = useRouter();
+const {t} = useI18n();
 
-const fees     = ref<any[]>(LocalStorageService.get<any[]>('fees',     []) || [])
-const payments = ref<any[]>(LocalStorageService.get<any[]>('payments', []) || [])
-const activeTab  = ref('fees')
-const showModal  = ref(false)
-const showPayModal = ref(false)
-const editing    = ref<any>(null)
-const toastMsg   = ref('')
+const fees = ref<any[]>(LocalStorageService.get<any[]>('fees', []) || []);
+const payments = ref<any[]>(LocalStorageService.get<any[]>('payments', []) || []);
+const activeTab = ref('fees');
+const showModal = ref(false);
+const showPayModal = ref(false);
+const editing = ref<any>(null);
+const toastMsg = ref('');
 
-const form = ref({ name:'', description:'', amount:0, currency:'$', category:'tuition', status:'active', dueDate:'' })
-const payForm = ref({ studentName:'', feeName:'', amount:0, method:'Cash', date:new Date().toISOString().split('T')[0] })
+const form = ref({name: '', description: '', amount: 0, currency: '$', category: 'tuition', status: 'active', dueDate: ''});
+const payForm = ref({studentName: '', feeName: '', amount: 0, method: 'Cash', date: new Date().toISOString().split('T')[0]});
 
 const tabs = computed(() => [
-  { val:'fees',      icon:'💳', label: t('finance.fees')      },
-  { val:'payments',  icon:'🧾', label: t('finance.payments')  },
-  { val:'analytics', icon:'📊', label: t('finance.analytics') },
-])
+  {val: 'fees', icon: '💳', label: t('finance.fees')},
+  {val: 'payments', icon: '🧾', label: t('finance.payments')},
+  {val: 'analytics', icon: '📊', label: t('finance.analytics')},
+]);
 
-const totalFees        = computed(() => fees.value.reduce((s,f)=>s+Number(f.amount||0),0))
-const totalCollected   = computed(() => payments.value.reduce((s,p)=>s+Number(p.amount||0),0))
-const totalOutstanding = computed(() => Math.max(0, totalFees.value - totalCollected.value))
-const collectedPct     = computed(() => totalFees.value ? Math.min(100, Math.round(totalCollected.value/totalFees.value*100)) : 0)
+const totalFees = computed(() => fees.value.reduce((s, f)=>s + Number(f.amount || 0), 0));
+const totalCollected = computed(() => payments.value.reduce((s, p)=>s + Number(p.amount || 0), 0));
+const totalOutstanding = computed(() => Math.max(0, totalFees.value - totalCollected.value));
+const collectedPct = computed(() => totalFees.value ? Math.min(100, Math.round(totalCollected.value / totalFees.value * 100)) : 0);
 
-const palette = ['#1976d2','#2e7d32','#e65100','#6a1b9a','#c62828','#00838f','#4527a0','#558b2f']
-function feeColor(n: string)  { return palette[(n?.charCodeAt(0)||0) % palette.length] }
-function payColor(n: string)  { return palette[(n?.charCodeAt(0)||0) % palette.length] }
+const palette = ['#1976d2', '#2e7d32', '#e65100', '#6a1b9a', '#c62828', '#00838f', '#4527a0', '#558b2f'];
+function feeColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
+function payColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
 function feeEmoji(cat: string) {
-  return ({tuition:'🎓',activity:'⚽',library:'📚',transport:'🚌',exam:'📝',other:'💰'} as any)[cat] || '💳'
+  return ({tuition: '🎓', activity: '⚽', library: '📚', transport: '🚌', exam: '📝', other: '💰'} as any)[cat] || '💳';
 }
-function fmtDate(d: string) { return d ? new Date(d).toLocaleDateString() : '—' }
+function fmtDate(d: string) { return d ? new Date(d).toLocaleDateString() : '—'; }
 function statusBadge(s: string) {
-  return ({active:'badge-green',pending:'badge-orange',inactive:'badge-gray'} as any)[s] || 'badge-gray'
+  return ({active: 'badge-green', pending: 'badge-orange', inactive: 'badge-gray'} as any)[s] || 'badge-gray';
 }
 
-function showToast(msg: string) { toastMsg.value=msg; setTimeout(()=>toastMsg.value='',2500) }
+function showToast(msg: string) { toastMsg.value = msg; setTimeout(()=>toastMsg.value = '', 2500); }
 
-function openCreate() { form.value={name:'',description:'',amount:0,currency:'$',category:'tuition',status:'active',dueDate:''}; editing.value=null; showModal.value=true }
-function editItem(f: any) { editing.value=f; form.value={...f}; showModal.value=true }
-function closeModal()     { showModal.value=false; editing.value=null }
-function openPayment()    { payForm.value={studentName:'',feeName:'',amount:0,method:'Cash',date:new Date().toISOString().split('T')[0]}; showPayModal.value=true }
+function openCreate() { form.value = {name: '', description: '', amount: 0, currency: '$', category: 'tuition', status: 'active', dueDate: ''}; editing.value = null; showModal.value = true; }
+function editItem(f: any) { editing.value = f; form.value = {...f}; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; }
+function openPayment() { payForm.value = {studentName: '', feeName: '', amount: 0, method: 'Cash', date: new Date().toISOString().split('T')[0]}; showPayModal.value = true; }
 
 function deleteItem(id: string) {
-  if (confirm(t('finance.deleteFee'))) { fees.value=fees.value.filter(f=>f.id!==id); LocalStorageService.set('fees',fees.value); showToast(t('messages.deletedSuccessfully')) }
+  if (confirm(t('finance.deleteFee'))) { fees.value = fees.value.filter(f=>f.id !== id); LocalStorageService.set('fees', fees.value); showToast(t('messages.deletedSuccessfully')); }
 }
 function saveItem() {
-  if (!form.value.name) return
-  const wasEditing = editing.value
+  if (!form.value.name) return;
+  const wasEditing = editing.value;
   if (editing.value) {
-    const i=fees.value.findIndex(f=>f.id===editing.value.id)
-    if (i!==-1) fees.value[i]={...fees.value[i],...form.value}
+    const i = fees.value.findIndex(f=>f.id === editing.value.id);
+    if (i !== -1) fees.value[i] = {...fees.value[i], ...form.value};
   } else {
-    fees.value.push({id:`fee_${Date.now()}`,schoolId:'school_1',...form.value})
+    fees.value.push({id: `fee_${Date.now()}`, schoolId: 'school_1', ...form.value});
   }
-  LocalStorageService.set('fees',fees.value); closeModal(); showToast(wasEditing ? t('messages.updatedSuccessfully') : t('messages.createdSuccessfully'))
+  LocalStorageService.set('fees', fees.value); closeModal(); showToast(wasEditing ? t('messages.updatedSuccessfully') : t('messages.createdSuccessfully'));
 }
 function savePayment() {
-  if (!payForm.value.studentName || !payForm.value.amount) return
-  payments.value.unshift({id:`pay_${Date.now()}`,...payForm.value})
-  LocalStorageService.set('payments',payments.value); showPayModal.value=false; showToast(t('finance.paymentRecorded'))
+  if (!payForm.value.studentName || !payForm.value.amount) return;
+  payments.value.unshift({id: `pay_${Date.now()}`, ...payForm.value});
+  LocalStorageService.set('payments', payments.value); showPayModal.value = false; showToast(t('finance.paymentRecorded'));
 }
 </script>
 

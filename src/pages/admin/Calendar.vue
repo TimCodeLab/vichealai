@@ -2,12 +2,39 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('calendar.title') }}</span>
-        <button class="pg-new" @click="openCreate">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <button
+          class="pg-new"
+          @click="openCreate"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M12 5v14M5 12h14"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          /></svg>
           {{ t('actions.create') }}
         </button>
       </div>
@@ -15,18 +42,35 @@
 
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
-
         <!-- Month nav -->
         <div class="month-nav">
-          <button class="month-btn" @click="prevMonth">‹</button>
-          <div class="month-label">{{ monthLabel }}</div>
-          <button class="month-btn" @click="nextMonth">›</button>
+          <button
+            class="month-btn"
+            @click="prevMonth"
+          >
+            ‹
+          </button>
+          <div class="month-label">
+            {{ monthLabel }}
+          </div>
+          <button
+            class="month-btn"
+            @click="nextMonth"
+          >
+            ›
+          </button>
         </div>
 
         <!-- Calendar grid -->
         <div class="cal-grid-wrap">
           <div class="cal-days-head">
-            <div v-for="d in dayNames" :key="d" class="cal-dname">{{ d }}</div>
+            <div
+              v-for="d in dayNames"
+              :key="d"
+              class="cal-dname"
+            >
+              {{ d }}
+            </div>
           </div>
           <div class="cal-grid">
             <div
@@ -37,8 +81,16 @@
               @click="cell.inMonth && selectDay(cell)"
             >
               <span class="cal-day-num">{{ cell.day }}</span>
-              <div v-if="cell.events.length" class="event-dots">
-                <span v-for="(ev, i) in cell.events.slice(0,3)" :key="i" class="event-dot" :style="{ background: typeColor(ev.type) }"></span>
+              <div
+                v-if="cell.events.length"
+                class="event-dots"
+              >
+                <span
+                  v-for="(ev, i) in cell.events.slice(0,3)"
+                  :key="i"
+                  class="event-dot"
+                  :style="{ background: typeColor(ev.type) }"
+                />
               </div>
             </div>
           </div>
@@ -46,194 +98,285 @@
 
         <!-- Events list -->
         <div class="filter-tabs">
-          <button v-for="tab in filterTabs" :key="tab.val" class="filter-tab" :class="{ active: activeFilter === tab.val }" @click="activeFilter = tab.val">
+          <button
+            v-for="tab in filterTabs"
+            :key="tab.val"
+            class="filter-tab"
+            :class="{ active: activeFilter === tab.val }"
+            @click="activeFilter = tab.val"
+          >
             {{ tab.label }}
           </button>
         </div>
 
-        <div v-if="filteredEvents.length === 0" class="pg-empty">
-          <div style="font-size:48px;margin-bottom:12px">📅</div>
-          <div class="empty-title">{{ t('calendar.noEvents') }}</div>
-          <div class="empty-sub">{{ t('calendar.noEventsSub') }}</div>
+        <div
+          v-if="filteredEvents.length === 0"
+          class="pg-empty"
+        >
+          <div style="font-size:48px;margin-bottom:12px">
+            📅
+          </div>
+          <div class="empty-title">
+            {{ t('calendar.noEvents') }}
+          </div>
+          <div class="empty-sub">
+            {{ t('calendar.noEventsSub') }}
+          </div>
         </div>
 
-        <div v-for="ev in filteredEvents" :key="ev.id" class="ev-card">
-          <div class="ev-color-bar" :style="{ background: typeColor(ev.type) }"></div>
+        <div
+          v-for="ev in filteredEvents"
+          :key="ev.id"
+          class="ev-card"
+        >
+          <div
+            class="ev-color-bar"
+            :style="{ background: typeColor(ev.type) }"
+          />
           <div class="ev-body">
-            <div class="ev-name">{{ ev.name }}</div>
-            <div class="ev-dates">{{ formatDate(ev.startDate) }} {{ ev.endDate && ev.endDate !== ev.startDate ? '→ ' + formatDate(ev.endDate) : '' }}</div>
-            <span class="ev-type-badge" :style="{ background: typeColor(ev.type) + '22', color: typeColor(ev.type) }">{{ typeName(ev.type) }}</span>
+            <div class="ev-name">
+              {{ ev.name }}
+            </div>
+            <div class="ev-dates">
+              {{ formatDate(ev.startDate) }} {{ ev.endDate && ev.endDate !== ev.startDate ? '→ ' + formatDate(ev.endDate) : '' }}
+            </div>
+            <span
+              class="ev-type-badge"
+              :style="{ background: typeColor(ev.type) + '22', color: typeColor(ev.type) }"
+            >{{ typeName(ev.type) }}</span>
           </div>
-          <button class="ev-del" @click="deleteEvent(ev.id)">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <button
+            class="ev-del"
+            @click="deleteEvent(ev.id)"
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+            ><polyline
+              points="3 6 5 6 21 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            /><path
+              d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            /></svg>
           </button>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
     <!-- Modal -->
-    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+    <ion-modal
+      :is-open="showModal"
+      @did-dismiss="closeModal"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">{{ editing ? '✏️ ' + t('calendar.editEvent') : '➕ ' + t('calendar.newEvent') }}</span>
-          <button class="mo-close" @click="closeModal">✕</button>
+          <button
+            class="mo-close"
+            @click="closeModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">{{ t('calendar.eventName') }} *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Khmer New Year Holiday" /></div>
-          <div class="mo-row2">
-            <div class="mo-field"><label class="mo-label">{{ t('calendar.startDate') }}</label><input v-model="form.startDate" type="date" class="mo-input" /></div>
-            <div class="mo-field"><label class="mo-label">{{ t('calendar.endDate') }}</label><input v-model="form.endDate" type="date" class="mo-input" /></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('calendar.eventName') }} *</label><input
+              v-model="form.name"
+              class="mo-input"
+              placeholder="e.g. Khmer New Year Holiday"
+            >
           </div>
-          <div class="mo-field"><label class="mo-label">{{ t('calendar.type') }}</label>
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">{{ t('calendar.startDate') }}</label><input
+                v-model="form.startDate"
+                type="date"
+                class="mo-input"
+              >
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">{{ t('calendar.endDate') }}</label><input
+                v-model="form.endDate"
+                type="date"
+                class="mo-input"
+              >
+            </div>
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('calendar.type') }}</label>
             <div class="type-picker">
-              <button v-for="type in eventTypes" :key="type.val" class="type-btn" :class="{ active: form.type === type.val }" :style="form.type === type.val ? { background: type.color, borderColor: type.color, color:'white' } : {}" @click="form.type = type.val">
+              <button
+                v-for="type in eventTypes"
+                :key="type.val"
+                class="type-btn"
+                :class="{ active: form.type === type.val }"
+                :style="form.type === type.val ? { background: type.color, borderColor: type.color, color:'white' } : {}"
+                @click="form.type = type.val"
+              >
                 {{ type.icon }} {{ type.label }}
               </button>
             </div>
           </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="saveEvent" :disabled="!form.name || !form.startDate">{{ t('actions.save') }}</button>
+            <button
+              class="mo-cancel"
+              @click="closeModal"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!form.name || !form.startDate"
+              @click="saveEvent"
+            >
+              {{ t('actions.save') }}
+            </button>
           </div>
         </div>
       </div>
     </ion-modal>
-
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t }  = useI18n()
+const router = useRouter();
+const {t} = useI18n();
 
-const now        = new Date()
-const viewYear   = ref(now.getFullYear())
-const viewMonth  = ref(now.getMonth()) // 0-based
-const showModal  = ref(false)
-const editing    = ref<any>(null)
-const activeFilter = ref('all')
+const now = new Date();
+const viewYear = ref(now.getFullYear());
+const viewMonth = ref(now.getMonth()); // 0-based
+const showModal = ref(false);
+const editing = ref<any>(null);
+const activeFilter = ref('all');
 
 const events = ref<any[]>(LocalStorageService.get<any[]>('calendar_events', []) || [
-  { id:'ev1', name:'Khmer New Year', startDate:'2026-04-13', endDate:'2026-04-16', type:'holiday' },
-  { id:'ev2', name:'Term 1 Exams', startDate:'2026-06-01', endDate:'2026-06-07', type:'exam' },
-  { id:'ev3', name:'Sports Day', startDate:'2026-03-15', endDate:'2026-03-15', type:'activity' },
-  { id:'ev4', name:'Parent Meeting', startDate:'2026-07-10', endDate:'2026-07-10', type:'meeting' },
-])
+  {id: 'ev1', name: 'Khmer New Year', startDate: '2026-04-13', endDate: '2026-04-16', type: 'holiday'},
+  {id: 'ev2', name: 'Term 1 Exams', startDate: '2026-06-01', endDate: '2026-06-07', type: 'exam'},
+  {id: 'ev3', name: 'Sports Day', startDate: '2026-03-15', endDate: '2026-03-15', type: 'activity'},
+  {id: 'ev4', name: 'Parent Meeting', startDate: '2026-07-10', endDate: '2026-07-10', type: 'meeting'},
+]);
 
-const form = ref({ name:'', startDate:'', endDate:'', type:'holiday' })
+const form = ref({name: '', startDate: '', endDate: '', type: 'holiday'});
 
-const dayNames    = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-const eventTypes  = computed(() => [
-  { val:'holiday', icon:'🏖', label: t('calendar.holiday'),  color:'#dc2626' },
-  { val:'exam',    icon:'📋', label: t('calendar.exam'),     color:'#1976d2' },
-  { val:'activity',icon:'⚽', label: t('calendar.activity'), color:'#16a34a' },
-  { val:'meeting', icon:'🤝', label: t('calendar.meeting'),  color:'#d97706' },
-  { val:'other',   icon:'📌', label: t('calendar.other'),    color:'#6b7280' },
-])
+const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const eventTypes = computed(() => [
+  {val: 'holiday', icon: '🏖', label: t('calendar.holiday'), color: '#dc2626'},
+  {val: 'exam', icon: '📋', label: t('calendar.exam'), color: '#1976d2'},
+  {val: 'activity', icon: '⚽', label: t('calendar.activity'), color: '#16a34a'},
+  {val: 'meeting', icon: '🤝', label: t('calendar.meeting'), color: '#d97706'},
+  {val: 'other', icon: '📌', label: t('calendar.other'), color: '#6b7280'},
+]);
 
 const filterTabs = computed(() => [
-  { val:'all',      label: t('calendar.all') },
-  { val:'upcoming', label: t('calendar.upcoming') },
-  { val:'past',     label: t('calendar.past') },
-])
+  {val: 'all', label: t('calendar.all')},
+  {val: 'upcoming', label: t('calendar.upcoming')},
+  {val: 'past', label: t('calendar.past')},
+]);
 
 const monthLabel = computed(() => {
-  return new Date(viewYear.value, viewMonth.value).toLocaleDateString('en-US', { month:'long', year:'numeric' })
-})
+  return new Date(viewYear.value, viewMonth.value).toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+});
 
 const calCells = computed(() => {
-  const firstDay = new Date(viewYear.value, viewMonth.value, 1).getDay()
-  const daysInMonth = new Date(viewYear.value, viewMonth.value + 1, 0).getDate()
-  const daysInPrev  = new Date(viewYear.value, viewMonth.value, 0).getDate()
-  const cells: any[] = []
-  const todayStr = now.toISOString().slice(0,10)
+  const firstDay = new Date(viewYear.value, viewMonth.value, 1).getDay();
+  const daysInMonth = new Date(viewYear.value, viewMonth.value + 1, 0).getDate();
+  const daysInPrev = new Date(viewYear.value, viewMonth.value, 0).getDate();
+  const cells: any[] = [];
+  const todayStr = now.toISOString().slice(0, 10);
 
   // prev month
   for (let i = firstDay - 1; i >= 0; i--) {
-    cells.push({ key:`p${i}`, day: daysInPrev - i, inMonth: false, events: [] })
+    cells.push({key: `p${i}`, day: daysInPrev - i, inMonth: false, events: []});
   }
   // current month
   for (let d = 1; d <= daysInMonth; d++) {
-    const dateStr = `${viewYear.value}-${String(viewMonth.value+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`
-    const dayEvents = events.value.filter(ev => ev.startDate <= dateStr && (ev.endDate || ev.startDate) >= dateStr)
-    cells.push({ key:`c${d}`, day: d, date: dateStr, inMonth: true, isToday: dateStr === todayStr, events: dayEvents })
+    const dateStr = `${viewYear.value}-${String(viewMonth.value + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    const dayEvents = events.value.filter(ev => ev.startDate <= dateStr && (ev.endDate || ev.startDate) >= dateStr);
+    cells.push({key: `c${d}`, day: d, date: dateStr, inMonth: true, isToday: dateStr === todayStr, events: dayEvents});
   }
   // next month
-  const remaining = 42 - cells.length
+  const remaining = 42 - cells.length;
   for (let i = 1; i <= remaining; i++) {
-    cells.push({ key:`n${i}`, day: i, inMonth: false, events: [] })
+    cells.push({key: `n${i}`, day: i, inMonth: false, events: []});
   }
-  return cells
-})
+  return cells;
+});
 
 const filteredEvents = computed(() => {
-  const todayStr = now.toISOString().slice(0,10)
+  const todayStr = now.toISOString().slice(0, 10);
   return events.value.filter(ev => {
-    if (activeFilter.value === 'upcoming') return (ev.endDate || ev.startDate) >= todayStr
-    if (activeFilter.value === 'past')     return (ev.endDate || ev.startDate) < todayStr
-    return true
-  }).sort((a,b) => a.startDate.localeCompare(b.startDate))
-})
+    if (activeFilter.value === 'upcoming') return (ev.endDate || ev.startDate) >= todayStr;
+    if (activeFilter.value === 'past') return (ev.endDate || ev.startDate) < todayStr;
+    return true;
+  }).sort((a, b) => a.startDate.localeCompare(b.startDate));
+});
 
 function typeColor(type: string) {
-  const map: Record<string,string> = { holiday:'#dc2626', exam:'#1976d2', activity:'#16a34a', meeting:'#d97706', other:'#6b7280' }
-  return map[type] || '#6b7280'
+  const map: Record<string, string> = {holiday: '#dc2626', exam: '#1976d2', activity: '#16a34a', meeting: '#d97706', other: '#6b7280'};
+  return map[type] || '#6b7280';
 }
 
 function typeName(type: string) {
-  const found = eventTypes.value.find(e => e.val === type)
-  return found ? found.label : type
+  const found = eventTypes.value.find(e => e.val === type);
+  return found ? found.label : type;
 }
 
 function formatDate(iso: string) {
-  if (!iso) return ''
-  return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })
+  if (!iso) return '';
+  return new Date(iso + 'T00:00:00').toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'});
 }
 
 function prevMonth() {
-  if (viewMonth.value === 0) { viewMonth.value = 11; viewYear.value-- }
-  else viewMonth.value--
+  if (viewMonth.value === 0) { viewMonth.value = 11; viewYear.value--; }
+  else viewMonth.value--;
 }
 function nextMonth() {
-  if (viewMonth.value === 11) { viewMonth.value = 0; viewYear.value++ }
-  else viewMonth.value++
+  if (viewMonth.value === 11) { viewMonth.value = 0; viewYear.value++; }
+  else viewMonth.value++;
 }
 
 function selectDay(cell: any) {
-  form.value.startDate = cell.date
-  form.value.endDate   = cell.date
-  openCreate()
+  form.value.startDate = cell.date;
+  form.value.endDate = cell.date;
+  openCreate();
 }
 
-function openCreate() { if (!form.value.startDate) form.value={name:'',startDate:'',endDate:'',type:'holiday'}; editing.value=null; showModal.value=true }
-function closeModal()  { showModal.value=false; editing.value=null; form.value={name:'',startDate:'',endDate:'',type:'holiday'} }
+function openCreate() { if (!form.value.startDate) form.value = {name: '', startDate: '', endDate: '', type: 'holiday'}; editing.value = null; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; form.value = {name: '', startDate: '', endDate: '', type: 'holiday'}; }
 
 function deleteEvent(id: string) {
   if (confirm(t('calendar.deleteEvent'))) {
-    events.value = events.value.filter(e => e.id !== id)
-    LocalStorageService.set('calendar_events', events.value)
+    events.value = events.value.filter(e => e.id !== id);
+    LocalStorageService.set('calendar_events', events.value);
   }
 }
 
 function saveEvent() {
-  if (!form.value.name || !form.value.startDate) return
+  if (!form.value.name || !form.value.startDate) return;
   if (editing.value) {
-    const i = events.value.findIndex(e => e.id === editing.value.id)
-    if (i !== -1) events.value[i] = { ...events.value[i], ...form.value }
+    const i = events.value.findIndex(e => e.id === editing.value.id);
+    if (i !== -1) events.value[i] = {...events.value[i], ...form.value};
   } else {
-    events.value.push({ id:`ev_${Date.now()}`, ...form.value })
+    events.value.push({id: `ev_${Date.now()}`, ...form.value});
   }
-  LocalStorageService.set('calendar_events', events.value)
-  closeModal()
+  LocalStorageService.set('calendar_events', events.value);
+  closeModal();
 }
 </script>
 

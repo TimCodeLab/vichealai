@@ -1,16 +1,24 @@
 <template>
   <div class="empty-state">
-    <ion-icon :icon="icon" class="empty-icon"></ion-icon>
+    <ion-icon
+      :icon="icon"
+      class="empty-icon"
+    />
     <h3>{{ title }}</h3>
-    <p v-if="message">{{ message }}</p>
-    <ion-button v-if="actionText && actionCallback" @click="actionCallback">
+    <p v-if="message">
+      {{ message }}
+    </p>
+    <ion-button
+      v-if="actionText && actionCallback"
+      @click="actionCallback"
+    >
       {{ actionText }}
     </ion-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { IonIcon, IonButton } from '@ionic/vue'
+import {IonIcon, IonButton} from '@ionic/vue';
 
 defineProps<{
   icon: any
@@ -18,7 +26,7 @@ defineProps<{
   message?: string
   actionText?: string
   actionCallback?: () => void
-}>()
+}>();
 </script>
 
 <style scoped>

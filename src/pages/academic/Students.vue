@@ -21,23 +21,54 @@
           /></svg>
         </button>
         <span class="pg-title">{{ t('nav.students') }}</span>
-        <button
-          class="pg-new"
-          @click="openCreate"
-        >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-          ><path
-            d="M12 5v14M5 12h14"
-            stroke="white"
-            stroke-width="2.5"
-            stroke-linecap="round"
-          /></svg>
-          {{ t('actions.create') }}
-        </button>
+        <div class="pg-head-actions">
+          <button
+            class="pg-import-btn"
+            :title="t('students.importExcel')"
+            @click="showImport = true"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+            ><path
+              d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
+              stroke="white"
+              stroke-width="2"
+            /><polyline
+              points="7 10 12 15 17 10"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+            /><line
+              x1="12"
+              y1="15"
+              x2="12"
+              y2="3"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+            /></svg>
+          </button>
+          <button
+            class="pg-new"
+            @click="openCreate"
+          >
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+            ><path
+              d="M12 5v14M5 12h14"
+              stroke="white"
+              stroke-width="2.5"
+              stroke-linecap="round"
+            /></svg>
+            {{ t('actions.create') }}
+          </button>
+        </div>
       </div>
     </ion-header>
 
@@ -127,8 +158,17 @@
             <div class="pg-name">
               {{ student.name }}
             </div>
-            <div class="pg-row">
+            <div
+              v-if="student.email"
+              class="pg-row"
+            >
               <span class="pg-lbl">✉️</span><span class="pg-val">{{ student.email }}</span>
+            </div>
+            <div
+              v-if="student.phone"
+              class="pg-row"
+            >
+              <span class="pg-lbl">📞</span><span class="pg-val">{{ student.phone }}</span>
             </div>
             <div class="pg-row">
               <span class="pg-lbl">🏫</span><span class="pg-val">{{ className(student.classId) }}</span>
@@ -139,12 +179,20 @@
             >
               <span class="pg-lbl">🎂</span><span class="pg-val">{{ fmtDate(student.dateOfBirth) }}</span>
             </div>
+            <div
+              v-if="student.parentName"
+              class="pg-row"
+            >
+              <span class="pg-lbl">👨‍👩‍👦</span><span class="pg-val">{{ student.parentName }}</span>
+            </div>
             <div class="pg-badges">
               <span class="pg-badge pg-green">● {{ t('students.active') }}</span>
               <span
                 v-if="student.gender"
                 class="pg-badge pg-blue"
-              >{{ student.gender === 'M' || student.gender === 'male' ? '♂ ' + t('students.male') : '♀ ' + t('students.female') }}</span>
+              >
+                {{ student.gender === 'M' || student.gender === 'male' ? '♂ ' + t('students.male') : '♀ ' + t('students.female') }}
+              </span>
             </div>
           </div>
           <div class="pg-actions">
@@ -199,42 +247,61 @@
             </button>
           </div>
         </div>
-
         <div style="height:28px" />
       </div>
     </ion-content>
 
-    <!-- Credentials popup -->
-    <ion-modal :is-open="!!newCredentials" @did-dismiss="newCredentials = null">
+    <!-- ── Credentials Modal ── -->
+    <ion-modal
+      :is-open="!!newCredentials"
+      @did-dismiss="newCredentials = null"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">🔑 {{ t('credentials.title') }}</span>
-          <button class="mo-close" @click="newCredentials = null">✕</button>
+          <button
+            class="mo-close"
+            @click="newCredentials = null"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
           <div class="cred-banner">
-            <div class="cred-notice">{{ t('credentials.saveNote') }}</div>
-            <div class="cred-name">{{ newCredentials?.name }}</div>
+            <div class="cred-notice">
+              {{ t('credentials.saveNote') }}
+            </div>
+            <div class="cred-name">
+              {{ newCredentials?.name }}
+            </div>
           </div>
           <div class="cred-box">
             <div class="cred-row">
               <span class="cred-lbl">{{ t('credentials.loginCode') }}</span>
               <span class="cred-val code">{{ newCredentials?.loginCode }}</span>
             </div>
-            <div class="cred-divider"></div>
+            <div class="cred-divider" />
             <div class="cred-row">
               <span class="cred-lbl">{{ t('credentials.tempPassword') }}</span>
               <span class="cred-val">{{ newCredentials?.loginPassword }}</span>
             </div>
           </div>
-          <div class="cred-hint">{{ t('credentials.changeHint') }}</div>
-          <button class="mo-save" style="width:100%" @click="newCredentials = null">{{ t('actions.ok') }}</button>
+          <div class="cred-hint">
+            {{ t('credentials.changeHint') }}
+          </div>
+          <button
+            class="mo-save"
+            style="width:100%"
+            @click="newCredentials = null"
+          >
+            {{ t('actions.ok') }}
+          </button>
         </div>
       </div>
     </ion-modal>
 
-    <!-- Modal -->
+    <!-- ── Create / Edit Modal ── -->
     <ion-modal
       :is-open="showModal"
       @did-dismiss="closeModal"
@@ -251,26 +318,42 @@
           </button>
         </div>
         <div class="mo-body">
+          <!-- Full name -->
           <div class="mo-field">
-            <label class="mo-label">{{ t('students.fullName') }} *</label>
+            <label class="mo-label">{{ t('students.fullName') }} <span class="req-star">*</span></label>
             <input
               v-model="form.name"
               class="mo-input"
               placeholder="e.g. Sokha Chan"
             >
           </div>
-          <div class="mo-field">
-            <label class="mo-label">{{ t('forms.email') }}</label>
-            <input
-              v-model="form.email"
-              type="email"
-              class="mo-input"
-              placeholder="student@school.edu.kh"
-            >
-          </div>
+
+          <!-- Email + Phone -->
           <div class="mo-row2">
             <div class="mo-field">
-              <label class="mo-label">{{ t('students.gender') }}</label>
+              <label class="mo-label">{{ t('forms.email') }}</label>
+              <input
+                v-model="form.email"
+                type="email"
+                class="mo-input"
+                placeholder="student@school.kh"
+              >
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">{{ t('students.phone') }}</label>
+              <input
+                v-model="form.phone"
+                type="tel"
+                class="mo-input"
+                placeholder="012 345 678"
+              >
+            </div>
+          </div>
+
+          <!-- Gender + DOB -->
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">{{ t('students.gender') }} <span class="req-star">*</span></label>
               <select
                 v-model="form.gender"
                 class="mo-input"
@@ -292,6 +375,8 @@
               >
             </div>
           </div>
+
+          <!-- Class -->
           <div class="mo-field">
             <label class="mo-label">{{ t('nav.classes') }}</label>
             <select
@@ -299,7 +384,7 @@
               class="mo-input"
             >
               <option value="">
-                -- {{ t('students.selectClass') }} --
+                — {{ t('students.selectClass') }} —
               </option>
               <option
                 v-for="c in classes"
@@ -310,14 +395,37 @@
               </option>
             </select>
           </div>
+
+          <!-- Parent name + phone -->
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">{{ t('students.parentName') }}</label>
+              <input
+                v-model="form.parentName"
+                class="mo-input"
+                placeholder="e.g. Sokha Mom"
+              >
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">{{ t('students.parentPhone') }}</label>
+              <input
+                v-model="form.parentPhone"
+                class="mo-input"
+                placeholder="098 765 432"
+              >
+            </div>
+          </div>
+
+          <!-- Address -->
           <div class="mo-field">
-            <label class="mo-label">{{ t('forms.address') }}</label>
+            <label class="mo-label">{{ t('students.address') }}</label>
             <input
               v-model="form.address"
               class="mo-input"
               :placeholder="t('students.address')"
             >
           </div>
+
           <div class="mo-btns">
             <button
               class="mo-cancel"
@@ -336,6 +444,178 @@
         </div>
       </div>
     </ion-modal>
+
+    <!-- ── Import Excel Modal ── -->
+    <ion-modal
+      :is-open="showImport"
+      @did-dismiss="closeImport"
+    >
+      <div class="mo-wrap">
+        <div class="mo-handle" />
+        <div class="mo-head">
+          <span class="mo-title">📊 {{ t('students.importTitle') }}</span>
+          <button
+            class="mo-close"
+            @click="closeImport"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="mo-body">
+          <!-- Template download card -->
+          <div class="imp-tpl-card">
+            <div class="imp-tpl-info">
+              <span class="imp-tpl-icon">📋</span>
+              <div>
+                <div class="imp-tpl-title">
+                  {{ t('students.downloadTpl') }}
+                </div>
+                <div class="imp-tpl-sub">
+                  {{ t('students.importHint') }}
+                </div>
+              </div>
+            </div>
+            <button
+              class="imp-tpl-btn"
+              @click="downloadTemplate"
+            >
+              ⬇ {{ t('students.downloadTpl') }}
+            </button>
+          </div>
+
+          <!-- Column guide -->
+          <div class="imp-cols">
+            <div class="imp-col-header">
+              <span>{{ t('forms.name') }}</span>
+              <span>{{ t('forms.status') }}</span>
+              <span>{{ t('forms.description') }}</span>
+            </div>
+            <div
+              v-for="col in templateCols"
+              :key="col.key"
+              class="imp-col-row"
+            >
+              <span class="imp-col-name">{{ col.label }}</span>
+              <span :class="['imp-col-badge', col.required ? 'req' : 'opt']">
+                {{ col.required ? t('students.colRequired') : t('students.colOptional') }}
+              </span>
+              <span class="imp-col-desc">{{ t(col.descKey) }}</span>
+            </div>
+          </div>
+
+          <!-- Upload zone -->
+          <div
+            class="imp-drop"
+            @click="fileInput?.click()"
+            @dragover.prevent
+            @drop.prevent="onDrop"
+          >
+            <input
+              ref="fileInput"
+              type="file"
+              accept=".xlsx,.xls"
+              style="display:none"
+              @change="onFileChange"
+            >
+            <div v-if="!importRows.length">
+              <div style="font-size:36px;margin-bottom:8px">
+                📁
+              </div>
+              <div class="imp-drop-title">
+                {{ t('students.importHint') }}
+              </div>
+              <div class="imp-drop-sub">
+                .xlsx / .xls
+              </div>
+            </div>
+            <div
+              v-else
+              class="imp-loaded"
+            >
+              <span class="imp-loaded-icon">✅</span>
+              <span>{{ t('students.importPreview').replace('{n}', String(importRows.length)) }}</span>
+            </div>
+          </div>
+
+          <div
+            v-if="importError"
+            class="imp-error"
+          >
+            ⚠️ {{ importError }}
+          </div>
+
+          <!-- Preview table -->
+          <div
+            v-if="importRows.length"
+            class="imp-preview-wrap"
+          >
+            <div class="imp-preview-scroll">
+              <table class="imp-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th
+                      v-for="h in importHeaders"
+                      :key="h"
+                    >
+                      {{ h }}
+                    </th>
+                    <th>✓</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(row, idx) in importRows.slice(0,8)"
+                    :key="idx"
+                    :class="row._error ? 'row-err':'row-ok'"
+                  >
+                    <td>{{ idx+1 }}</td>
+                    <td
+                      v-for="h in importHeaders"
+                      :key="h"
+                    >
+                      {{ row[h] ?? '' }}
+                    </td>
+                    <td>{{ row._error ? '❌' : '✅' }}</td>
+                  </tr>
+                  <tr v-if="importRows.length > 8">
+                    <td
+                      :colspan="importHeaders.length+2"
+                      style="text-align:center;color:#6b7280;font-size:12px;padding:8px"
+                    >
+                      + {{ importRows.length - 8 }} more rows…
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="imp-summary">
+              <span class="imp-ok-count">✅ {{ validRows.length }} {{ t('students.colRequired').toLowerCase() !== t('students.colRequired') ? '' : '' }} valid</span>
+              <span
+                v-if="importRows.length - validRows.length"
+                class="imp-err-count"
+              >❌ {{ importRows.length - validRows.length }} errors</span>
+            </div>
+          </div>
+
+          <div class="mo-btns">
+            <button
+              class="mo-cancel"
+              @click="closeImport"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!validRows.length"
+              @click="confirmImport"
+            >
+              {{ t('actions.import') }} {{ validRows.length ? '(' + validRows.length + ')' : '' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </ion-modal>
   </ion-page>
 </template>
 
@@ -345,23 +625,56 @@ import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
 import {useRouter} from 'vue-router';
 import {useI18n} from '@/composables/useI18n';
 import {LocalStorageService} from '@/services/localStorageService';
+import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 const router = useRouter();
 const {t} = useI18n();
 
+// ── State ──────────────────────────────────────────────
 const searchQuery = ref('');
 const activeFilter = ref('all');
 const showModal = ref(false);
+const showImport = ref(false);
 const editing = ref<any>(null);
 const students = ref<any[]>(LocalStorageService.get<any[]>('students', []) || []);
 const classes = ref<any[]>(LocalStorageService.get<any[]>('classes', []) || []);
-const form = ref({name:'', email:'', classId:'', dateOfBirth:'', gender:'male', address:''});
 
+const emptyForm = () => ({
+  name: '', email: '', phone: '', classId: '', dateOfBirth: '',
+  gender: 'male', address: '', parentName: '', parentPhone: ''
+});
+const form = ref(emptyForm());
+
+const newCredentials = ref<{loginCode:string; loginPassword:string; name:string} | null>(null);
+
+// ── Import state ───────────────────────────────────────
+const fileInput = ref<HTMLInputElement | null>(null);
+const importRows = ref<any[]>([]);
+const importHeaders = ref<string[]>([]);
+const importError = ref('');
+
+// templateCols drives both the guide and the download template
+const templateCols = computed(() => [
+  {key: 'name', label: t('students.fullName'), required: true, descKey: 'students.colNameDesc'},
+  {key: 'gender', label: t('students.gender'), required: true, descKey: 'students.colGenderDesc'},
+  {key: 'dateOfBirth', label: t('students.dob'), required: false, descKey: 'students.colDobDesc'},
+  {key: 'phone', label: t('students.phone'), required: false, descKey: 'students.colPhoneDesc'},
+  {key: 'email', label: t('forms.email'), required: false, descKey: 'students.colEmailDesc'},
+  {key: 'class', label: t('nav.classes'), required: false, descKey: 'students.colClassDesc'},
+  {key: 'address', label: t('students.address'), required: false, descKey: 'students.colAddressDesc'},
+  {key: 'parentName', label: t('students.parentName'), required: false, descKey: 'students.colParentDesc'},
+  {key: 'parentPhone', label: t('students.parentPhone'), required: false, descKey: 'students.colParentPhDesc'},
+]);
+
+const validRows = computed(() => importRows.value.filter(r => !r._error));
+
+// ── Filters ────────────────────────────────────────────
 const filters = computed(() => [
-  { val: 'all',    label: t('actions.all') },
-  { val: 'active', label: t('students.active') },
-  { val: 'male',   label: '♂ ' + t('students.male') },
-  { val: 'female', label: '♀ ' + t('students.female') },
+  {val: 'all', label: t('actions.all')},
+  {val: 'active', label: t('students.active')},
+  {val: 'male', label: '♂ ' + t('students.male')},
+  {val: 'female', label: '♀ ' + t('students.female')},
 ]);
 
 const filtered = computed(() => {
@@ -375,86 +688,244 @@ const filtered = computed(() => {
   return list;
 });
 
+// ── Helpers ────────────────────────────────────────────
 const palette = ['#1976d2', '#2e7d32', '#e65100', '#6a1b9a', '#c62828', '#00838f', '#4527a0', '#558b2f'];
-function aColor(n: string) { return palette[(n?.charCodeAt(0)||0) % palette.length]; }
-function aInitial(n: string) { return (n||'?').charAt(0).toUpperCase(); }
-function className(id: string) { return classes.value.find(c=>c.id===id)?.name || (id ? id : '—'); }
+function aColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
+function aInitial(n: string) { return (n || '?').charAt(0).toUpperCase(); }
+function className(id: string) { return classes.value.find(c=>c.id === id)?.name || (id ? id : '—'); }
 function fmtDate(d: string) { return d ? new Date(d).toLocaleDateString() : '—'; }
 
-function openCreate() { form.value = {name:'', email:'', classId:'', dateOfBirth:'', gender:'male', address:''}; editing.value=null; showModal.value=true; }
-function editItem(s: any) { editing.value=s; form.value={...s}; showModal.value=true; }
-function closeModal() { showModal.value=false; editing.value=null; }
+// ── CRUD ───────────────────────────────────────────────
+function openCreate() { form.value = emptyForm(); editing.value = null; showModal.value = true; }
+function editItem(s: any) { editing.value = s; form.value = {...emptyForm(), ...s}; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; }
 
 function deleteItem(id: string) {
   if (confirm(t('messages.confirmDelete'))) {
-    students.value = students.value.filter(s=>s.id!==id);
+    students.value = students.value.filter(s=>s.id !== id);
     LocalStorageService.set('students', students.value);
   }
 }
-const newCredentials = ref<{loginCode:string; loginPassword:string; name:string} | null>(null)
 
 function genStudentCode() {
-  const year = new Date().getFullYear()
-  const existing = students.value.filter((s: any) => s.loginCode?.startsWith(`STD-${year}-`))
-  const num = String(existing.length + 1).padStart(3, '0')
-  return `STD-${year}-${num}`
+  const year = new Date().getFullYear();
+  const n = students.value.filter((s:any)=>s.loginCode?.startsWith(`STD-${year}-`)).length;
+  return `STD-${year}-${String(n + 1).padStart(3, '0')}`;
 }
 function genPassword() {
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!'
-  return Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('')
+  const c = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!';
+  return Array.from({length: 8}, ()=>c[Math.floor(Math.random() * c.length)]).join('');
 }
 
 function saveItem() {
   if (!form.value.name) return;
   if (editing.value) {
-    const i = students.value.findIndex((s: any) => s.id === editing.value.id);
+    const i = students.value.findIndex((s:any)=>s.id === editing.value.id);
     if (i !== -1) students.value[i] = {...students.value[i], ...form.value};
     newCredentials.value = null;
   } else {
-    const loginCode     = genStudentCode()
-    const loginPassword = genPassword()
+    const loginCode = genStudentCode(), loginPassword = genPassword();
     students.value.push({
-      id:`stu_${Date.now()}`, schoolId:'school_1', status:'active',
+      id: `stu_${Date.now()}`, schoolId: 'school_1', status: 'active',
       loginCode, loginPassword, mustChangePassword: true, role: 'student',
       ...form.value
     });
-    newCredentials.value = { loginCode, loginPassword, name: form.value.name }
+    newCredentials.value = {loginCode, loginPassword, name: form.value.name};
   }
-  LocalStorageService.set('students', students.value); closeModal();
+  LocalStorageService.set('students', students.value);
+  closeModal();
+}
+
+// ── Excel Import ───────────────────────────────────────
+function closeImport() {
+  showImport.value = false; importRows.value = []; importHeaders.value = []; importError.value = '';
+}
+
+async function downloadTemplate() {
+  const cols = templateCols.value;
+
+  const wb = new ExcelJS.Workbook();
+  wb.creator = 'TECHOCAM';
+  wb.created = new Date();
+
+  const ws = wb.addWorksheet('Students', {
+    views: [{state: 'frozen', xSplit: 0, ySplit: 3}],
+    properties: {defaultRowHeight: 20},
+  });
+
+  // Column widths
+  ws.columns = cols.map(c => ({key: c.key, width: c.key === 'dateOfBirth' ? 26 : c.key.startsWith('parent') ? 24 : 22}));
+
+  // ── Row 1: Column keys (technical — what the parser reads) ──
+  const r1 = ws.addRow(cols.map(c => c.key));
+  r1.height = 36;
+  r1.eachCell((cell, ci) => {
+    const req = cols[ci - 1]?.required;
+    cell.font = {bold: true, color: {argb: 'FFFFFFFF'}, size: 11, name: 'Calibri'};
+    cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: req ? 'FF1565C0' : 'FF37474F'}};
+    cell.alignment = {vertical: 'middle', horizontal: 'center', wrapText: false};
+    cell.border = {bottom: {style: 'medium', color: {argb: 'FFFFFFFF'}}, right: {style: 'thin', color: {argb: 'FF78909C'}}};
+  });
+
+  // ── Row 2: Human-readable labels (Khmer/EN description) ──
+  const r2 = ws.addRow(cols.map(c => t(c.descKey)));
+  r2.height = 30;
+  r2.eachCell((cell, ci) => {
+    const req = cols[ci - 1]?.required;
+    cell.font = {bold: true, size: 10, color: {argb: req ? 'FF0D47A1' : 'FF37474F'}, name: 'Calibri'};
+    cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: req ? 'FFE3F2FD' : 'FFECEFF1'}};
+    cell.alignment = {vertical: 'middle', horizontal: 'center', wrapText: true};
+    cell.border = {bottom: {style: 'thin', color: {argb: 'FFBBDEFB'}}, right: {style: 'thin', color: {argb: 'FFCFD8DC'}}};
+  });
+
+  // ── Row 3: Required / Optional badge ──
+  const r3 = ws.addRow(cols.map(c => c.required ? '★  ' + t('students.colRequired') : t('students.colOptional')));
+  r3.height = 20;
+  r3.eachCell((cell, ci) => {
+    const req = cols[ci - 1]?.required;
+    cell.font = {bold: true, italic: true, size: 9, color: {argb: req ? 'FFC62828' : 'FF2E7D32'}, name: 'Calibri'};
+    cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: req ? 'FFFFCDD2' : 'FFF1F8E9'}};
+    cell.alignment = {vertical: 'middle', horizontal: 'center'};
+    cell.border = {bottom: {style: 'medium', color: {argb: req ? 'FFEF9A9A' : 'FFA5D6A7'}}, right: {style: 'thin', color: {argb: 'FFCFD8DC'}}};
+  });
+
+  // ── Sample rows ──
+  const samples = [
+    ['Sokha Chan', 'female', '2010-05-15', '012 345 678', 'sokha@school.kh', 'Grade 7A', 'Phnom Penh', 'Chan Mom', '098 111 222'],
+    ['Dara Sok', 'male', '2009-11-02', '', '', 'Grade 8B', 'Kandal', '', ''],
+  ];
+  samples.forEach((data, si) => {
+    const row = ws.addRow(data);
+    row.height = 22;
+    row.eachCell({includeEmpty: true}, (cell, ci) => {
+      cell.font = {italic: true, size: 10, color: {argb: 'FF5D4037'}, name: 'Calibri'};
+      cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: si === 0 ? 'FFFFFDE7' : 'FFFFF8E1'}};
+      cell.alignment = {vertical: 'middle'};
+      cell.border = {
+        top: {style: 'thin', color: {argb: 'FFFFE082'}},
+        bottom: {style: 'thin', color: {argb: 'FFFFE082'}},
+        right: {style: 'thin', color: {argb: 'FFFFE082'}},
+      };
+    });
+    // Mark first cell as example
+    const firstCell = row.getCell(1);
+    firstCell.font = {italic: true, bold: true, size: 10, color: {argb: 'FF795548'}, name: 'Calibri'};
+  });
+
+  // ── Empty data rows (5 blank rows ready to fill) ──
+  for (let i = 0; i < 5; i++) {
+    const row = ws.addRow(Array(cols.length).fill(''));
+    row.height = 22;
+    row.eachCell({includeEmpty: true}, (cell) => {
+      cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: 'FFFAFAFA'}};
+      cell.border = {
+        top: {style: 'thin', color: {argb: 'FFE0E0E0'}},
+        bottom: {style: 'thin', color: {argb: 'FFE0E0E0'}},
+        right: {style: 'thin', color: {argb: 'FFE0E0E0'}},
+        left: {style: 'thin', color: {argb: 'FFE0E0E0'}},
+      };
+    });
+  }
+
+  // ── Generate & download ──
+  const buffer = await wb.xlsx.writeBuffer();
+  const blob = new Blob([buffer], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'student_import_template.xlsx'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+function parseFile(file: File) {
+  importError.value = ''; importRows.value = [];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const wb = XLSX.read(new Uint8Array(e.target!.result as ArrayBuffer), {type: 'array'});
+      const rows: any[][] = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header: 1, defval: ''});
+      if (rows.length < 2) { importError.value = t('students.importError'); return; }
+      // First row with 'name' is the header
+      const hi = rows.findIndex(r => r.map((c:any)=>String(c).toLowerCase()).includes('name'));
+      if (hi === -1) { importError.value = t('students.importError'); return; }
+      const headers: string[] = rows[hi].map((c:any)=>String(c).trim());
+      // Filter display headers (skip hint rows)
+      importHeaders.value = headers.filter(h => h && !h.startsWith('★') && h !== t('students.colOptional'));
+      importRows.value = rows.slice(hi + 1)
+        .filter(r=>r.some(c=>c !== ''))
+        .map(row => {
+          const obj:any = {};
+          headers.forEach((h, i)=>{ if (h) obj[h] = String(row[i] ?? '').trim(); });
+          if (!obj.name) { obj._error = 'name required'; }
+          else if (!obj.gender || !['male', 'female', 'm', 'f'].includes(obj.gender.toLowerCase())) {
+            obj._error = 'gender: male or female';
+          } else {
+            obj.gender = obj.gender.toLowerCase().startsWith('m') ? 'male' : 'female';
+            if (obj.class) {
+              const m = classes.value.find(c=>c.name?.toLowerCase() === obj.class.toLowerCase());
+              obj.classId = m?.id || '';
+            }
+          }
+          return obj;
+        });
+    } catch { importError.value = t('students.importError'); }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function onFileChange(e: Event) { const f = (e.target as HTMLInputElement).files?.[0]; if (f) parseFile(f); }
+function onDrop(e: DragEvent) { const f = e.dataTransfer?.files?.[0]; if (f) parseFile(f); }
+
+function confirmImport() {
+  validRows.value.forEach(row => {
+    students.value.push({
+      id: `stu_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      schoolId: 'school_1', status: 'active',
+      loginCode: genStudentCode(), loginPassword: genPassword(),
+      mustChangePassword: true, role: 'student',
+      name: row.name, gender: row.gender,
+      dateOfBirth: row.dateOfBirth || '', phone: row.phone || '',
+      email: row.email || '', classId: row.classId || '',
+      address: row.address || '', parentName: row.parentName || '', parentPhone: row.parentPhone || '',
+    });
+  });
+  LocalStorageService.set('students', students.value);
+  closeImport();
+  alert(t('students.importSuccess').replace('{n}', String(validRows.value.length)));
 }
 </script>
 
 <style scoped>
-/* Header */
-.pg-header { background: linear-gradient(135deg,#1565c0 0%,#1976d2 45%,#0288d1 100%); box-shadow:0 4px 20px rgba(21,101,192,.4); }
-.pg-bar    { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; height:56px; }
-.pg-back   { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.18); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.pg-title  { font-size:17px; font-weight:700; color:white; letter-spacing:.3px; }
-.pg-new    { display:flex; align-items:center; gap:5px; padding:7px 12px; background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.35); border-radius:20px; color:white; font-size:13px; font-weight:600; cursor:pointer; }
-.pg-new:active { background:rgba(255,255,255,.32); }
+/* ── Header ── */
+.pg-header       { background:linear-gradient(135deg,#1565c0 0%,#1976d2 45%,#0288d1 100%); box-shadow:0 4px 20px rgba(21,101,192,.4); }
+.pg-bar          { display:flex; align-items:center; justify-content:space-between; padding:12px 14px; height:56px; }
+.pg-back         { width:36px; height:36px; border-radius:50%; background:rgba(255,255,255,.18); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.pg-title        { font-size:17px; font-weight:700; color:white; letter-spacing:.3px; flex:1; text-align:center; }
+.pg-head-actions { display:flex; align-items:center; gap:8px; }
+.pg-import-btn   { width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.pg-new          { display:flex; align-items:center; gap:5px; padding:7px 12px; background:rgba(255,255,255,.22); border:1px solid rgba(255,255,255,.35); border-radius:20px; color:white; font-size:13px; font-weight:600; cursor:pointer; }
 
-/* Body */
+/* ── Body ── */
 .pg-body { padding:14px; }
 
-/* Search */
-.pg-search { display:flex; align-items:center; gap:8px; background:white; border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 14px; margin-bottom:12px; box-shadow:0 1px 4px rgba(0,0,0,.05); }
+/* ── Search ── */
+.pg-search           { display:flex; align-items:center; gap:8px; background:white; border:1.5px solid #e5e7eb; border-radius:12px; padding:10px 14px; margin-bottom:12px; box-shadow:0 1px 4px rgba(0,0,0,.05); }
 .pg-search:focus-within { border-color:#1976d2; }
-.pg-search-input { flex:1; border:none; outline:none; font-size:14px; color:#1f2937; background:transparent; }
+.pg-search-input     { flex:1; border:none; outline:none; font-size:14px; color:#1f2937; background:transparent; }
 .pg-search-input::placeholder { color:#9ca3af; }
-.pg-search-clear { color:#9ca3af; cursor:pointer; font-size:13px; }
+.pg-search-clear     { color:#9ca3af; cursor:pointer; font-size:13px; }
 
-/* Meta row */
-.pg-meta    { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+/* ── Meta ── */
+.pg-meta    { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:6px; }
 .pg-count   { font-size:12px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; }
-.pg-filters { display:flex; gap:4px; }
-.pg-filter  { padding:4px 10px; border-radius:20px; border:1.5px solid #e5e7eb; background:white; font-size:11px; font-weight:600; color:#6b7280; cursor:pointer; white-space:nowrap; }
+.pg-filters { display:flex; gap:4px; flex-wrap:wrap; }
+.pg-filter  { padding:4px 10px; border-radius:20px; border:1.5px solid #e5e7eb; background:white; font-size:11px; font-weight:600; color:#6b7280; cursor:pointer; }
 .pg-filter.active { background:#1976d2; border-color:#1976d2; color:white; }
 
-/* Empty */
+/* ── Empty ── */
 .pg-empty     { text-align:center; padding:60px 20px 40px; }
 .pg-empty-btn { margin-top:16px; padding:10px 24px; background:#1976d2; color:white; border:none; border-radius:10px; font-size:14px; font-weight:600; cursor:pointer; }
 
-/* Card */
+/* ── Cards ── */
 .pg-card    { display:flex; align-items:flex-start; gap:12px; background:white; border-radius:14px; padding:14px; margin-bottom:10px; box-shadow:0 2px 10px rgba(0,0,0,.06); border:1px solid rgba(0,0,0,.04); }
 .pg-avatar  { width:46px; height:46px; border-radius:50%; color:white; font-size:19px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 3px 10px rgba(0,0,0,.15); }
 .pg-info    { flex:1; min-width:0; }
@@ -465,19 +936,15 @@ function saveItem() {
 .pg-badges  { display:flex; gap:5px; margin-top:6px; flex-wrap:wrap; }
 .pg-badge   { font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; }
 .pg-green   { background:#dcfce7; color:#16a34a; }
-.pg-blue    { background:#dbeafe; color:#1d
-/* Credentials modal */
-.cred-banner { background:#f0fdf4; border-radius:12px; padding:14px; text-align:center; }
-.cred-notice { font-size:12px; color:#16a34a; font-weight:600; margin-bottom:4px; }
-.cred-name   { font-size:16px; font-weight:800; color:#1f2937; }
-.cred-box    { background:#f8faff; border:1.5px solid #dbeafe; border-radius:12px; padding:16px; }
-.cred-row    { display:flex; align-items:center; justify-content:space-between; }
-.cred-lbl    { font-size:12px; font-weight:600; color:#6b7280; }
-.cred-val    { font-size:14px; font-weight:700; color:#1f2937; font-family:monospace; }
-.cred-val.code { font-size:18px; color:#1565c0; letter-spacing:1px; }
-.cred-divider{ height:1px; background:#e5e7eb; margin:10px 0; }
-.cred-hint   { font-size:12px; color:#9ca3af; text-align:center; }
-:#e5e7eb; margin:12px auto 0; }
+.pg-blue    { background:#dbeafe; color:#1d4ed8; }
+.pg-actions { display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
+.pg-btn     { width:32px; height:32px; border-radius:8px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.pg-btn-edit { background:#eff6ff; color:#1976d2; }
+.pg-btn-del  { background:#fef2f2; color:#ef4444; }
+
+/* ── Shared modal ── */
+.mo-wrap   { display:flex; flex-direction:column; height:100%; background:white; border-radius:20px 20px 0 0; }
+.mo-handle { width:40px; height:4px; border-radius:4px; background:#e5e7eb; margin:12px auto 0; }
 .mo-head   { display:flex; align-items:center; justify-content:space-between; padding:14px 18px 10px; border-bottom:1px solid #f3f4f6; }
 .mo-title  { font-size:16px; font-weight:700; color:#1f2937; }
 .mo-close  { width:30px; height:30px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; font-size:13px; color:#6b7280; }
@@ -485,10 +952,60 @@ function saveItem() {
 .mo-field  { display:flex; flex-direction:column; gap:5px; }
 .mo-row2   { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .mo-label  { font-size:11px; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:.5px; }
+.req-star  { color:#ef4444; }
 .mo-input  { width:100%; padding:11px 13px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:14px; color:#1f2937; background:#f9fafb; outline:none; box-sizing:border-box; }
 .mo-input:focus { border-color:#1976d2; background:white; }
 .mo-btns   { display:flex; gap:10px; padding-top:4px; }
 .mo-cancel { flex:1; padding:13px; background:#f3f4f6; color:#374151; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
 .mo-save   { flex:2; padding:13px; background:linear-gradient(135deg,#1565c0,#1976d2); color:white; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; }
 .mo-save:disabled { opacity:.45; cursor:default; }
+
+/* ── Credentials ── */
+.cred-banner  { background:#f0fdf4; border-radius:12px; padding:14px; text-align:center; }
+.cred-notice  { font-size:12px; color:#16a34a; font-weight:600; margin-bottom:4px; }
+.cred-name    { font-size:16px; font-weight:800; color:#1f2937; }
+.cred-box     { background:#f8faff; border:1.5px solid #dbeafe; border-radius:12px; padding:16px; }
+.cred-row     { display:flex; align-items:center; justify-content:space-between; }
+.cred-lbl     { font-size:12px; font-weight:600; color:#6b7280; }
+.cred-val     { font-size:14px; font-weight:700; color:#1f2937; font-family:monospace; }
+.cred-val.code { font-size:18px; color:#1565c0; letter-spacing:1px; }
+.cred-divider { height:1px; background:#e5e7eb; margin:10px 0; }
+.cred-hint    { font-size:12px; color:#9ca3af; text-align:center; }
+
+/* ── Import ── */
+.imp-tpl-card  { background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:12px; padding:14px; }
+.imp-tpl-info  { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.imp-tpl-icon  { font-size:28px; flex-shrink:0; }
+.imp-tpl-title { font-size:14px; font-weight:700; color:#15803d; }
+.imp-tpl-sub   { font-size:11px; color:#4ade80; margin-top:2px; line-height:1.4; }
+.imp-tpl-btn   { width:100%; padding:10px; background:#16a34a; color:white; border:none; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; }
+
+.imp-cols       { background:#f8faff; border:1px solid #dbeafe; border-radius:10px; overflow:hidden; }
+.imp-col-header { display:grid; grid-template-columns:110px 68px 1fr; gap:8px; padding:7px 12px; background:#dbeafe; font-size:10px; font-weight:800; color:#1e40af; text-transform:uppercase; letter-spacing:.5px; }
+.imp-col-row    { display:grid; grid-template-columns:110px 68px 1fr; gap:8px; align-items:center; padding:7px 12px; border-top:1px solid #e0eaff; font-size:12px; }
+.imp-col-name   { font-weight:700; color:#1565c0; }
+.imp-col-badge  { font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; text-align:center; }
+.imp-col-badge.req { background:#fef2f2; color:#ef4444; }
+.imp-col-badge.opt { background:#f0fdf4; color:#16a34a; }
+.imp-col-desc   { color:#6b7280; font-size:11px; line-height:1.3; }
+
+.imp-drop        { border:2px dashed #d1d5db; border-radius:12px; padding:28px; text-align:center; cursor:pointer; transition:border-color .2s,background .2s; }
+.imp-drop:hover  { border-color:#1976d2; background:#f8faff; }
+.imp-drop-title  { font-size:14px; font-weight:600; color:#374151; }
+.imp-drop-sub    { font-size:12px; color:#9ca3af; margin-top:4px; }
+.imp-loaded      { display:flex; align-items:center; justify-content:center; gap:8px; font-size:14px; font-weight:600; color:#16a34a; }
+.imp-loaded-icon { font-size:22px; }
+.imp-error       { background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:10px 14px; font-size:13px; color:#dc2626; }
+
+.imp-preview-wrap   { border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; }
+.imp-preview-scroll { overflow-x:auto; }
+.imp-table    { width:100%; border-collapse:collapse; font-size:11px; }
+.imp-table th { background:#f3f4f6; padding:6px 10px; text-align:left; font-weight:700; color:#374151; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
+.imp-table td { padding:5px 10px; border-bottom:1px solid #f3f4f6; color:#374151; white-space:nowrap; max-width:110px; overflow:hidden; text-overflow:ellipsis; }
+.row-ok td:last-child { color:#16a34a; font-weight:700; }
+.row-err { background:#fff5f5; }
+.row-err td:last-child { color:#dc2626; }
+.imp-summary    { display:flex; gap:12px; padding:8px 14px; background:#f9fafb; border-top:1px solid #e5e7eb; }
+.imp-ok-count   { font-size:12px; font-weight:700; color:#16a34a; }
+.imp-err-count  { font-size:12px; font-weight:700; color:#dc2626; }
 </style>

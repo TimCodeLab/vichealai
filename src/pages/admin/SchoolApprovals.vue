@@ -2,22 +2,48 @@
   <ion-page>
     <ion-header class="ion-no-border">
       <ion-toolbar>
-        <ion-buttons slot="start">
-          <ion-button @click="router.back()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </ion-button>
-        </ion-buttons>
+        <template #start>
+          <ion-buttons>
+            <ion-button @click="router.back()">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><path
+                d="M19 12H5M5 12l7 7M5 12l7-7"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg>
+            </ion-button>
+          </ion-buttons>
+        </template>
         <ion-title>{{ t('approvals.title') }}</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true" style="--background:#f0f4ff">
-
+    <ion-content
+      :fullscreen="true"
+      style="--background:#f0f4ff"
+    >
       <!-- Summary bar -->
       <div class="summary-bar">
-        <div class="summ-item" v-for="s in summary" :key="s.key">
-          <div class="summ-num" :style="{ color: s.color }">{{ s.count }}</div>
-          <div class="summ-lbl">{{ s.label }}</div>
+        <div
+          v-for="s in summary"
+          :key="s.key"
+          class="summ-item"
+        >
+          <div
+            class="summ-num"
+            :style="{ color: s.color }"
+          >
+            {{ s.count }}
+          </div>
+          <div class="summ-lbl">
+            {{ s.label }}
+          </div>
         </div>
       </div>
 
@@ -29,34 +55,62 @@
           class="filter-tab"
           :class="{ active: activeFilter === tab.val }"
           @click="activeFilter = tab.val"
-        >{{ tab.label }}</button>
+        >
+          {{ tab.label }}
+        </button>
       </div>
 
       <!-- Empty state -->
-      <div v-if="filtered.length === 0" class="empty-state">
-        <div class="empty-icon">📭</div>
-        <div class="empty-title">{{ t('approvals.noRequests') }}</div>
+      <div
+        v-if="filtered.length === 0"
+        class="empty-state"
+      >
+        <div class="empty-icon">
+          📭
+        </div>
+        <div class="empty-title">
+          {{ t('approvals.noRequests') }}
+        </div>
       </div>
 
       <!-- Registration cards -->
-      <div class="reg-list" v-else>
-        <div v-for="reg in filtered" :key="reg.id" class="reg-card">
+      <div
+        v-else
+        class="reg-list"
+      >
+        <div
+          v-for="reg in filtered"
+          :key="reg.id"
+          class="reg-card"
+        >
           <div class="reg-card-top">
-            <div class="school-badge" :style="{ background: typeColor(reg.schoolType) }">
+            <div
+              class="school-badge"
+              :style="{ background: typeColor(reg.schoolType) }"
+            >
               {{ reg.schoolType === 'public' ? '🏛' : '🏫' }}
             </div>
             <div class="school-info">
-              <div class="school-name">{{ reg.schoolNameKh || reg.schoolNameEn }}</div>
-              <div class="school-name-en">{{ reg.schoolNameEn }}</div>
+              <div class="school-name">
+                {{ reg.schoolNameKh || reg.schoolNameEn }}
+              </div>
+              <div class="school-name-en">
+                {{ reg.schoolNameEn }}
+              </div>
               <div class="school-meta">
                 <span class="meta-chip">{{ levelLabel(reg.level) }}</span>
                 <span class="meta-chip">{{ reg.province }}</span>
               </div>
             </div>
-            <div class="status-badge" :class="reg.status">{{ t('approvals.' + reg.status) }}</div>
+            <div
+              class="status-badge"
+              :class="reg.status"
+            >
+              {{ t('approvals.' + reg.status) }}
+            </div>
           </div>
 
-          <div class="divider-line"></div>
+          <div class="divider-line" />
 
           <div class="detail-grid">
             <div class="detail-item">
@@ -75,7 +129,10 @@
               <span class="detail-icon">📍</span>
               <span class="detail-text">{{ reg.address }}</span>
             </div>
-            <div v-if="reg.totalStudents" class="detail-item">
+            <div
+              v-if="reg.totalStudents"
+              class="detail-item"
+            >
               <span class="detail-icon">🎒</span>
               <span class="detail-text">{{ reg.totalStudents }} {{ t('approvals.students') }}</span>
             </div>
@@ -90,14 +147,32 @@
           </div>
 
           <!-- Action buttons for pending -->
-          <div v-if="reg.status === 'pending'" class="action-row">
-            <button class="btn-reject" @click="openReject(reg)">✕ {{ t('approvals.reject') }}</button>
-            <button class="btn-approve" @click="approve(reg)">✓ {{ t('approvals.approve') }}</button>
+          <div
+            v-if="reg.status === 'pending'"
+            class="action-row"
+          >
+            <button
+              class="btn-reject"
+              @click="openReject(reg)"
+            >
+              ✕ {{ t('approvals.reject') }}
+            </button>
+            <button
+              class="btn-approve"
+              @click="approve(reg)"
+            >
+              ✓ {{ t('approvals.approve') }}
+            </button>
           </div>
 
           <!-- Approved credentials display -->
-          <div v-if="reg.status === 'approved' && reg.adminCredentials" class="cred-box">
-            <div class="cred-title">🔑 {{ t('approvals.adminCredentials') }}</div>
+          <div
+            v-if="reg.status === 'approved' && reg.adminCredentials"
+            class="cred-box"
+          >
+            <div class="cred-title">
+              🔑 {{ t('approvals.adminCredentials') }}
+            </div>
             <div class="cred-row">
               <span class="cred-lbl">Email:</span>
               <span class="cred-val">{{ reg.adminCredentials.email }}</span>
@@ -113,115 +188,145 @@
           </div>
 
           <!-- Rejection reason display -->
-          <div v-if="reg.status === 'rejected' && reg.rejectReason" class="reject-box">
+          <div
+            v-if="reg.status === 'rejected' && reg.rejectReason"
+            class="reject-box"
+          >
             <span class="reject-reason-lbl">{{ t('approvals.reason') }}:</span> {{ reg.rejectReason }}
           </div>
         </div>
       </div>
 
       <!-- Toast -->
-      <div v-if="toast" class="toast">{{ toast }}</div>
-
+      <div
+        v-if="toast"
+        class="toast"
+      >
+        {{ toast }}
+      </div>
     </ion-content>
 
     <!-- Reject modal -->
-    <ion-modal :is-open="showRejectModal" @didDismiss="showRejectModal = false" :breakpoints="[0,1]" :initial-breakpoint="1">
+    <ion-modal
+      :is-open="showRejectModal"
+      :breakpoints="[0,1]"
+      :initial-breakpoint="1"
+      @did-dismiss="showRejectModal = false"
+    >
       <ion-content style="--background:white">
         <div class="modal-inner">
-          <div class="modal-title">✕ {{ t('approvals.rejectTitle') }}</div>
-          <div class="modal-school">{{ rejectTarget?.schoolNameKh }}</div>
+          <div class="modal-title">
+            ✕ {{ t('approvals.rejectTitle') }}
+          </div>
+          <div class="modal-school">
+            {{ rejectTarget?.schoolNameKh }}
+          </div>
           <label class="field-label">{{ t('approvals.rejectReason') }} *</label>
-          <textarea v-model="rejectReason" class="field-input" rows="4" :placeholder="t('approvals.rejectPlaceholder')"></textarea>
+          <textarea
+            v-model="rejectReason"
+            class="field-input"
+            rows="4"
+            :placeholder="t('approvals.rejectPlaceholder')"
+          />
           <div class="modal-btns">
-            <button class="mbtn-cancel" @click="showRejectModal = false">{{ t('actions.cancel') }}</button>
-            <button class="mbtn-reject" @click="confirmReject">{{ t('approvals.confirm') }}</button>
+            <button
+              class="mbtn-cancel"
+              @click="showRejectModal = false"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mbtn-reject"
+              @click="confirmReject"
+            >
+              {{ t('approvals.confirm') }}
+            </button>
           </div>
         </div>
       </ion-content>
     </ion-modal>
-
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonModal } from '@ionic/vue'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {useRouter} from 'vue-router';
+import {IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonModal} from '@ionic/vue';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const { t } = useI18n()
-const router = useRouter()
+const {t} = useI18n();
+const router = useRouter();
 
 // ── Data ──
-const registrations = ref<any[]>(LocalStorageService.get<any[]>('pending_registrations', []) || [])
-const activeFilter   = ref('all')
-const toast          = ref('')
-const showRejectModal = ref(false)
-const rejectTarget    = ref<any>(null)
-const rejectReason    = ref('')
+const registrations = ref<any[]>(LocalStorageService.get<any[]>('pending_registrations', []) || []);
+const activeFilter = ref('all');
+const toast = ref('');
+const showRejectModal = ref(false);
+const rejectTarget = ref<any>(null);
+const rejectReason = ref('');
 
 // ── Filter tabs ──
 const filterTabs = computed(() => [
-  { val:'all',      label: t('approvals.all') },
-  { val:'pending',  label: t('approvals.pending') },
-  { val:'approved', label: t('approvals.approved') },
-  { val:'rejected', label: t('approvals.rejected') },
-])
+  {val: 'all', label: t('approvals.all')},
+  {val: 'pending', label: t('approvals.pending')},
+  {val: 'approved', label: t('approvals.approved')},
+  {val: 'rejected', label: t('approvals.rejected')},
+]);
 
 const filtered = computed(() =>
   activeFilter.value === 'all'
     ? registrations.value
     : registrations.value.filter(r => r.status === activeFilter.value)
-)
+);
 
 // ── Summary bar ──
 const summary = computed(() => [
-  { key:'total',    count: registrations.value.length,                             label: t('approvals.total'),    color:'#1976d2' },
-  { key:'pending',  count: registrations.value.filter(r => r.status==='pending').length,  label: t('approvals.pending'),  color:'#f59e0b' },
-  { key:'approved', count: registrations.value.filter(r => r.status==='approved').length, label: t('approvals.approved'), color:'#16a34a' },
-  { key:'rejected', count: registrations.value.filter(r => r.status==='rejected').length, label: t('approvals.rejected'), color:'#dc2626' },
-])
+  {key: 'total', count: registrations.value.length, label: t('approvals.total'), color: '#1976d2'},
+  {key: 'pending', count: registrations.value.filter(r => r.status === 'pending').length, label: t('approvals.pending'), color: '#f59e0b'},
+  {key: 'approved', count: registrations.value.filter(r => r.status === 'approved').length, label: t('approvals.approved'), color: '#16a34a'},
+  {key: 'rejected', count: registrations.value.filter(r => r.status === 'rejected').length, label: t('approvals.rejected'), color: '#dc2626'},
+]);
 
 // ── Helpers ──
 function typeColor(type: string) {
-  return type === 'public' ? '#1976d220' : '#7c3aed20'
+  return type === 'public' ? '#1976d220' : '#7c3aed20';
 }
 
 function levelLabel(level: string) {
-  const map: Record<string,string> = {
-    primary:'Primary', lower_secondary:'Lower Sec.', upper_secondary:'Upper Sec.',
-    university:'University', integrated:'Integrated'
-  }
-  return map[level] || level
+  const map: Record<string, string> = {
+    primary: 'Primary', lower_secondary: 'Lower Sec.', upper_secondary: 'Upper Sec.',
+    university: 'University', integrated: 'Integrated'
+  };
+  return map[level] || level;
 }
 
 function formatDate(iso: string) {
-  if (!iso) return ''
-  return new Date(iso).toLocaleDateString('km-KH', { year:'numeric', month:'short', day:'numeric' })
+  if (!iso) return '';
+  return new Date(iso).toLocaleDateString('km-KH', {year: 'numeric', month: 'short', day: 'numeric'});
 }
 
 function save() {
-  LocalStorageService.set('pending_registrations', registrations.value)
+  LocalStorageService.set('pending_registrations', registrations.value);
 }
 
 function showToast(msg: string) {
-  toast.value = msg
-  setTimeout(() => toast.value = '', 2500)
+  toast.value = msg;
+  setTimeout(() => toast.value = '', 2500);
 }
 
 // ── Approve ──
 function approve(reg: any) {
-  const schoolCode = 'SCH-' + Date.now().toString().slice(-6)
-  const email      = 'admin@' + reg.schoolNameEn.toLowerCase().replace(/\s+/g, '') + '.edu.kh'
-  const password   = 'Admin@' + Math.random().toString(36).slice(2, 8).toUpperCase()
+  const schoolCode = 'SCH-' + Date.now().toString().slice(-6);
+  const email = 'admin@' + reg.schoolNameEn.toLowerCase().replace(/\s+/g, '') + '.edu.kh';
+  const password = 'Admin@' + Math.random().toString(36).slice(2, 8).toUpperCase();
 
-  reg.status = 'approved'
-  reg.approvedAt = new Date().toISOString()
-  reg.adminCredentials = { email, password, schoolCode }
+  reg.status = 'approved';
+  reg.approvedAt = new Date().toISOString();
+  reg.adminCredentials = {email, password, schoolCode};
 
   // Register school in schools list
-  const schools: any[] = JSON.parse(localStorage.getItem('schools') || '[]')
+  const schools: any[] = JSON.parse(localStorage.getItem('schools') || '[]');
   schools.push({
     id: 'school_' + Date.now(),
     name: reg.schoolNameKh || reg.schoolNameEn,
@@ -238,28 +343,28 @@ function approve(reg: any) {
     adminPassword: password,
     isActive: true,
     createdAt: new Date().toISOString(),
-  })
-  localStorage.setItem('schools', JSON.stringify(schools))
+  });
+  localStorage.setItem('schools', JSON.stringify(schools));
 
-  save()
-  showToast('✅ ' + t('approvals.approvedMsg'))
+  save();
+  showToast('✅ ' + t('approvals.approvedMsg'));
 }
 
 // ── Reject ──
 function openReject(reg: any) {
-  rejectTarget.value = reg
-  rejectReason.value = ''
-  showRejectModal.value = true
+  rejectTarget.value = reg;
+  rejectReason.value = '';
+  showRejectModal.value = true;
 }
 
 function confirmReject() {
-  if (!rejectReason.value.trim()) return
-  rejectTarget.value.status      = 'rejected'
-  rejectTarget.value.rejectReason = rejectReason.value
-  rejectTarget.value.rejectedAt  = new Date().toISOString()
-  save()
-  showRejectModal.value = false
-  showToast('✕ ' + t('approvals.rejectedMsg'))
+  if (!rejectReason.value.trim()) return;
+  rejectTarget.value.status = 'rejected';
+  rejectTarget.value.rejectReason = rejectReason.value;
+  rejectTarget.value.rejectedAt = new Date().toISOString();
+  save();
+  showRejectModal.value = false;
+  showToast('✕ ' + t('approvals.rejectedMsg'));
 }
 </script>
 

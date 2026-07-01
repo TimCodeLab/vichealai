@@ -2,8 +2,22 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('nav.reports') }}</span>
         <span class="pg-badge-header">{{ currentMonth }}</span>
@@ -12,28 +26,63 @@
 
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
-
         <!-- Summary stats -->
         <div class="stat-grid">
-          <div class="stat-card" style="background:linear-gradient(135deg,#1565c0,#1976d2)">
-            <div class="stat-icon">👥</div>
-            <div class="stat-num">{{ stats.students }}</div>
-            <div class="stat-lbl">{{ t('nav.students') }}</div>
+          <div
+            class="stat-card"
+            style="background:linear-gradient(135deg,#1565c0,#1976d2)"
+          >
+            <div class="stat-icon">
+              👥
+            </div>
+            <div class="stat-num">
+              {{ stats.students }}
+            </div>
+            <div class="stat-lbl">
+              {{ t('nav.students') }}
+            </div>
           </div>
-          <div class="stat-card" style="background:linear-gradient(135deg,#2e7d32,#43a047)">
-            <div class="stat-icon">👩‍🏫</div>
-            <div class="stat-num">{{ stats.teachers }}</div>
-            <div class="stat-lbl">{{ t('nav.teachers') }}</div>
+          <div
+            class="stat-card"
+            style="background:linear-gradient(135deg,#2e7d32,#43a047)"
+          >
+            <div class="stat-icon">
+              👩‍🏫
+            </div>
+            <div class="stat-num">
+              {{ stats.teachers }}
+            </div>
+            <div class="stat-lbl">
+              {{ t('nav.teachers') }}
+            </div>
           </div>
-          <div class="stat-card" style="background:linear-gradient(135deg,#e65100,#f57c00)">
-            <div class="stat-icon">🏫</div>
-            <div class="stat-num">{{ stats.classes }}</div>
-            <div class="stat-lbl">{{ t('nav.classes') }}</div>
+          <div
+            class="stat-card"
+            style="background:linear-gradient(135deg,#e65100,#f57c00)"
+          >
+            <div class="stat-icon">
+              🏫
+            </div>
+            <div class="stat-num">
+              {{ stats.classes }}
+            </div>
+            <div class="stat-lbl">
+              {{ t('nav.classes') }}
+            </div>
           </div>
-          <div class="stat-card" style="background:linear-gradient(135deg,#6a1b9a,#8e24aa)">
-            <div class="stat-icon">📊</div>
-            <div class="stat-num">{{ stats.exams }}</div>
-            <div class="stat-lbl">{{ t('nav.exams') }}</div>
+          <div
+            class="stat-card"
+            style="background:linear-gradient(135deg,#6a1b9a,#8e24aa)"
+          >
+            <div class="stat-icon">
+              📊
+            </div>
+            <div class="stat-num">
+              {{ stats.exams }}
+            </div>
+            <div class="stat-lbl">
+              {{ t('nav.exams') }}
+            </div>
           </div>
         </div>
 
@@ -46,17 +95,35 @@
           <div class="att-bar-wrap">
             <div class="att-row">
               <span class="att-lbl att-present">{{ t('attendance.present') }}</span>
-              <div class="att-track"><div class="att-fill" style="background:#22c55e" :style="{ width: attPct('present') + '%' }"></div></div>
+              <div class="att-track">
+                <div
+                  class="att-fill"
+                  style="background:#22c55e"
+                  :style="{ width: attPct('present') + '%' }"
+                />
+              </div>
               <span class="att-val">{{ countAtt('present') }}</span>
             </div>
             <div class="att-row">
               <span class="att-lbl att-absent">{{ t('attendance.absent') }}</span>
-              <div class="att-track"><div class="att-fill" style="background:#ef4444" :style="{ width: attPct('absent') + '%' }"></div></div>
+              <div class="att-track">
+                <div
+                  class="att-fill"
+                  style="background:#ef4444"
+                  :style="{ width: attPct('absent') + '%' }"
+                />
+              </div>
               <span class="att-val">{{ countAtt('absent') }}</span>
             </div>
             <div class="att-row">
               <span class="att-lbl att-late">{{ t('attendance.late') }}</span>
-              <div class="att-track"><div class="att-fill" style="background:#f97316" :style="{ width: attPct('late') + '%' }"></div></div>
+              <div class="att-track">
+                <div
+                  class="att-fill"
+                  style="background:#f97316"
+                  :style="{ width: attPct('late') + '%' }"
+                />
+              </div>
               <span class="att-val">{{ countAtt('late') }}</span>
             </div>
           </div>
@@ -75,7 +142,13 @@
           <div class="gen-field">
             <label class="gen-label">{{ t('reports.type') }}</label>
             <div class="type-grid">
-              <button v-for="rt in reportTypes" :key="rt.value" class="type-btn" :class="{ active: selectedType === rt.value }" @click="selectedType = rt.value">
+              <button
+                v-for="rt in reportTypes"
+                :key="rt.value"
+                class="type-btn"
+                :class="{ active: selectedType === rt.value }"
+                @click="selectedType = rt.value"
+              >
                 <span class="type-icon">{{ rt.icon }}</span>
                 <span class="type-lbl">{{ rt.label }}</span>
               </button>
@@ -85,24 +158,56 @@
           <div class="gen-row2">
             <div class="gen-field">
               <label class="gen-label">{{ t('reports.dateFrom') }}</label>
-              <input v-model="dateFrom" type="date" class="gen-input" />
+              <input
+                v-model="dateFrom"
+                type="date"
+                class="gen-input"
+              >
             </div>
             <div class="gen-field">
               <label class="gen-label">{{ t('reports.dateTo') }}</label>
-              <input v-model="dateTo" type="date" class="gen-input" />
+              <input
+                v-model="dateTo"
+                type="date"
+                class="gen-input"
+              >
             </div>
           </div>
 
           <div class="gen-field">
             <label class="gen-label">{{ t('reports.format') }}</label>
             <div style="display:flex;gap:6px">
-              <button v-for="f in formats" :key="f" class="fmt-btn" :class="{ active: selectedFormat === f }" @click="selectedFormat = f">{{ f }}</button>
+              <button
+                v-for="f in formats"
+                :key="f"
+                class="fmt-btn"
+                :class="{ active: selectedFormat === f }"
+                @click="selectedFormat = f"
+              >
+                {{ f }}
+              </button>
             </div>
           </div>
 
-          <button class="gen-btn" @click="generateReport" :disabled="generating">
+          <button
+            class="gen-btn"
+            :disabled="generating"
+            @click="generateReport"
+          >
             <span v-if="!generating">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:-3px;margin-right:6px"><path d="M12 2v10m0 0l-3-3m3 3l3-3M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                style="vertical-align:-3px;margin-right:6px"
+              ><path
+                d="M12 2v10m0 0l-3-3m3 3l3-3M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              /></svg>
               {{ t('reports.generateBtn') }} {{ selectedType ? reportTypes.find(r=>r.value===selectedType)?.label : '' }}
             </span>
             <span v-else>⏳ {{ t('reports.generating') }}</span>
@@ -110,134 +215,209 @@
         </div>
 
         <!-- Recent Reports -->
-        <div class="section-card" v-if="recentReports.length > 0">
+        <div
+          v-if="recentReports.length > 0"
+          class="section-card"
+        >
           <div class="section-head">
             <span class="section-title">🗂 {{ t('reports.recent') }}</span>
-            <button class="clear-btn" @click="clearReports">{{ t('reports.clearAll') }}</button>
+            <button
+              class="clear-btn"
+              @click="clearReports"
+            >
+              {{ t('reports.clearAll') }}
+            </button>
           </div>
-          <div v-for="rep in recentReports" :key="rep.id" class="report-row">
-            <div class="report-icon" :style="{ background: typeColor(rep.type) }">{{ typeIcon(rep.type) }}</div>
+          <div
+            v-for="rep in recentReports"
+            :key="rep.id"
+            class="report-row"
+          >
+            <div
+              class="report-icon"
+              :style="{ background: typeColor(rep.type) }"
+            >
+              {{ typeIcon(rep.type) }}
+            </div>
             <div class="report-info">
-              <div class="report-name">{{ rep.name }}</div>
-              <div class="report-meta">{{ rep.date }} · {{ rep.format }} · {{ rep.size }}</div>
+              <div class="report-name">
+                {{ rep.name }}
+              </div>
+              <div class="report-meta">
+                {{ rep.date }} · {{ rep.format }} · {{ rep.size }}
+              </div>
             </div>
             <div style="display:flex;gap:6px">
-              <button class="rep-act" title="Download" @click="downloadReport(rep)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2v10m0 0l-3-3m3 3l3-3M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <button
+                class="rep-act"
+                title="Download"
+                @click="downloadReport(rep)"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                ><path
+                  d="M12 2v10m0 0l-3-3m3 3l3-3M3 17v2a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                /></svg>
               </button>
-              <button class="rep-act rep-del" title="Delete" @click="deleteReport(rep.id)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <button
+                class="rep-act rep-del"
+                title="Delete"
+                @click="deleteReport(rep.id)"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                ><polyline
+                  points="3 6 5 6 21 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                /><path
+                  d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                /><path
+                  d="M10 11v6M14 11v6"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                /></svg>
               </button>
             </div>
           </div>
         </div>
 
-        <div class="section-card" v-else style="text-align:center;padding:32px 20px">
-          <div style="font-size:40px;margin-bottom:8px">📂</div>
-          <div style="font-size:14px;font-weight:600;color:#374151">{{ t('reports.noReports') }}</div>
-          <div style="font-size:12px;color:#9ca3af;margin-top:4px">{{ t('reports.noReportsSub') }}</div>
+        <div
+          v-else
+          class="section-card"
+          style="text-align:center;padding:32px 20px"
+        >
+          <div style="font-size:40px;margin-bottom:8px">
+            📂
+          </div>
+          <div style="font-size:14px;font-weight:600;color:#374151">
+            {{ t('reports.noReports') }}
+          </div>
+          <div style="font-size:12px;color:#9ca3af;margin-top:4px">
+            {{ t('reports.noReportsSub') }}
+          </div>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
     <!-- Toast -->
     <transition name="toast">
-      <div v-if="toastMsg" class="toast">{{ toastMsg }}</div>
+      <div
+        v-if="toastMsg"
+        class="toast"
+      >
+        {{ toastMsg }}
+      </div>
     </transition>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t } = useI18n()
+const router = useRouter();
+const {t} = useI18n();
 
-const today = new Date()
-const currentMonth = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-const todayStr = today.toISOString().split('T')[0]
+const today = new Date();
+const currentMonth = today.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+const todayStr = today.toISOString().split('T')[0];
 
-const students   = ref<any[]>(LocalStorageService.get<any[]>('students',   []) || [])
-const teachers   = ref<any[]>(LocalStorageService.get<any[]>('teachers',   []) || [])
-const classes    = ref<any[]>(LocalStorageService.get<any[]>('classes',    []) || [])
-const exams      = ref<any[]>(LocalStorageService.get<any[]>('exams',      []) || [])
-const attendance = ref<any[]>(LocalStorageService.get<any[]>('attendance', []) || [])
-const recentReports = ref<any[]>(LocalStorageService.get<any[]>('reports', []) || [])
+const students = ref<any[]>(LocalStorageService.get<any[]>('students', []) || []);
+const teachers = ref<any[]>(LocalStorageService.get<any[]>('teachers', []) || []);
+const classes = ref<any[]>(LocalStorageService.get<any[]>('classes', []) || []);
+const exams = ref<any[]>(LocalStorageService.get<any[]>('exams', []) || []);
+const attendance = ref<any[]>(LocalStorageService.get<any[]>('attendance', []) || []);
+const recentReports = ref<any[]>(LocalStorageService.get<any[]>('reports', []) || []);
 
 const stats = computed(() => ({
   students: students.value.length,
   teachers: teachers.value.length,
-  classes:  classes.value.length,
-  exams:    exams.value.length,
-}))
+  classes: classes.value.length,
+  exams: exams.value.length,
+}));
 
-const todayAtt = computed(() => attendance.value.filter(a => a.date?.startsWith(todayStr)))
-function countAtt(s: string) { return todayAtt.value.filter(a=>a.status===s).length }
-function attPct(s: string)   { const total=todayAtt.value.length; return total ? Math.round(countAtt(s)/total*100) : 0 }
+const todayAtt = computed(() => attendance.value.filter(a => a.date?.startsWith(todayStr)));
+function countAtt(s: string) { return todayAtt.value.filter(a=>a.status === s).length; }
+function attPct(s: string) { const total = todayAtt.value.length; return total ? Math.round(countAtt(s) / total * 100) : 0; }
 const attendanceRate = computed(() => {
-  const total = todayAtt.value.length
-  return total ? Math.round(countAtt('present') / total * 100) : 0
-})
+  const total = todayAtt.value.length;
+  return total ? Math.round(countAtt('present') / total * 100) : 0;
+});
 
-const selectedType   = ref('students')
-const selectedFormat = ref('PDF')
-const dateFrom       = ref(new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0])
-const dateTo         = ref(todayStr)
-const generating     = ref(false)
-const toastMsg       = ref('')
+const selectedType = ref('students');
+const selectedFormat = ref('PDF');
+const dateFrom = ref(new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0]);
+const dateTo = ref(todayStr);
+const generating = ref(false);
+const toastMsg = ref('');
 
 const reportTypes = computed(() => [
-  { value:'students',   label: t('nav.students'),   icon:'👥' },
-  { value:'teachers',   label: t('nav.teachers'),   icon:'👩‍🏫' },
-  { value:'attendance', label: t('nav.attendance'), icon:'📋' },
-  { value:'exams',      label: t('nav.exams'),      icon:'📊' },
-  { value:'homework',   label: t('nav.homework'),   icon:'📝' },
-  { value:'finance',    label: t('nav.finance'),    icon:'💰' },
-])
-const formats = ['PDF', 'Excel', 'CSV']
+  {value: 'students', label: t('nav.students'), icon: '👥'},
+  {value: 'teachers', label: t('nav.teachers'), icon: '👩‍🏫'},
+  {value: 'attendance', label: t('nav.attendance'), icon: '📋'},
+  {value: 'exams', label: t('nav.exams'), icon: '📊'},
+  {value: 'homework', label: t('nav.homework'), icon: '📝'},
+  {value: 'finance', label: t('nav.finance'), icon: '💰'},
+]);
+const formats = ['PDF', 'Excel', 'CSV'];
 
 function typeColor(type: string) {
-  return ({students:'#1976d2',teachers:'#2e7d32',attendance:'#e65100',exams:'#6a1b9a',homework:'#c62828',finance:'#00838f'} as any)[type] || '#374151'
+  return ({students: '#1976d2', teachers: '#2e7d32', attendance: '#e65100', exams: '#6a1b9a', homework: '#c62828', finance: '#00838f'} as any)[type] || '#374151';
 }
 function typeIcon(type: string) {
-  return ({students:'👥',teachers:'👩‍🏫',attendance:'📋',exams:'📊',homework:'📝',finance:'💰'} as any)[type] || '📄'
+  return ({students: '👥', teachers: '👩‍🏫', attendance: '📋', exams: '📊', homework: '📝', finance: '💰'} as any)[type] || '📄';
 }
 
-function showToast(msg: string) { toastMsg.value=msg; setTimeout(()=>toastMsg.value='', 2800) }
+function showToast(msg: string) { toastMsg.value = msg; setTimeout(()=>toastMsg.value = '', 2800); }
 
 function generateReport() {
-  generating.value = true
+  generating.value = true;
   setTimeout(() => {
-    const typeName = reportTypes.value.find(r=>r.value===selectedType.value)?.label || selectedType.value
+    const typeName = reportTypes.value.find(r=>r.value === selectedType.value)?.label || selectedType.value;
     const rep = {
-      id:     `rep_${Date.now()}`,
-      type:   selectedType.value,
-      name:   `${typeName} Report — ${dateFrom.value} to ${dateTo.value}`,
+      id: `rep_${Date.now()}`,
+      type: selectedType.value,
+      name: `${typeName} Report — ${dateFrom.value} to ${dateTo.value}`,
       format: selectedFormat.value,
-      date:   new Date().toLocaleDateString(),
-      size:   `${Math.floor(Math.random()*900+100)} KB`,
-    }
-    recentReports.value.unshift(rep)
-    if (recentReports.value.length > 10) recentReports.value = recentReports.value.slice(0,10)
-    LocalStorageService.set('reports', recentReports.value)
-    generating.value = false
-    showToast(`✅ ${typeName} report generated!`)
-  }, 1400)
+      date: new Date().toLocaleDateString(),
+      size: `${Math.floor(Math.random() * 900 + 100)} KB`,
+    };
+    recentReports.value.unshift(rep);
+    if (recentReports.value.length > 10) recentReports.value = recentReports.value.slice(0, 10);
+    LocalStorageService.set('reports', recentReports.value);
+    generating.value = false;
+    showToast(`✅ ${typeName} report generated!`);
+  }, 1400);
 }
 
-function downloadReport(rep: any) { showToast(`📥 Downloading ${rep.format} report...`) }
+function downloadReport(rep: any) { showToast(`📥 Downloading ${rep.format} report...`); }
 function deleteReport(id: string) {
-  recentReports.value = recentReports.value.filter(r=>r.id!==id)
-  LocalStorageService.set('reports', recentReports.value)
+  recentReports.value = recentReports.value.filter(r=>r.id !== id);
+  LocalStorageService.set('reports', recentReports.value);
 }
 function clearReports() {
-  if (confirm(t('reports.clearConfirm'))) { recentReports.value=[]; LocalStorageService.set('reports',[]) }
+  if (confirm(t('reports.clearConfirm'))) { recentReports.value = []; LocalStorageService.set('reports', []); }
 }
 </script>
 

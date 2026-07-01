@@ -2,12 +2,39 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('parents.title') }}</span>
-        <button class="pg-new" @click="openCreate">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <button
+          class="pg-new"
+          @click="openCreate"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M12 5v14M5 12h14"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          /></svg>
           {{ t('actions.create') }}
         </button>
       </div>
@@ -15,121 +42,268 @@
 
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
-
         <div class="pg-search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
-          <input v-model="searchQuery" class="pg-search-input" :placeholder="t('parents.search')" />
-          <span v-if="searchQuery" class="pg-search-clear" @click="searchQuery = ''">✕</span>
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><circle
+            cx="11"
+            cy="11"
+            r="8"
+            stroke="#9ca3af"
+            stroke-width="2"
+          /><path
+            d="M21 21l-4.35-4.35"
+            stroke="#9ca3af"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
+          <input
+            v-model="searchQuery"
+            class="pg-search-input"
+            :placeholder="t('parents.search')"
+          >
+          <span
+            v-if="searchQuery"
+            class="pg-search-clear"
+            @click="searchQuery = ''"
+          >✕</span>
         </div>
 
         <div class="pg-meta">
           <span class="pg-count">{{ filtered.length }} {{ t('parents.parents') }}</span>
         </div>
 
-        <div v-if="filtered.length === 0" class="pg-empty">
-          <div style="font-size:52px;margin-bottom:12px">👨‍👩‍👧</div>
-          <div class="empty-title">{{ t('parents.notFound') }}</div>
-          <div class="empty-sub">{{ t('parents.notFoundSub') }}</div>
-          <button class="pg-empty-btn" @click="openCreate">+ {{ t('parents.add') }}</button>
+        <div
+          v-if="filtered.length === 0"
+          class="pg-empty"
+        >
+          <div style="font-size:52px;margin-bottom:12px">
+            👨‍👩‍👧
+          </div>
+          <div class="empty-title">
+            {{ t('parents.notFound') }}
+          </div>
+          <div class="empty-sub">
+            {{ t('parents.notFoundSub') }}
+          </div>
+          <button
+            class="pg-empty-btn"
+            @click="openCreate"
+          >
+            + {{ t('parents.add') }}
+          </button>
         </div>
 
-        <div v-for="parent in filtered" :key="parent.id" class="pg-card">
-          <div class="pg-avatar" :style="{ background: aColor(parent.name) }">{{ aInitial(parent.name) }}</div>
+        <div
+          v-for="parent in filtered"
+          :key="parent.id"
+          class="pg-card"
+        >
+          <div
+            class="pg-avatar"
+            :style="{ background: aColor(parent.name) }"
+          >
+            {{ aInitial(parent.name) }}
+          </div>
           <div class="pg-info">
-            <div class="pg-name">{{ parent.name }}</div>
-            <div class="pg-row"><span class="pg-lbl">📱</span><span class="pg-val">{{ parent.phone || '—' }}</span></div>
-            <div class="pg-row"><span class="pg-lbl">✉️</span><span class="pg-val">{{ parent.email || '—' }}</span></div>
-            <div v-if="parent.student" class="pg-row"><span class="pg-lbl">🎒</span><span class="pg-val">{{ parent.student }}</span></div>
-            <div v-if="parent.occupation" class="pg-row"><span class="pg-lbl">💼</span><span class="pg-val">{{ parent.occupation }}</span></div>
+            <div class="pg-name">
+              {{ parent.name }}
+            </div>
+            <div class="pg-row">
+              <span class="pg-lbl">📱</span><span class="pg-val">{{ parent.phone || '—' }}</span>
+            </div>
+            <div class="pg-row">
+              <span class="pg-lbl">✉️</span><span class="pg-val">{{ parent.email || '—' }}</span>
+            </div>
+            <div
+              v-if="parent.student"
+              class="pg-row"
+            >
+              <span class="pg-lbl">🎒</span><span class="pg-val">{{ parent.student }}</span>
+            </div>
+            <div
+              v-if="parent.occupation"
+              class="pg-row"
+            >
+              <span class="pg-lbl">💼</span><span class="pg-val">{{ parent.occupation }}</span>
+            </div>
           </div>
           <div class="pg-actions">
-            <button class="pg-btn pg-btn-edit" @click="editItem(parent)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <button
+              class="pg-btn pg-btn-edit"
+              @click="editItem(parent)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /></svg>
             </button>
-            <button class="pg-btn pg-btn-del" @click="deleteItem(parent.id)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <button
+              class="pg-btn pg-btn-del"
+              @click="deleteItem(parent.id)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><polyline
+                points="3 6 5 6 21 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /></svg>
             </button>
           </div>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
-    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+    <ion-modal
+      :is-open="showModal"
+      @did-dismiss="closeModal"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">{{ editing ? '✏️ ' + t('parents.editTitle') : '➕ ' + t('parents.newTitle') }}</span>
-          <button class="mo-close" @click="closeModal">✕</button>
+          <button
+            class="mo-close"
+            @click="closeModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">{{ t('forms.name') }} *</label><input v-model="form.name" class="mo-input" placeholder="ឈ្មោះពេញ" /></div>
-          <div class="mo-row2">
-            <div class="mo-field"><label class="mo-label">{{ t('forms.phone') }}</label><input v-model="form.phone" class="mo-input" placeholder="012 xxx xxx" /></div>
-            <div class="mo-field"><label class="mo-label">{{ t('forms.email') }}</label><input v-model="form.email" type="email" class="mo-input" placeholder="email@..." /></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('forms.name') }} *</label><input
+              v-model="form.name"
+              class="mo-input"
+              placeholder="ឈ្មោះពេញ"
+            >
           </div>
-          <div class="mo-field"><label class="mo-label">{{ t('parents.student') }}</label><input v-model="form.student" class="mo-input" placeholder="Linked student name" /></div>
-          <div class="mo-field"><label class="mo-label">{{ t('parents.occupation') }}</label><input v-model="form.occupation" class="mo-input" placeholder="e.g. Farmer, Teacher, Business" /></div>
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">{{ t('forms.phone') }}</label><input
+                v-model="form.phone"
+                class="mo-input"
+                placeholder="012 xxx xxx"
+              >
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">{{ t('forms.email') }}</label><input
+                v-model="form.email"
+                type="email"
+                class="mo-input"
+                placeholder="email@..."
+              >
+            </div>
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('parents.student') }}</label><input
+              v-model="form.student"
+              class="mo-input"
+              placeholder="Linked student name"
+            >
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('parents.occupation') }}</label><input
+              v-model="form.occupation"
+              class="mo-input"
+              placeholder="e.g. Farmer, Teacher, Business"
+            >
+          </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.name">{{ t('actions.save') }}</button>
+            <button
+              class="mo-cancel"
+              @click="closeModal"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!form.name"
+              @click="saveItem"
+            >
+              {{ t('actions.save') }}
+            </button>
           </div>
         </div>
       </div>
     </ion-modal>
-
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t }  = useI18n()
+const router = useRouter();
+const {t} = useI18n();
 
-const searchQuery = ref('')
-const showModal   = ref(false)
-const editing     = ref<any>(null)
+const searchQuery = ref('');
+const showModal = ref(false);
+const editing = ref<any>(null);
 
-const parents = ref<any[]>(LocalStorageService.get<any[]>('parents', []) || [])
-const form    = ref({ name:'', phone:'', email:'', student:'', occupation:'' })
+const parents = ref<any[]>(LocalStorageService.get<any[]>('parents', []) || []);
+const form = ref({name: '', phone: '', email: '', student: '', occupation: ''});
 
 const filtered = computed(() => {
-  if (!searchQuery.value) return parents.value
-  const q = searchQuery.value.toLowerCase()
-  return parents.value.filter(p => p.name?.toLowerCase().includes(q) || p.student?.toLowerCase().includes(q) || p.phone?.includes(q))
-})
+  if (!searchQuery.value) return parents.value;
+  const q = searchQuery.value.toLowerCase();
+  return parents.value.filter(p => p.name?.toLowerCase().includes(q) || p.student?.toLowerCase().includes(q) || p.phone?.includes(q));
+});
 
-const palette = ['#c62828','#1565c0','#2e7d32','#e65100','#6a1b9a','#00838f','#4527a0']
-function aColor(n: string)   { return palette[(n?.charCodeAt(0)||0) % palette.length] }
-function aInitial(n: string) { return (n||'?').charAt(0).toUpperCase() }
+const palette = ['#c62828', '#1565c0', '#2e7d32', '#e65100', '#6a1b9a', '#00838f', '#4527a0'];
+function aColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
+function aInitial(n: string) { return (n || '?').charAt(0).toUpperCase(); }
 
-function openCreate() { form.value={name:'',phone:'',email:'',student:'',occupation:''}; editing.value=null; showModal.value=true }
-function editItem(p: any)    { editing.value=p; form.value={...p}; showModal.value=true }
-function closeModal()        { showModal.value=false; editing.value=null }
+function openCreate() { form.value = {name: '', phone: '', email: '', student: '', occupation: ''}; editing.value = null; showModal.value = true; }
+function editItem(p: any) { editing.value = p; form.value = {...p}; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; }
 
 function deleteItem(id: string) {
   if (confirm(t('messages.confirmDelete'))) {
-    parents.value = parents.value.filter(p => p.id !== id)
-    LocalStorageService.set('parents', parents.value)
+    parents.value = parents.value.filter(p => p.id !== id);
+    LocalStorageService.set('parents', parents.value);
   }
 }
 
 function saveItem() {
-  if (!form.value.name) return
+  if (!form.value.name) return;
   if (editing.value) {
-    const i = parents.value.findIndex(p => p.id === editing.value.id)
-    if (i !== -1) parents.value[i] = { ...parents.value[i], ...form.value }
+    const i = parents.value.findIndex(p => p.id === editing.value.id);
+    if (i !== -1) parents.value[i] = {...parents.value[i], ...form.value};
   } else {
-    parents.value.push({ id:`par_${Date.now()}`, ...form.value })
+    parents.value.push({id: `par_${Date.now()}`, ...form.value});
   }
-  LocalStorageService.set('parents', parents.value)
-  closeModal()
+  LocalStorageService.set('parents', parents.value);
+  closeModal();
 }
 </script>
 

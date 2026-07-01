@@ -2,12 +2,39 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('nav.homework') }}</span>
-        <button class="pg-new" @click="openCreate">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <button
+          class="pg-new"
+          @click="openCreate"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M12 5v14M5 12h14"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          /></svg>
           {{ t('actions.create') }}
         </button>
       </div>
@@ -16,70 +43,240 @@
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
         <div class="pg-search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
-          <input v-model="searchQuery" class="pg-search-input" :placeholder="t('actions.search') + '...'" />
-          <span v-if="searchQuery" @click="searchQuery=''" style="color:#9ca3af;cursor:pointer;font-size:13px">✕</span>
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><circle
+            cx="11"
+            cy="11"
+            r="8"
+            stroke="#9ca3af"
+            stroke-width="2"
+          /><path
+            d="M21 21l-4.35-4.35"
+            stroke="#9ca3af"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
+          <input
+            v-model="searchQuery"
+            class="pg-search-input"
+            :placeholder="t('actions.search') + '...'"
+          >
+          <span
+            v-if="searchQuery"
+            style="color:#9ca3af;cursor:pointer;font-size:13px"
+            @click="searchQuery=''"
+          >✕</span>
         </div>
 
         <div class="pg-meta">
           <span class="pg-count">{{ filtered.length }} {{ t('homework.assignmentsLabel') }}</span>
           <div style="display:flex;gap:4px">
-            <button class="pg-filter" :class="{ active: filter==='all' }"     @click="filter='all'">{{ t('homework.all') }}</button>
-            <button class="pg-filter" :class="{ active: filter==='pending' }" @click="filter='pending'">{{ t('homework.pending') }}</button>
-            <button class="pg-filter" :class="{ active: filter==='overdue' }" @click="filter='overdue'">{{ t('homework.overdue') }}</button>
+            <button
+              class="pg-filter"
+              :class="{ active: filter==='all' }"
+              @click="filter='all'"
+            >
+              {{ t('homework.all') }}
+            </button>
+            <button
+              class="pg-filter"
+              :class="{ active: filter==='pending' }"
+              @click="filter='pending'"
+            >
+              {{ t('homework.pending') }}
+            </button>
+            <button
+              class="pg-filter"
+              :class="{ active: filter==='overdue' }"
+              @click="filter='overdue'"
+            >
+              {{ t('homework.overdue') }}
+            </button>
           </div>
         </div>
 
-        <div v-if="filtered.length === 0" class="pg-empty">
-          <div style="font-size:52px;margin-bottom:12px">📝</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">{{ t('homework.notFound') }}</div>
-          <button class="pg-empty-btn" @click="openCreate">+ {{ t('homework.add') }}</button>
+        <div
+          v-if="filtered.length === 0"
+          class="pg-empty"
+        >
+          <div style="font-size:52px;margin-bottom:12px">
+            📝
+          </div>
+          <div style="font-size:16px;font-weight:600;color:#374151">
+            {{ t('homework.notFound') }}
+          </div>
+          <button
+            class="pg-empty-btn"
+            @click="openCreate"
+          >
+            + {{ t('homework.add') }}
+          </button>
         </div>
 
-        <div v-for="hw in filtered" :key="hw.id" class="pg-card">
-          <div class="pg-hw-icon" :style="{ background: aColor(hw.title) }">📝</div>
+        <div
+          v-for="hw in filtered"
+          :key="hw.id"
+          class="pg-card"
+        >
+          <div
+            class="pg-hw-icon"
+            :style="{ background: aColor(hw.title) }"
+          >
+            📝
+          </div>
           <div class="pg-info">
-            <div class="pg-name">{{ hw.title }}</div>
-            <div class="pg-row" v-if="hw.description"><span style="color:#6b7280;font-size:12px">{{ hw.description }}</span></div>
-            <div class="pg-row"><span>🏫</span><span class="pg-val">{{ getClassName(hw.classId) }}</span></div>
-            <div class="pg-row"><span>📅</span><span class="pg-val" :class="{ 'overdue-text': isOverdue(hw.dueDate) }">{{ t('homework.dueLabel') }}: {{ formatDate(hw.dueDate) }}</span></div>
-            <span class="pg-badge" :class="isOverdue(hw.dueDate) ? 'badge-red' : 'badge-orange'">{{ isOverdue(hw.dueDate) ? '⚠ ' + t('homework.overdue') : '⏳ ' + t('homework.pending') }}</span>
+            <div class="pg-name">
+              {{ hw.title }}
+            </div>
+            <div
+              v-if="hw.description"
+              class="pg-row"
+            >
+              <span style="color:#6b7280;font-size:12px">{{ hw.description }}</span>
+            </div>
+            <div class="pg-row">
+              <span>🏫</span><span class="pg-val">{{ getClassName(hw.classId) }}</span>
+            </div>
+            <div class="pg-row">
+              <span>📅</span><span
+                class="pg-val"
+                :class="{ 'overdue-text': isOverdue(hw.dueDate) }"
+              >{{ t('homework.dueLabel') }}: {{ formatDate(hw.dueDate) }}</span>
+            </div>
+            <span
+              class="pg-badge"
+              :class="isOverdue(hw.dueDate) ? 'badge-red' : 'badge-orange'"
+            >{{ isOverdue(hw.dueDate) ? '⚠ ' + t('homework.overdue') : '⏳ ' + t('homework.pending') }}</span>
           </div>
           <div class="pg-actions">
-            <button class="pg-btn pg-btn-edit" @click="editItem(hw)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <button
+              class="pg-btn pg-btn-edit"
+              @click="editItem(hw)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /></svg>
             </button>
-            <button class="pg-btn pg-btn-del" @click="deleteItem(hw.id)">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><polyline points="3 6 5 6 21 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <button
+              class="pg-btn pg-btn-del"
+              @click="deleteItem(hw.id)"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+              ><polyline
+                points="3 6 5 6 21 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /><path
+                d="M10 11v6M14 11v6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              /></svg>
             </button>
           </div>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
-    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+    <ion-modal
+      :is-open="showModal"
+      @did-dismiss="closeModal"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">{{ editing ? '✏️ ' + t('homework.editTitle') : '📝 ' + t('homework.newTitle') }}</span>
-          <button class="mo-close" @click="closeModal">✕</button>
+          <button
+            class="mo-close"
+            @click="closeModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">{{ t('homework.titleLabel') }} *</label><input v-model="form.title" class="mo-input" placeholder="e.g. Math Chapter 5 Exercises" /></div>
-          <div class="mo-field"><label class="mo-label">{{ t('homework.description') }}</label><textarea v-model="form.description" class="mo-input mo-textarea" placeholder="Instructions for students..." rows="3"></textarea></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('homework.titleLabel') }} *</label><input
+              v-model="form.title"
+              class="mo-input"
+              placeholder="e.g. Math Chapter 5 Exercises"
+            >
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('homework.description') }}</label><textarea
+              v-model="form.description"
+              class="mo-input mo-textarea"
+              placeholder="Instructions for students..."
+              rows="3"
+            />
+          </div>
           <div class="mo-field">
             <label class="mo-label">{{ t('nav.classes') }}</label>
-            <select v-model="form.classId" class="mo-input">
-              <option value="">-- {{ t('homework.selectClass') }} --</option>
-              <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
+            <select
+              v-model="form.classId"
+              class="mo-input"
+            >
+              <option value="">
+                -- {{ t('homework.selectClass') }} --
+              </option>
+              <option
+                v-for="c in classes"
+                :key="c.id"
+                :value="c.id"
+              >
+                {{ c.name }}
+              </option>
             </select>
           </div>
-          <div class="mo-field"><label class="mo-label">{{ t('homework.dueDate') }}</label><input v-model="form.dueDate" type="date" class="mo-input" /></div>
+          <div class="mo-field">
+            <label class="mo-label">{{ t('homework.dueDate') }}</label><input
+              v-model="form.dueDate"
+              type="date"
+              class="mo-input"
+            >
+          </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.title">{{ t('actions.save') }}</button>
+            <button
+              class="mo-cancel"
+              @click="closeModal"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!form.title"
+              @click="saveItem"
+            >
+              {{ t('actions.save') }}
+            </button>
           </div>
         </div>
       </div>
@@ -88,51 +285,51 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t } = useI18n()
-const searchQuery = ref('')
-const filter = ref('all')
-const showModal = ref(false)
-const editing = ref<any>(null)
-const items = ref<any[]>(LocalStorageService.get<any[]>('homework', []) || [])
-const classes = ref<any[]>(LocalStorageService.get<any[]>('classes', []) || [])
-const form = ref({ title:'', description:'', classId:'', dueDate:'' })
+const router = useRouter();
+const {t} = useI18n();
+const searchQuery = ref('');
+const filter = ref('all');
+const showModal = ref(false);
+const editing = ref<any>(null);
+const items = ref<any[]>(LocalStorageService.get<any[]>('homework', []) || []);
+const classes = ref<any[]>(LocalStorageService.get<any[]>('classes', []) || []);
+const form = ref({title: '', description: '', classId: '', dueDate: ''});
 
 const filtered = computed(() => {
-  let list = items.value
-  if (searchQuery.value) list = list.filter(i => i.title?.toLowerCase().includes(searchQuery.value.toLowerCase()))
-  if (filter.value === 'overdue') list = list.filter(i => isOverdue(i.dueDate))
-  if (filter.value === 'pending') list = list.filter(i => !isOverdue(i.dueDate))
-  return list
-})
+  let list = items.value;
+  if (searchQuery.value) list = list.filter(i => i.title?.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  if (filter.value === 'overdue') list = list.filter(i => isOverdue(i.dueDate));
+  if (filter.value === 'pending') list = list.filter(i => !isOverdue(i.dueDate));
+  return list;
+});
 
-const palette = ['#1976d2','#2e7d32','#e65100','#6a1b9a','#c62828','#00838f']
-function aColor(n: string) { return palette[(n?.charCodeAt(0)||0) % palette.length] }
-function getClassName(id: string) { return classes.value.find(c=>c.id===id)?.name || '—' }
-function formatDate(d: string) { return d ? new Date(d).toLocaleDateString() : '—' }
-function isOverdue(d: string)  { return d ? new Date(d) < new Date() : false }
+const palette = ['#1976d2', '#2e7d32', '#e65100', '#6a1b9a', '#c62828', '#00838f'];
+function aColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
+function getClassName(id: string) { return classes.value.find(c=>c.id === id)?.name || '—'; }
+function formatDate(d: string) { return d ? new Date(d).toLocaleDateString() : '—'; }
+function isOverdue(d: string) { return d ? new Date(d) < new Date() : false; }
 
-function openCreate() { form.value={title:'',description:'',classId:'',dueDate:''}; editing.value=null; showModal.value=true }
-function editItem(i: any) { editing.value=i; form.value={...i}; showModal.value=true }
-function closeModal()     { showModal.value=false; editing.value=null }
+function openCreate() { form.value = {title: '', description: '', classId: '', dueDate: ''}; editing.value = null; showModal.value = true; }
+function editItem(i: any) { editing.value = i; form.value = {...i}; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; }
 function deleteItem(id: string) {
-  if (confirm(t('messages.confirmDelete'))) { items.value=items.value.filter(i=>i.id!==id); LocalStorageService.set('homework',items.value) }
+  if (confirm(t('messages.confirmDelete'))) { items.value = items.value.filter(i=>i.id !== id); LocalStorageService.set('homework', items.value); }
 }
 function saveItem() {
-  if (!form.value.title) return
+  if (!form.value.title) return;
   if (editing.value) {
-    const idx=items.value.findIndex(i=>i.id===editing.value.id)
-    if (idx!==-1) items.value[idx]={...items.value[idx],...form.value}
+    const idx = items.value.findIndex(i=>i.id === editing.value.id);
+    if (idx !== -1) items.value[idx] = {...items.value[idx], ...form.value};
   } else {
-    items.value.push({id:`hw_${Date.now()}`,schoolId:'school_1',createdAt:new Date().toISOString(),...form.value})
+    items.value.push({id: `hw_${Date.now()}`, schoolId: 'school_1', createdAt: new Date().toISOString(), ...form.value});
   }
-  LocalStorageService.set('homework',items.value); closeModal()
+  LocalStorageService.set('homework', items.value); closeModal();
 }
 </script>
 

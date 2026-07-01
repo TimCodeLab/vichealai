@@ -2,12 +2,39 @@
   <ion-page>
     <ion-header class="pg-header">
       <div class="pg-bar">
-        <button class="pg-back" @click="router.back()">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <button
+          class="pg-back"
+          @click="router.back()"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M19 12H5M5 12L12 19M5 12L12 5"
+            stroke="white"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          /></svg>
         </button>
         <span class="pg-title">{{ t('nav.classes') }}</span>
-        <button class="pg-new" @click="openCreate">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <button
+          class="pg-new"
+          @click="openCreate"
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><path
+            d="M12 5v14M5 12h14"
+            stroke="white"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          /></svg>
           {{ t('actions.create') }}
         </button>
       </div>
@@ -16,63 +43,181 @@
     <ion-content style="--background:#f5f7fa">
       <div class="pg-body anim-fade-up">
         <div class="pg-search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="#9ca3af" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/></svg>
-          <input v-model="searchQuery" class="pg-search-input" :placeholder="t('actions.search') + '...'" />
-          <span v-if="searchQuery" class="pg-search-clear" @click="searchQuery = ''">✕</span>
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+          ><circle
+            cx="11"
+            cy="11"
+            r="8"
+            stroke="#9ca3af"
+            stroke-width="2"
+          /><path
+            d="M21 21l-4.35-4.35"
+            stroke="#9ca3af"
+            stroke-width="2"
+            stroke-linecap="round"
+          /></svg>
+          <input
+            v-model="searchQuery"
+            class="pg-search-input"
+            :placeholder="t('actions.search') + '...'"
+          >
+          <span
+            v-if="searchQuery"
+            class="pg-search-clear"
+            @click="searchQuery = ''"
+          >✕</span>
         </div>
 
         <div class="pg-meta">
           <span class="pg-count">{{ filtered.length }} {{ t('nav.classes') }}</span>
         </div>
 
-        <div v-if="filtered.length === 0" class="pg-empty">
-          <div style="font-size:52px;margin-bottom:12px">🏫</div>
-          <div style="font-size:16px;font-weight:600;color:#374151">No classes found</div>
-          <div style="font-size:13px;color:#9ca3af;margin-top:4px">Create your first class</div>
-          <button class="pg-empty-btn" @click="openCreate">+ Add Class</button>
+        <div
+          v-if="filtered.length === 0"
+          class="pg-empty"
+        >
+          <div style="font-size:52px;margin-bottom:12px">
+            🏫
+          </div>
+          <div style="font-size:16px;font-weight:600;color:#374151">
+            No classes found
+          </div>
+          <div style="font-size:13px;color:#9ca3af;margin-top:4px">
+            Create your first class
+          </div>
+          <button
+            class="pg-empty-btn"
+            @click="openCreate"
+          >
+            + Add Class
+          </button>
         </div>
 
         <!-- Class cards as grid for compact look -->
         <div class="pg-grid">
-          <div v-for="cls in filtered" :key="cls.id" class="pg-cls-card">
-            <div class="pg-cls-top" :style="{ background: aColor(cls.name) }">
+          <div
+            v-for="cls in filtered"
+            :key="cls.id"
+            class="pg-cls-card"
+          >
+            <div
+              class="pg-cls-top"
+              :style="{ background: aColor(cls.name) }"
+            >
               <span class="pg-cls-icon">🏫</span>
               <div class="pg-cls-actions">
-                <button class="pg-btn-sm pg-btn-edit" @click="editItem(cls)">✏️</button>
-                <button class="pg-btn-sm pg-btn-del" @click="deleteItem(cls.id)">🗑️</button>
+                <button
+                  class="pg-btn-sm pg-btn-edit"
+                  @click="editItem(cls)"
+                >
+                  ✏️
+                </button>
+                <button
+                  class="pg-btn-sm pg-btn-del"
+                  @click="deleteItem(cls.id)"
+                >
+                  🗑️
+                </button>
               </div>
             </div>
             <div class="pg-cls-body">
-              <div class="pg-cls-name">{{ cls.name }}</div>
-              <div class="pg-cls-row" v-if="cls.grade">Grade: {{ cls.grade }}</div>
-              <div class="pg-cls-row">{{ studentCount(cls.id) }} students</div>
-              <div class="pg-cls-row" v-if="cls.room">Room: {{ cls.room }}</div>
+              <div class="pg-cls-name">
+                {{ cls.name }}
+              </div>
+              <div
+                v-if="cls.grade"
+                class="pg-cls-row"
+              >
+                Grade: {{ cls.grade }}
+              </div>
+              <div class="pg-cls-row">
+                {{ studentCount(cls.id) }} students
+              </div>
+              <div
+                v-if="cls.room"
+                class="pg-cls-row"
+              >
+                Room: {{ cls.room }}
+              </div>
             </div>
           </div>
         </div>
 
-        <div style="height:28px"></div>
+        <div style="height:28px" />
       </div>
     </ion-content>
 
-    <ion-modal :is-open="showModal" @did-dismiss="closeModal">
+    <ion-modal
+      :is-open="showModal"
+      @did-dismiss="closeModal"
+    >
       <div class="mo-wrap">
-        <div class="mo-handle"></div>
+        <div class="mo-handle" />
         <div class="mo-head">
           <span class="mo-title">{{ editing ? '✏️ Edit Class' : '➕ New Class' }}</span>
-          <button class="mo-close" @click="closeModal">✕</button>
+          <button
+            class="mo-close"
+            @click="closeModal"
+          >
+            ✕
+          </button>
         </div>
         <div class="mo-body">
-          <div class="mo-field"><label class="mo-label">Class Name *</label><input v-model="form.name" class="mo-input" placeholder="e.g. Grade 7A" /></div>
-          <div class="mo-row2">
-            <div class="mo-field"><label class="mo-label">Grade</label><input v-model="form.grade" class="mo-input" placeholder="7" /></div>
-            <div class="mo-field"><label class="mo-label">Room</label><input v-model="form.room" class="mo-input" placeholder="101" /></div>
+          <div class="mo-field">
+            <label class="mo-label">Class Name *</label><input
+              v-model="form.name"
+              class="mo-input"
+              placeholder="e.g. Grade 7A"
+            >
           </div>
-          <div class="mo-field"><label class="mo-label">Description</label><input v-model="form.description" class="mo-input" placeholder="Optional notes" /></div>
-          <div class="mo-field"><label class="mo-label">Academic Year</label><input v-model="form.academicYear" class="mo-input" placeholder="2025-2026" /></div>
+          <div class="mo-row2">
+            <div class="mo-field">
+              <label class="mo-label">Grade</label><input
+                v-model="form.grade"
+                class="mo-input"
+                placeholder="7"
+              >
+            </div>
+            <div class="mo-field">
+              <label class="mo-label">Room</label><input
+                v-model="form.room"
+                class="mo-input"
+                placeholder="101"
+              >
+            </div>
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Description</label><input
+              v-model="form.description"
+              class="mo-input"
+              placeholder="Optional notes"
+            >
+          </div>
+          <div class="mo-field">
+            <label class="mo-label">Academic Year</label><input
+              v-model="form.academicYear"
+              class="mo-input"
+              placeholder="2025-2026"
+            >
+          </div>
           <div class="mo-btns">
-            <button class="mo-cancel" @click="closeModal">{{ t('actions.cancel') }}</button>
-            <button class="mo-save" @click="saveItem" :disabled="!form.name">{{ t('actions.save') }}</button>
+            <button
+              class="mo-cancel"
+              @click="closeModal"
+            >
+              {{ t('actions.cancel') }}
+            </button>
+            <button
+              class="mo-save"
+              :disabled="!form.name"
+              @click="saveItem"
+            >
+              {{ t('actions.save') }}
+            </button>
           </div>
         </div>
       </div>
@@ -81,46 +226,46 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonContent, IonModal } from '@ionic/vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from '@/composables/useI18n'
-import { LocalStorageService } from '@/services/localStorageService'
+import {ref, computed} from 'vue';
+import {IonPage, IonHeader, IonContent, IonModal} from '@ionic/vue';
+import {useRouter} from 'vue-router';
+import {useI18n} from '@/composables/useI18n';
+import {LocalStorageService} from '@/services/localStorageService';
 
-const router = useRouter()
-const { t } = useI18n()
-const searchQuery = ref('')
-const showModal = ref(false)
-const editing = ref<any>(null)
-const classes = ref<any[]>(LocalStorageService.get<any[]>('classes', []) || [])
-const students = ref<any[]>(LocalStorageService.get<any[]>('students', []) || [])
-const form = ref({ name:'', grade:'', room:'', description:'', academicYear:'' })
+const router = useRouter();
+const {t} = useI18n();
+const searchQuery = ref('');
+const showModal = ref(false);
+const editing = ref<any>(null);
+const classes = ref<any[]>(LocalStorageService.get<any[]>('classes', []) || []);
+const students = ref<any[]>(LocalStorageService.get<any[]>('students', []) || []);
+const form = ref({name: '', grade: '', room: '', description: '', academicYear: ''});
 
 const filtered = computed(() => {
-  if (!searchQuery.value) return classes.value
-  const q = searchQuery.value.toLowerCase()
-  return classes.value.filter(c => c.name?.toLowerCase().includes(q) || c.grade?.toLowerCase().includes(q))
-})
+  if (!searchQuery.value) return classes.value;
+  const q = searchQuery.value.toLowerCase();
+  return classes.value.filter(c => c.name?.toLowerCase().includes(q) || c.grade?.toLowerCase().includes(q));
+});
 
-const palette = ['#1976d2','#2e7d32','#e65100','#6a1b9a','#c62828','#00838f','#4527a0','#558b2f']
-function aColor(n: string) { return palette[(n?.charCodeAt(0)||0) % palette.length] }
-function studentCount(id: string) { return students.value.filter(s=>s.classId===id).length }
+const palette = ['#1976d2', '#2e7d32', '#e65100', '#6a1b9a', '#c62828', '#00838f', '#4527a0', '#558b2f'];
+function aColor(n: string) { return palette[(n?.charCodeAt(0) || 0) % palette.length]; }
+function studentCount(id: string) { return students.value.filter(s=>s.classId === id).length; }
 
-function openCreate() { form.value={name:'',grade:'',room:'',description:'',academicYear:''}; editing.value=null; showModal.value=true }
-function editItem(c: any) { editing.value=c; form.value={...c}; showModal.value=true }
-function closeModal()     { showModal.value=false; editing.value=null }
+function openCreate() { form.value = {name: '', grade: '', room: '', description: '', academicYear: ''}; editing.value = null; showModal.value = true; }
+function editItem(c: any) { editing.value = c; form.value = {...c}; showModal.value = true; }
+function closeModal() { showModal.value = false; editing.value = null; }
 function deleteItem(id: string) {
-  if (confirm(t('messages.confirmDelete'))) { classes.value=classes.value.filter(c=>c.id!==id); LocalStorageService.set('classes',classes.value) }
+  if (confirm(t('messages.confirmDelete'))) { classes.value = classes.value.filter(c=>c.id !== id); LocalStorageService.set('classes', classes.value); }
 }
 function saveItem() {
-  if (!form.value.name) return
+  if (!form.value.name) return;
   if (editing.value) {
-    const i = classes.value.findIndex(c=>c.id===editing.value.id)
-    if (i!==-1) classes.value[i]={...classes.value[i],...form.value}
+    const i = classes.value.findIndex(c=>c.id === editing.value.id);
+    if (i !== -1) classes.value[i] = {...classes.value[i], ...form.value};
   } else {
-    classes.value.push({id:`cls_${Date.now()}`,schoolId:'school_1',...form.value})
+    classes.value.push({id: `cls_${Date.now()}`, schoolId: 'school_1', ...form.value});
   }
-  LocalStorageService.set('classes',classes.value); closeModal()
+  LocalStorageService.set('classes', classes.value); closeModal();
 }
 </script>
 
