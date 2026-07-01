@@ -244,9 +244,9 @@
 
         <div class="s-app-footer">
           <div class="s-app-logo">🎓</div>
-          <div class="s-app-name">VICHEALAI</div>
+          <div class="s-app-name">techocam</div>
           <div class="s-app-tagline">{{ t('app.subtitle') }}</div>
-          <div class="s-app-copy">© 2025 VICHEALAI. All rights reserved.</div>
+          <div class="s-app-copy">© 2025 techocam. All rights reserved.</div>
         </div>
 
         <div style="height:24px"></div>

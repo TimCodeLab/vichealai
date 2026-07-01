@@ -1,4 +1,4 @@
-# VICHEALAI - School Management System
+# TECHOCAM - School Management System
 
 A modern, multi-school platform for managing high schools with comprehensive features for administrators, teachers, students, and parents. Built with Vue 3, Ionic, and Capacitor for cross-platform support.
 
@@ -63,7 +63,7 @@ A modern, multi-school platform for managing high schools with comprehensive fea
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd vichealai
+    cd techocam
    ```
 
 2. **Install dependencies**
@@ -103,7 +103,7 @@ npx cap open android
 ## 📂 Project Structure
 
 ```
-vichealai/
+techocam/
 ├── src/
 │   ├── assets/          # Images, styles, icons
 │   ├── components/      # Reusable Vue components
@@ -188,7 +188,7 @@ Developed for schools in Southeast Asia, with a focus on offline-first architect
 
 ## 📞 Support
 
-For support, email support@vichealai.com or open an issue in the repository.
+For support, email support@techocam.com or open an issue in the repository.
 
 ## 🎯 Goals
 

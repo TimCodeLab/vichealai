@@ -1,4 +1,4 @@
-# VICHEALAI Test Credentials
+# techocam Test Credentials
 
 ## Common Details
 - **School Code**: `SCHOOL001`

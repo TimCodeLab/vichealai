@@ -7,7 +7,7 @@ class OfflineService {
   async initialize() {
     try {
       // Initialize database (will use fallback on web)
-      await database.initialize('vichealai.db');
+      await database.initialize('techocam.db');
 
       console.log(`Offline service initialized (Online: ${this.isOnline})`);
     } catch (error) {

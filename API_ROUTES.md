@@ -1,4 +1,4 @@
-# VICHEALAI API Routes
+# techocam API Routes
 
 ## Base URL
 ```

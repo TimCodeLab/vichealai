@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.vichealai.app',
-  appName: 'VICHEALAI',
+  appId: 'com.techocam.app',
+  appName: 'techocam',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

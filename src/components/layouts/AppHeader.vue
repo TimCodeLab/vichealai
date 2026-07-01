@@ -34,7 +34,7 @@
             </svg>
           </div>
           <div class="brand-text">
-            <span class="brand-name">VICHEALAI</span>
+            <span class="brand-name">{{ t('app.title') }}</span>
             <span
               v-if="authStore.user"
               class="brand-user"
@@ -130,7 +130,7 @@ const showNoInternetModal = ref(false);
 
 const appTitle = computed(() => {
   const user = authStore.user;
-  return user ? `VICHEALAI - ${user.name}` : 'VICHEALAI';
+  return user ? `${t('app.title')} - ${user.name}` : t('app.title');
 });
 
 const isOfflineMode = computed(() => offlineModeStore.isOfflineMode);

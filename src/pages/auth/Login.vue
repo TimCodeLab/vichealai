@@ -13,7 +13,7 @@
         <!-- Logo -->
         <div class="logo-wrap">
           <div class="logo-icon">🎓</div>
-          <h1 class="logo-title">VICHEALAI</h1>
+          <h1 class="logo-title">techocam</h1>
           <p class="logo-sub">School Management System</p>
         </div>
 
@@ -137,7 +137,7 @@
           </button>
         </div>
 
-        <div class="footer-note">© 2026 VICHEALAI · School Management System</div>
+        <div class="footer-note">© 2026 techocam · School Management System</div>
       </div>
 
     </ion-content>

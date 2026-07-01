@@ -1,4 +1,4 @@
-# VICHEALAI Quick Start Guide
+# techocam Quick Start Guide
 
 ## Installation
 

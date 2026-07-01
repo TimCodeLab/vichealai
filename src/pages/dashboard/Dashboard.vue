@@ -15,7 +15,7 @@
               </svg>
             </div>
             <div class="brand-text">
-              <span class="brand-name">VICHEALAI</span>
+              <span class="brand-name">{{ t('app.title') }}</span>
               <span class="brand-sub">School Management</span>
             </div>
           </div>
@@ -46,7 +46,7 @@
       </div>
     </ion-header>
 
-    <!-- Profile dropdown – outside ion-header so Ionic overflow:hidden doesn't block clicks -->
+    <!-- Profile dropdown -->
     <transition name="dropdown">
       <div v-if="showProfileMenu" class="profile-dropdown">
         <div class="profile-dropdown-user">
@@ -73,26 +73,15 @@
     <ion-content style="--background:#f5f7fa">
       <div class="dash-body">
 
-        <!-- Stats cards -->
-        <div class="stats-row anim-fade-up" style="animation-delay:.12s">
-          <div v-for="stat in liveStats" :key="stat.label" class="stat-card press-lift" @click="navigate(stat.path)">
-            <div class="stat-card-icon" :style="{ background: stat.bg }">{{ stat.icon }}</div>
-            <div class="stat-card-info">
-              <div class="stat-card-num">{{ stat.value }}</div>
-              <div class="stat-card-lbl">{{ stat.label }}</div>
-            </div>
-          </div>
-        </div>
-
         <!-- Search -->
-        <div class="search-wrap anim-fade-up" style="animation-delay:.16s">
+        <div class="search-wrap anim-fade-up" style="animation-delay:.12s">
           <span class="search-icon">🔍</span>
           <input v-model="searchQuery" class="search-input" :placeholder="t('dashboard.searchModules')" />
         </div>
 
         <!-- Categorized modules -->
         <template v-if="!searchQuery">
-          <div v-for="cat in moduleCategories" :key="cat.key" class="anim-fade-up" style="animation-delay:.2s">
+          <div v-for="cat in moduleCategories" :key="cat.key" class="anim-fade-up" style="animation-delay:.16s">
             <div class="cat-head">
               <span class="cat-icon">{{ cat.icon }}</span>
               <span class="cat-title">{{ cat.label }}</span>
@@ -135,7 +124,7 @@
         </template>
 
         <!-- Today card -->
-        <div class="today-card anim-fade-up" style="animation-delay:.28s">
+        <div class="today-card anim-fade-up" style="animation-delay:.24s">
           <div class="today-head">
             <span class="today-title">📅 {{ todayLabel }}</span>
             <span class="today-badge">{{ t('reports.today') }}</span>
@@ -209,9 +198,15 @@ const greetingEmoji = computed(() => {
   return '🌙'
 })
 
-const todayLabel = computed(() =>
-  new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' })
-)
+const DAY_KEYS   = ['sun','mon','tue','wed','thu','fri','sat'] as const
+const MONTH_KEYS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'] as const
+
+const todayLabel = computed(() => {
+  const now  = new Date()
+  const day  = t(`dates.${DAY_KEYS[now.getDay()]}`)
+  const mon  = t(`dates.${MONTH_KEYS[now.getMonth()]}`)
+  return `${day}, ${mon} ${now.getDate()}`
+})
 
 const liveData = computed(() => ({
   students: (LocalStorageService.get<any[]>('students', []) || []).length,
@@ -220,37 +215,30 @@ const liveData = computed(() => ({
   homework: (LocalStorageService.get<any[]>('homework', []) || []).length,
 }))
 
-const liveStats = computed(() => [
-  { label: t('nav.students'),  value: liveData.value.students, icon:'👥', bg:'linear-gradient(135deg,#1565c0,#1976d2)', path:'/students' },
-  { label: t('nav.teachers'),  value: liveData.value.teachers, icon:'👩‍🏫', bg:'linear-gradient(135deg,#2e7d32,#43a047)', path:'/teachers' },
-  { label: t('nav.classes'),   value: liveData.value.classes,  icon:'🏫', bg:'linear-gradient(135deg,#e65100,#f57c00)', path:'/classes'  },
-  { label: t('nav.homework'),  value: liveData.value.homework, icon:'📝', bg:'linear-gradient(135deg,#6a1b9a,#8e24aa)', path:'/homework' },
-])
-
 const C: Record<string, string> = {
-  students:    'linear-gradient(135deg,#1565c0,#1976d2)',
-  teachers:    'linear-gradient(135deg,#2e7d32,#43a047)',
-  classes:     'linear-gradient(135deg,#e65100,#f57c00)',
-  subjects:    'linear-gradient(135deg,#00838f,#0097a7)',
-  attendance:  'linear-gradient(135deg,#1565c0,#29b6f6)',
-  timetable:   'linear-gradient(135deg,#4527a0,#7e57c2)',
-  homework:    'linear-gradient(135deg,#c62828,#e53935)',
-  exams:       'linear-gradient(135deg,#6a1b9a,#ab47bc)',
-  library:     'linear-gradient(135deg,#558b2f,#8bc34a)',
-  reports:     'linear-gradient(135deg,#37474f,#78909c)',
-  finance:     'linear-gradient(135deg,#2e7d32,#66bb6a)',
+  students:     'linear-gradient(135deg,#1565c0,#1976d2)',
+  teachers:     'linear-gradient(135deg,#2e7d32,#43a047)',
+  classes:      'linear-gradient(135deg,#e65100,#f57c00)',
+  subjects:     'linear-gradient(135deg,#00838f,#0097a7)',
+  attendance:   'linear-gradient(135deg,#1565c0,#29b6f6)',
+  timetable:    'linear-gradient(135deg,#4527a0,#7e57c2)',
+  homework:     'linear-gradient(135deg,#c62828,#e53935)',
+  exams:        'linear-gradient(135deg,#6a1b9a,#ab47bc)',
+  library:      'linear-gradient(135deg,#558b2f,#8bc34a)',
+  reports:      'linear-gradient(135deg,#37474f,#78909c)',
+  finance:      'linear-gradient(135deg,#2e7d32,#66bb6a)',
   communication:'linear-gradient(135deg,#e65100,#ff7043)',
-  calendar:    'linear-gradient(135deg,#0277bd,#039be5)',
-  parents:     'linear-gradient(135deg,#c62828,#ef9a9a)',
-  roles:       'linear-gradient(135deg,#4a148c,#7b1fa2)',
-  approvals:   'linear-gradient(135deg,#e65100,#ffa726)',
-  settings:    'linear-gradient(135deg,#455a64,#607d8b)',
+  calendar:     'linear-gradient(135deg,#0277bd,#039be5)',
+  parents:      'linear-gradient(135deg,#c62828,#ef9a9a)',
+  roles:        'linear-gradient(135deg,#4a148c,#7b1fa2)',
+  approvals:    'linear-gradient(135deg,#e65100,#ffa726)',
+  settings:     'linear-gradient(135deg,#455a64,#607d8b)',
 }
 
 const moduleCategories = computed(() => {
-  const isAdmin = ['super_admin','school_admin'].includes(userRole.value)
+  const isAdmin      = ['super_admin','school_admin'].includes(userRole.value)
   const isSuperAdmin = userRole.value === 'super_admin'
-  const cats = [
+  return [
     {
       key: 'academic', icon: '📚', label: t('dashboard.catAcademic'),
       modules: [
@@ -287,16 +275,14 @@ const moduleCategories = computed(() => {
         ...(isSuperAdmin ? [{ id:'approvals', icon:'🏫', label: t('nav.approvals'), path:'/school-approvals', color: C.approvals }] : []),
         { id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings },
       ]
-    }] : [
-      { key:'settings-only', icon:'⚙️', label: t('dashboard.catSystem'),
-        modules: [{ id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings }]
-      }
-    ])
+    }] : [{
+      key:'settings-only', icon:'⚙️', label: t('dashboard.catSystem'),
+      modules: [{ id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings }]
+    }])
   ]
-  return cats
 })
 
-const allModules = computed(() => moduleCategories.value.flatMap(c => c.modules))
+const allModules    = computed(() => moduleCategories.value.flatMap(c => c.modules))
 const searchResults = computed(() => {
   if (!searchQuery.value) return []
   const q = searchQuery.value.toLowerCase()
@@ -327,7 +313,7 @@ const searchResults = computed(() => {
 
 .menu-btn { --color:white; --padding-start:0; --padding-end:0; margin:0; }
 
-.brand { display:flex; align-items:center; gap:8px; }
+.brand      { display:flex; align-items:center; gap:8px; }
 .brand-logo { display:flex; align-items:center; animation: float 4s ease-in-out infinite; }
 .brand-text { display:flex; flex-direction:column; line-height:1.15; }
 .brand-name { font-size:17px; font-weight:800; color:white; letter-spacing:.8px; text-shadow:0 1px 4px rgba(0,0,0,.2); }
@@ -345,8 +331,8 @@ const searchResults = computed(() => {
   border-radius:20px; color:white; font-size:11px; font-weight:700;
   cursor:pointer; transition:background .2s;
 }
-.lang-btn:active { background:rgba(255,255,255,.3); transform:scale(.95); }
-.lang-flag { width:20px; height:15px; border-radius:3px; object-fit:cover; flex-shrink:0; }
+.lang-btn:active  { background:rgba(255,255,255,.3); transform:scale(.95); }
+.lang-flag        { width:20px; height:15px; border-radius:3px; object-fit:cover; flex-shrink:0; }
 
 /* Bell */
 .icon-btn {
@@ -394,9 +380,9 @@ const searchResults = computed(() => {
 .profile-dropdown-item:active { background:#f3f4f6; }
 .profile-dropdown-logout { color:#ef4444; }
 .profile-dropdown-logout:active { background:#fff5f5; }
-.dropdown-backdrop       { position:fixed; inset:0; z-index:1999; }
-.dropdown-enter-active   { transition:all .18s ease-out; }
-.dropdown-leave-active   { transition:all .14s ease-in; }
+.dropdown-backdrop     { position:fixed; inset:0; z-index:1999; }
+.dropdown-enter-active { transition:all .18s ease-out; }
+.dropdown-leave-active { transition:all .14s ease-in; }
 .dropdown-enter-from,.dropdown-leave-to { opacity:0; transform:translateY(-8px) scale(.97); }
 
 /* Greeting */
@@ -407,20 +393,6 @@ const searchResults = computed(() => {
 
 /* ── Body ── */
 .dash-body { padding:14px; background:#f5f7fa; }
-
-/* Stats cards */
-.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
-.stat-card {
-  display:flex; flex-direction:column; align-items:center; gap:6px;
-  background:white; border-radius:14px; padding:12px 6px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06); cursor:pointer;
-  transition:transform .15s, box-shadow .15s; border:1px solid #f3f4f6;
-}
-.stat-card:active { transform:scale(.93); }
-.stat-card-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,.15); }
-.stat-card-num  { font-size:18px; font-weight:800; color:#1f2937; line-height:1; }
-.stat-card-lbl  { font-size:9px; font-weight:600; color:#9ca3af; text-align:center; text-transform:uppercase; letter-spacing:.3px; }
-.stat-card-info { text-align:center; }
 
 /* Search */
 .search-wrap {
@@ -466,13 +438,13 @@ const searchResults = computed(() => {
 .today-badge { font-size:10px; font-weight:700; background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:20px; }
 .today-stats { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; align-items:center; }
 .today-stat  { text-align:center; padding:4px 0; }
-.ts-num      { display:block; font-size:22px; font-weight:800; line-height:1; }
-.ts-lbl      { display:block; font-size:10px; font-weight:600; color:#9ca3af; margin-top:3px; }
-.ts-blue     { color:#1976d2; }
-.ts-green    { color:#2e7d32; }
-.ts-orange   { color:#e65100; }
-.ts-purple   { color:#6a1b9a; }
-.ts-div      { width:1px; height:36px; background:#f3f4f6; }
+.ts-num  { display:block; font-size:22px; font-weight:800; line-height:1; }
+.ts-lbl  { display:block; font-size:10px; font-weight:600; color:#9ca3af; margin-top:3px; }
+.ts-blue   { color:#1976d2; }
+.ts-green  { color:#2e7d32; }
+.ts-orange { color:#e65100; }
+.ts-purple { color:#6a1b9a; }
+.ts-div  { width:1px; height:36px; background:#f3f4f6; }
 
 .press-lift { transition:transform .15s cubic-bezier(.22,1,.36,1), box-shadow .15s; cursor:pointer; }
 .press-lift:active { transform:scale(.94) translateY(1px); }

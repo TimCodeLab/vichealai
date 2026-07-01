@@ -5,7 +5,7 @@
       <!-- Header -->
       <div class="reg-header">
         <div class="reg-logo">🏫</div>
-        <h1 class="reg-title">VICHEALAI</h1>
+        <h1 class="reg-title">techocam</h1>
         <p class="reg-sub">{{ t('register.title') }}</p>
         <p class="reg-desc">{{ t('register.subtitle') }}</p>
       </div>

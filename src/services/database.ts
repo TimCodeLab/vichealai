@@ -24,7 +24,7 @@ class Database {
   private sqlite: any = null;
   private isNative = Capacitor.isNativePlatform();
 
-  async initialize(dbName: string = 'vichealai.db') {
+  async initialize(dbName: string = 'techocam.db') {
     try {
       // Skip SQLite for web platform, use localStorage fallback
       if (!this.isNative) {

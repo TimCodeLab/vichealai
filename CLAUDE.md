@@ -1,7 +1,7 @@
-# VICHEALAI Development Guide
+# techocam Development Guide
 
 ## Project Overview
-VICHEALAI is a comprehensive School Management System built with Vue 3 and Ionic for cross-platform support (web, iOS, Android). The application supports multiple schools with role-based access control and offline functionality.
+techocam is a comprehensive School Management System built with Vue 3 and Ionic for cross-platform support (web, iOS, Android). The application supports multiple schools with role-based access control and offline functionality.
 
 ## Tech Stack
 - **Frontend**: Vue 3 + TypeScript + Ionic Vue

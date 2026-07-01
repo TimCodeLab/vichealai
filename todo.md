@@ -2,7 +2,7 @@ I like this idea. If your goal is **"Allow all high schools to use the app"**, t
 
 ## Vision
 
-**VICHEALAI**
+**techocam**
 
 > A modern School Management System for High Schools that works on **Web, Android, and iOS**, with offline support for the mobile app.
 
@@ -428,7 +428,7 @@ This ensures teachers can continue working even without internet.
 ```
 Logo
 
-VICHEALAI
+techocam
 
 Email
 
@@ -616,4 +616,4 @@ To keep the project manageable, build it in phases:
    * Analytics
    * Third-party integrations
 
-This phased approach gives you a solid **minimum viable product (MVP)** that schools can start using, while leaving room to evolve **VICHEALAI** into a complete education platform suitable for many different high schools.
+This phased approach gives you a solid **minimum viable product (MVP)** that schools can start using, while leaving room to evolve **techocam** into a complete education platform suitable for many different high schools.

@@ -2,7 +2,7 @@
 
 ## Overview
 
-VICHEALAI now has a smart offline/online toggle in the header that allows users to work offline while showing clear limitations and error messages when features require internet.
+techocam now has a smart offline/online toggle in the header that allows users to work offline while showing clear limitations and error messages when features require internet.
 
 ## Features
 
