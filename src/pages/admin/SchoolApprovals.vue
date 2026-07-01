@@ -3,7 +3,9 @@
     <ion-header class="ion-no-border">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-back-button default-href="/dashboard" />
+          <ion-button @click="router.back()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12l7 7M5 12l7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </ion-button>
         </ion-buttons>
         <ion-title>{{ t('approvals.title') }}</ion-title>
       </ion-toolbar>
@@ -143,11 +145,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonBackButton, IonModal } from '@ionic/vue'
+import { useRouter } from 'vue-router'
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonButton, IonModal } from '@ionic/vue'
 import { useI18n } from '@/composables/useI18n'
 import { LocalStorageService } from '@/services/localStorageService'
 
 const { t } = useI18n()
+const router = useRouter()
 
 // ── Data ──
 const registrations = ref<any[]>(LocalStorageService.get<any[]>('pending_registrations', []) || [])
