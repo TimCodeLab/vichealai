@@ -39,6 +39,7 @@
             <div class="pg-row"><span class="pg-lbl">✉️</span><span class="pg-val">{{ teacher.email || '—' }}</span></div>
             <div class="pg-row"><span class="pg-lbl">📱</span><span class="pg-val">{{ teacher.phone || '—' }}</span></div>
             <div class="pg-row" v-if="teacher.subject"><span class="pg-lbl">📚</span><span class="pg-val">{{ teacher.subject }}</span></div>
+            <div v-if="teacher.loginCode" class="pg-row"><span class="pg-lbl">🔑</span><span class="pg-val" style="font-family:monospace;font-weight:700;font-size:12px;">{{ teacher.loginCode }}</span></div>
             <div class="pg-badges">
               <span class="pg-badge pg-green">● Active</span>
               <span v-if="teacher.qualification" class="pg-badge pg-blue">{{ teacher.qualification }}</span>
@@ -57,6 +58,36 @@
         <div style="height:28px"></div>
       </div>
     </ion-content>
+
+    <!-- Credentials popup -->
+    <ion-modal :is-open="!!newCredentials" @did-dismiss="newCredentials = null">
+      <div class="mo-wrap">
+        <div class="mo-handle"></div>
+        <div class="mo-head">
+          <span class="mo-title">🔑 {{ t('credentials.title') }}</span>
+          <button class="mo-close" @click="newCredentials = null">✕</button>
+        </div>
+        <div class="mo-body">
+          <div class="cred-banner">
+            <div class="cred-notice">{{ t('credentials.saveNote') }}</div>
+            <div class="cred-name">{{ newCredentials?.name }}</div>
+          </div>
+          <div class="cred-box">
+            <div class="cred-row">
+              <span class="cred-lbl">{{ t('credentials.loginCode') }}</span>
+              <span class="cred-val code">{{ newCredentials?.loginCode }}</span>
+            </div>
+            <div class="cred-divider"></div>
+            <div class="cred-row">
+              <span class="cred-lbl">{{ t('credentials.tempPassword') }}</span>
+              <span class="cred-val">{{ newCredentials?.loginPassword }}</span>
+            </div>
+          </div>
+          <div class="cred-hint">{{ t('credentials.changeHint') }}</div>
+          <button class="mo-save" style="width:100%" @click="newCredentials = null">{{ t('actions.ok') }}</button>
+        </div>
+      </div>
+    </ion-modal>
 
     <ion-modal :is-open="showModal" @did-dismiss="closeModal">
       <div class="mo-wrap">
@@ -116,13 +147,34 @@ function closeModal()        { showModal.value=false; editing.value=null }
 function deleteItem(id: string) {
   if (confirm(t('messages.confirmDelete'))) { teachers.value=teachers.value.filter(t=>t.id!==id); LocalStorageService.set('teachers',teachers.value) }
 }
+function genTeacherCode() {
+  const year = new Date().getFullYear()
+  const existing = teachers.value.filter(t => t.loginCode?.startsWith(`TCH-${year}-`))
+  const num = String(existing.length + 1).padStart(3, '0')
+  return `TCH-${year}-${num}`
+}
+function genPassword() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!'
+  return Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('')
+}
+
+const newCredentials = ref<{loginCode:string; loginPassword:string; name:string} | null>(null)
+
 function saveItem() {
   if (!form.value.name) return
   if (editing.value) {
     const i = teachers.value.findIndex(t=>t.id===editing.value.id)
     if (i!==-1) teachers.value[i]={...teachers.value[i],...form.value}
+    newCredentials.value = null
   } else {
-    teachers.value.push({id:`tch_${Date.now()}`,schoolId:'school_1',status:'active',...form.value})
+    const loginCode     = genTeacherCode()
+    const loginPassword = genPassword()
+    teachers.value.push({
+      id:`tch_${Date.now()}`, schoolId:'school_1', status:'active',
+      loginCode, loginPassword, mustChangePassword:true, role:'teacher',
+      ...form.value
+    })
+    newCredentials.value = { loginCode, loginPassword, name: form.value.name }
   }
   LocalStorageService.set('teachers',teachers.value); closeModal()
 }
@@ -180,4 +232,15 @@ ion-modal  { --border-radius:20px 20px 0 0; --max-height:88vh; align-items:flex-
 .pg-card { animation: fadeUp .35s ease both; }
 .pg-card:nth-child(1){animation-delay:.05s}.pg-card:nth-child(2){animation-delay:.10s}.pg-card:nth-child(3){animation-delay:.15s}.pg-card:nth-child(4){animation-delay:.20s}.pg-card:nth-child(5){animation-delay:.25s}.pg-card:nth-child(6){animation-delay:.30s}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* Credentials modal */
+.cred-banner { background:#f0fdf4; border-radius:12px; padding:14px; text-align:center; }
+.cred-notice { font-size:12px; color:#16a34a; font-weight:600; margin-bottom:4px; }
+.cred-name   { font-size:16px; font-weight:800; color:#1f2937; }
+.cred-box    { background:#f8faff; border:1.5px solid #dbeafe; border-radius:12px; padding:16px; }
+.cred-row    { display:flex; align-items:center; justify-content:space-between; }
+.cred-lbl    { font-size:12px; font-weight:600; color:#6b7280; }
+.cred-val    { font-size:14px; font-weight:700; color:#1f2937; font-family:monospace; }
+.cred-val.code { font-size:18px; color:#1565c0; letter-spacing:1px; }
+.cred-divider{ height:1px; background:#e5e7eb; margin:10px 0; }
+.cred-hint   { font-size:12px; color:#9ca3af; text-align:center; }
 </style>

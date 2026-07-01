@@ -73,54 +73,72 @@
     <ion-content style="--background:#f5f7fa">
       <div class="dash-body">
 
-        <!-- Quick Nav Card -->
-        <div class="quick-nav-card anim-fade-up" style="animation-delay:.12s">
-          <div class="quick-nav-grid stagger">
+        <!-- Stats cards -->
+        <div class="stats-row anim-fade-up" style="animation-delay:.12s">
+          <div v-for="stat in liveStats" :key="stat.label" class="stat-card press-lift" @click="navigate(stat.path)">
+            <div class="stat-card-icon" :style="{ background: stat.bg }">{{ stat.icon }}</div>
+            <div class="stat-card-info">
+              <div class="stat-card-num">{{ stat.value }}</div>
+              <div class="stat-card-lbl">{{ stat.label }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-wrap anim-fade-up" style="animation-delay:.16s">
+          <span class="search-icon">🔍</span>
+          <input v-model="searchQuery" class="search-input" :placeholder="t('dashboard.searchModules')" />
+        </div>
+
+        <!-- Categorized modules -->
+        <template v-if="!searchQuery">
+          <div v-for="cat in moduleCategories" :key="cat.key" class="anim-fade-up" style="animation-delay:.2s">
+            <div class="cat-head">
+              <span class="cat-icon">{{ cat.icon }}</span>
+              <span class="cat-title">{{ cat.label }}</span>
+            </div>
+            <div class="module-grid">
+              <button
+                v-for="mod in cat.modules"
+                :key="mod.id"
+                class="mod-item press-lift"
+                @click="navigate(mod.path)"
+              >
+                <div class="mod-icon-wrap" :style="{ background: mod.color }">
+                  <span class="mod-icon">{{ mod.icon }}</span>
+                </div>
+                <span class="mod-label">{{ mod.label }}</span>
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- Search results -->
+        <template v-else>
+          <div class="cat-head">
+            <span class="cat-icon">🔍</span>
+            <span class="cat-title">{{ searchResults.length }} {{ t('dashboard.modules').toLowerCase() }}</span>
+          </div>
+          <div class="module-grid">
             <button
-              v-for="quick in quickNav"
-              :key="quick.id"
-              class="quick-item press-lift ripple-wrap"
-              @click="navigate(quick.path)"
+              v-for="mod in searchResults"
+              :key="mod.id"
+              class="mod-item press-lift"
+              @click="navigate(mod.path)"
             >
-              <div class="quick-circle">{{ quick.icon }}</div>
-              <span class="quick-label">{{ quick.label }}</span>
+              <div class="mod-icon-wrap" :style="{ background: mod.color }">
+                <span class="mod-icon">{{ mod.icon }}</span>
+              </div>
+              <span class="mod-label">{{ mod.label }}</span>
             </button>
           </div>
-        </div>
+        </template>
 
-        <!-- Quick Stats -->
-        <div class="stats-row anim-fade-up stagger" style="animation-delay:.18s">
-          <div v-for="stat in liveStats" :key="stat.label" class="stat-pill press-lift" :style="{ background: stat.bg }" @click="navigate(stat.path)">
-            <div class="stat-pill-icon">{{ stat.icon }}</div>
-            <div class="stat-pill-num">{{ stat.value }}</div>
-            <div class="stat-pill-lbl">{{ stat.label }}</div>
-          </div>
-        </div>
-
-        <!-- Features Grid -->
-        <div class="section-head anim-fade-up" style="animation-delay:.22s">
-          <span class="section-title">{{ t('dashboard.modules') }}</span>
-        </div>
-
-        <div class="features-grid stagger anim-fade-up" style="animation-delay:.25s">
-          <button
-            v-for="feature in features"
-            :key="feature.id"
-            class="feature-item press-lift ripple-wrap"
-            @click="navigate(feature.path)"
-          >
-            <div class="feature-icon-wrap" :style="{ background: feature.color }">
-              <span class="feature-icon">{{ feature.icon }}</span>
-            </div>
-            <span class="feature-label">{{ feature.label }}</span>
-          </button>
-        </div>
-
-        <!-- Today's overview card -->
-        <div class="today-card anim-fade-up" style="animation-delay:.3s">
+        <!-- Today card -->
+        <div class="today-card anim-fade-up" style="animation-delay:.28s">
           <div class="today-head">
             <span class="today-title">📅 {{ todayLabel }}</span>
-            <span class="today-badge">Today</span>
+            <span class="today-badge">{{ t('reports.today') }}</span>
           </div>
           <div class="today-stats">
             <div class="today-stat">
@@ -172,8 +190,11 @@ function toggleLanguage() { i18nStore.setLocale(currentLang.value === 'km' ? 'en
 const user        = computed(() => authStore.user)
 const userName    = computed(() => user.value?.name || user.value?.email?.split('@')[0] || 'User')
 const userInitial = computed(() => userName.value.charAt(0).toUpperCase())
+const userRole    = computed(() => user.value?.role || '')
 
 const showProfileMenu = ref(false)
+const searchQuery     = ref('')
+
 function toggleProfileMenu() { showProfileMenu.value = !showProfileMenu.value }
 function goToProfile()       { showProfileMenu.value = false; router.push('/profile') }
 function handleLogout()      { showProfileMenu.value = false; authStore.logout(); router.replace('/login').catch(() => { window.location.replace('/login') }) }
@@ -181,7 +202,6 @@ function navigate(path: string) { router.push(path) }
 
 function getRoleLabel(role?: string) { return role ? (t(`roles.${role}`) || role) : 'User' }
 
-// Greeting based on time of day
 const greetingEmoji = computed(() => {
   const h = new Date().getHours()
   if (h < 12) return '🌅'
@@ -193,7 +213,6 @@ const todayLabel = computed(() =>
   new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' })
 )
 
-// Live counts from localStorage
 const liveData = computed(() => ({
   students: (LocalStorageService.get<any[]>('students', []) || []).length,
   teachers: (LocalStorageService.get<any[]>('teachers', []) || []).length,
@@ -202,47 +221,87 @@ const liveData = computed(() => ({
 }))
 
 const liveStats = computed(() => [
-  { label: t('nav.students'),   value: liveData.value.students, icon:'👥', bg:'linear-gradient(135deg,#1565c0,#1976d2)', path:'/students'  },
-  { label: t('nav.teachers'),   value: liveData.value.teachers, icon:'👩‍🏫', bg:'linear-gradient(135deg,#2e7d32,#43a047)', path:'/teachers'  },
-  { label: t('nav.classes'),    value: liveData.value.classes,  icon:'🏫', bg:'linear-gradient(135deg,#e65100,#f57c00)', path:'/classes'   },
-  { label: t('nav.homework'),   value: liveData.value.homework, icon:'📝', bg:'linear-gradient(135deg,#6a1b9a,#8e24aa)', path:'/homework'  },
+  { label: t('nav.students'),  value: liveData.value.students, icon:'👥', bg:'linear-gradient(135deg,#1565c0,#1976d2)', path:'/students' },
+  { label: t('nav.teachers'),  value: liveData.value.teachers, icon:'👩‍🏫', bg:'linear-gradient(135deg,#2e7d32,#43a047)', path:'/teachers' },
+  { label: t('nav.classes'),   value: liveData.value.classes,  icon:'🏫', bg:'linear-gradient(135deg,#e65100,#f57c00)', path:'/classes'  },
+  { label: t('nav.homework'),  value: liveData.value.homework, icon:'📝', bg:'linear-gradient(135deg,#6a1b9a,#8e24aa)', path:'/homework' },
 ])
 
-const quickNav = computed(() => [
-  { id:'attendance', icon:'📋', label: t('nav.attendance'), path:'/attendance' },
-  { id:'homework',   icon:'📝', label: t('nav.homework'),   path:'/homework'   },
-  { id:'students',   icon:'👥', label: t('nav.students'),   path:'/students'   },
-  { id:'reports',    icon:'📄', label: t('nav.reports'),    path:'/reports'    },
-])
-
-const featureColors: Record<string, string> = {
-  students:      'linear-gradient(135deg,#1565c0,#1976d2)',
-  teachers:      'linear-gradient(135deg,#2e7d32,#43a047)',
-  classes:       'linear-gradient(135deg,#e65100,#f57c00)',
-  attendance:    'linear-gradient(135deg,#00838f,#0097a7)',
-  timetable:     'linear-gradient(135deg,#4527a0,#5e35b1)',
-  homework:      'linear-gradient(135deg,#c62828,#e53935)',
-  exams:         'linear-gradient(135deg,#6a1b9a,#8e24aa)',
-  marks:         'linear-gradient(135deg,#0277bd,#039be5)',
-  finance:       'linear-gradient(135deg,#2e7d32,#66bb6a)',
-  announcements: 'linear-gradient(135deg,#e65100,#ff7043)',
-  reports:       'linear-gradient(135deg,#37474f,#546e7a)',
-  settings:      'linear-gradient(135deg,#455a64,#607d8b)',
+const C: Record<string, string> = {
+  students:    'linear-gradient(135deg,#1565c0,#1976d2)',
+  teachers:    'linear-gradient(135deg,#2e7d32,#43a047)',
+  classes:     'linear-gradient(135deg,#e65100,#f57c00)',
+  subjects:    'linear-gradient(135deg,#00838f,#0097a7)',
+  attendance:  'linear-gradient(135deg,#1565c0,#29b6f6)',
+  timetable:   'linear-gradient(135deg,#4527a0,#7e57c2)',
+  homework:    'linear-gradient(135deg,#c62828,#e53935)',
+  exams:       'linear-gradient(135deg,#6a1b9a,#ab47bc)',
+  library:     'linear-gradient(135deg,#558b2f,#8bc34a)',
+  reports:     'linear-gradient(135deg,#37474f,#78909c)',
+  finance:     'linear-gradient(135deg,#2e7d32,#66bb6a)',
+  communication:'linear-gradient(135deg,#e65100,#ff7043)',
+  calendar:    'linear-gradient(135deg,#0277bd,#039be5)',
+  parents:     'linear-gradient(135deg,#c62828,#ef9a9a)',
+  roles:       'linear-gradient(135deg,#4a148c,#7b1fa2)',
+  approvals:   'linear-gradient(135deg,#e65100,#ffa726)',
+  settings:    'linear-gradient(135deg,#455a64,#607d8b)',
 }
 
-const features = computed(() => [
-  { id:'students',      icon:'👥',  label: t('nav.students'),      path:'/students',      color: featureColors.students      },
-  { id:'teachers',      icon:'👩‍🏫', label: t('nav.teachers'),      path:'/teachers',      color: featureColors.teachers      },
-  { id:'classes',       icon:'🏫',  label: t('nav.classes'),       path:'/classes',       color: featureColors.classes       },
-  { id:'attendance',    icon:'✅',  label: t('nav.attendance'),    path:'/attendance',    color: featureColors.attendance    },
-  { id:'timetable',     icon:'📚',  label: t('nav.timetable'),     path:'/classes',       color: featureColors.timetable     },
-  { id:'homework',      icon:'📝',  label: t('nav.homework'),      path:'/homework',      color: featureColors.homework      },
-  { id:'exams',         icon:'📊',  label: t('nav.exams'),         path:'/exams',         color: featureColors.exams         },
-  { id:'finance',       icon:'💳',  label: t('nav.finance'),       path:'/finance',       color: featureColors.finance       },
-  { id:'announcements', icon:'📢',  label: t('nav.announcements'), path:'/communication', color: featureColors.announcements },
-  { id:'reports',       icon:'📄',  label: t('nav.reports'),       path:'/reports',       color: featureColors.reports       },
-  { id:'settings',      icon:'⚙️',  label: t('nav.settings'),      path:'/settings',      color: featureColors.settings      },
-])
+const moduleCategories = computed(() => {
+  const isAdmin = ['super_admin','school_admin'].includes(userRole.value)
+  const isSuperAdmin = userRole.value === 'super_admin'
+  const cats = [
+    {
+      key: 'academic', icon: '📚', label: t('dashboard.catAcademic'),
+      modules: [
+        { id:'students',   icon:'👥',  label: t('nav.students'),   path:'/students',   color: C.students   },
+        { id:'teachers',   icon:'👩‍🏫', label: t('nav.teachers'),   path:'/teachers',   color: C.teachers   },
+        { id:'classes',    icon:'🏫',  label: t('nav.classes'),    path:'/classes',    color: C.classes    },
+        { id:'subjects',   icon:'📖',  label: t('nav.subjects'),   path:'/subjects',   color: C.subjects   },
+        { id:'attendance', icon:'✅',  label: t('nav.attendance'), path:'/attendance', color: C.attendance },
+        { id:'timetable',  icon:'🗓️',  label: t('nav.timetable'),  path:'/timetable',  color: C.timetable  },
+      ]
+    },
+    {
+      key: 'learning', icon: '🎓', label: t('dashboard.catLearning'),
+      modules: [
+        { id:'homework', icon:'📝', label: t('nav.homework'), path:'/homework', color: C.homework },
+        { id:'exams',    icon:'📊', label: t('nav.exams'),    path:'/exams',    color: C.exams    },
+        { id:'library',  icon:'📚', label: t('nav.library'),  path:'/library',  color: C.library  },
+        { id:'reports',  icon:'📄', label: t('nav.reports'),  path:'/reports',  color: C.reports  },
+      ]
+    },
+    {
+      key: 'admin', icon: '🏢', label: t('dashboard.catAdmin'),
+      modules: [
+        { id:'finance',       icon:'💳', label: t('nav.finance'),       path:'/finance',       color: C.finance       },
+        { id:'communication', icon:'📢', label: t('nav.announcements'), path:'/communication', color: C.communication },
+        { id:'calendar',      icon:'📅', label: t('nav.calendar'),      path:'/calendar',      color: C.calendar      },
+        { id:'parents',       icon:'👨‍👩‍👧', label: t('nav.parents'),       path:'/parents',       color: C.parents       },
+      ]
+    },
+    ...(isAdmin ? [{
+      key: 'system', icon: '⚙️', label: t('dashboard.catSystem'),
+      modules: [
+        { id:'roles',    icon:'🛡️', label: t('nav.roles'),    path:'/roles',    color: C.roles    },
+        ...(isSuperAdmin ? [{ id:'approvals', icon:'🏫', label: t('nav.approvals'), path:'/school-approvals', color: C.approvals }] : []),
+        { id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings },
+      ]
+    }] : [
+      { key:'settings-only', icon:'⚙️', label: t('dashboard.catSystem'),
+        modules: [{ id:'settings', icon:'⚙️', label: t('nav.settings'), path:'/settings', color: C.settings }]
+      }
+    ])
+  ]
+  return cats
+})
+
+const allModules = computed(() => moduleCategories.value.flatMap(c => c.modules))
+const searchResults = computed(() => {
+  if (!searchQuery.value) return []
+  const q = searchQuery.value.toLowerCase()
+  return allModules.value.filter(m => m.label.toLowerCase().includes(q))
+})
 </script>
 
 <style scoped>
@@ -347,93 +406,64 @@ const features = computed(() => [
 .greeting-role   { font-size:10px; color:rgba(255,255,255,.65); background:rgba(255,255,255,.15); padding:2px 8px; border-radius:10px; }
 
 /* ── Body ── */
-.dash-body { padding:16px; background:#f5f7fa; }
+.dash-body { padding:14px; background:#f5f7fa; }
 
-/* Quick Nav */
-.quick-nav-card {
-  background:white; border-radius:18px;
-  box-shadow:0 2px 16px rgba(0,0,0,.07); padding:14px 8px;
-  margin-bottom:16px; border:1px solid rgba(0,123,255,.06);
+/* Stats cards */
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
+.stat-card {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:white; border-radius:14px; padding:12px 6px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06); cursor:pointer;
+  transition:transform .15s, box-shadow .15s; border:1px solid #f3f4f6;
 }
-.quick-nav-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:4px; }
+.stat-card:active { transform:scale(.93); }
+.stat-card-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+.stat-card-num  { font-size:18px; font-weight:800; color:#1f2937; line-height:1; }
+.stat-card-lbl  { font-size:9px; font-weight:600; color:#9ca3af; text-align:center; text-transform:uppercase; letter-spacing:.3px; }
+.stat-card-info { text-align:center; }
 
-.quick-item {
-  display:flex; flex-direction:column; align-items:center; gap:7px;
-  padding:10px 6px; border:none; background:transparent; cursor:pointer;
-  border-radius:14px; transition:all .2s;
+/* Search */
+.search-wrap {
+  display:flex; align-items:center; gap:8px; background:white;
+  border-radius:12px; padding:10px 14px; margin-bottom:14px;
+  box-shadow:0 1px 6px rgba(0,0,0,.06); border:1.5px solid #f3f4f6;
 }
-.quick-item:active { background:#f0f5ff; }
+.search-wrap:focus-within { border-color:#1976d2; }
+.search-icon  { font-size:16px; flex-shrink:0; }
+.search-input { flex:1; border:none; outline:none; font-size:14px; color:#1f2937; background:transparent; }
+.search-input::placeholder { color:#9ca3af; }
 
-.quick-circle {
-  width:52px; height:52px; border-radius:50%;
-  background:linear-gradient(135deg,#3b82f6,#1976d2);
-  display:flex; align-items:center; justify-content:center;
-  font-size:24px; box-shadow:0 4px 14px rgba(25,118,210,.35);
-  transition:transform .2s, box-shadow .2s;
+/* Category header */
+.cat-head  { display:flex; align-items:center; gap:6px; margin-bottom:10px; margin-top:4px; }
+.cat-icon  { font-size:16px; }
+.cat-title { font-size:12px; font-weight:800; color:#374151; text-transform:uppercase; letter-spacing:.7px; }
+
+/* Module grid */
+.module-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:18px;
 }
-.quick-item:active .quick-circle {
-  transform:scale(.92);
-  box-shadow:0 2px 8px rgba(25,118,210,.2);
-}
-
-.quick-label { font-size:10px; font-weight:700; color:#374151; text-align:center; line-height:1.2; max-width:58px; }
-
-/* Stats row */
-.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px; }
-
-.stat-pill {
-  border-radius:14px; padding:12px 6px; text-align:center;
-  cursor:pointer; transition:transform .18s, box-shadow .18s;
-  box-shadow:0 3px 12px rgba(0,0,0,.12);
-}
-.stat-pill:active { transform:scale(.93); }
-
-.stat-pill-icon { font-size:18px; margin-bottom:3px; }
-.stat-pill-num  { font-size:20px; font-weight:800; color:white; line-height:1; animation:countUp .6s cubic-bezier(.22,1,.36,1) both; }
-.stat-pill-lbl  { font-size:9px; font-weight:600; color:rgba(255,255,255,.8); margin-top:2px; text-transform:uppercase; letter-spacing:.3px; }
-
-@keyframes countUp {
-  from { opacity:0; transform:translateY(6px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-/* Section head */
-.section-head  { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
-.section-title { font-size:12px; font-weight:800; color:#6b7280; text-transform:uppercase; letter-spacing:.6px; }
-
-/* Features grid */
-.features-grid {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px;
-}
-
-.feature-item {
+.mod-item {
   display:flex; flex-direction:column; align-items:center; gap:7px;
   padding:12px 6px; border:none; background:white; cursor:pointer;
-  border-radius:14px; transition:all .2s;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,.06);
+  border:1px solid #f3f4f6; transition:transform .15s, box-shadow .15s;
 }
-.feature-item:active { transform:scale(.94); box-shadow:0 1px 4px rgba(0,0,0,.08); }
-
-.feature-icon-wrap {
+.mod-item:active { transform:scale(.93); box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.mod-icon-wrap {
   width:42px; height:42px; border-radius:12px;
   display:flex; align-items:center; justify-content:center;
-  transition:transform .2s;
-  box-shadow:0 3px 10px rgba(0,0,0,.15);
+  font-size:21px; box-shadow:0 3px 10px rgba(0,0,0,.18);
+  transition:transform .15s;
 }
-.feature-item:active .feature-icon-wrap { transform:scale(.9); }
-
-.feature-icon  { font-size:21px; }
-.feature-label { font-size:10px; font-weight:600; color:#374151; text-align:center; line-height:1.2; max-width:56px; overflow:hidden; text-overflow:ellipsis; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+.mod-item:active .mod-icon-wrap { transform:scale(.9); }
+.mod-icon  { font-size:21px; }
+.mod-label { font-size:10px; font-weight:600; color:#374151; text-align:center; line-height:1.2; max-width:58px; }
 
 /* Today card */
-.today-card {
-  background:white; border-radius:18px;
-  box-shadow:0 2px 14px rgba(0,0,0,.07); padding:16px;
-}
-.today-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.today-card  { background:white; border-radius:18px; box-shadow:0 2px 14px rgba(0,0,0,.07); padding:16px; }
+.today-head  { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
 .today-title { font-size:13px; font-weight:700; color:#1f2937; }
 .today-badge { font-size:10px; font-weight:700; background:#dbeafe; color:#1d4ed8; padding:3px 10px; border-radius:20px; }
-
 .today-stats { display:grid; grid-template-columns:1fr auto 1fr auto 1fr auto 1fr; align-items:center; }
 .today-stat  { text-align:center; padding:4px 0; }
 .ts-num      { display:block; font-size:22px; font-weight:800; line-height:1; }
@@ -444,16 +474,6 @@ const features = computed(() => [
 .ts-purple   { color:#6a1b9a; }
 .ts-div      { width:1px; height:36px; background:#f3f4f6; }
 
-/* Press-lift (global util in animations.css, re-declared for buttons) */
-.press-lift { transition:transform .15s cubic-bezier(.22,1,.36,1), box-shadow .15s ease; cursor:pointer; }
+.press-lift { transition:transform .15s cubic-bezier(.22,1,.36,1), box-shadow .15s; cursor:pointer; }
 .press-lift:active { transform:scale(.94) translateY(1px); }
-
-/* Ripple */
-.ripple-wrap { position:relative; overflow:hidden; }
-.ripple-wrap::after {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(circle, rgba(255,255,255,.35) 0%, transparent 70%);
-  transform:scale(0); opacity:0; transition:transform .4s, opacity .4s;
-}
-.ripple-wrap:active::after { transform:scale(3); opacity:1; transition:0s; }
 </style>

@@ -30,9 +30,9 @@
 
           <form @submit.prevent="handleLogin">
 
-            <!-- Email -->
+            <!-- Email / Login Code -->
             <div class="field">
-              <label class="field-label">Email Address</label>
+              <label class="field-label">Email or Login Code</label>
               <div class="field-wrap">
                 <svg class="field-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -40,10 +40,9 @@
                 </svg>
                 <input
                   v-model="email"
-                  type="email"
                   class="field-input"
-                  placeholder="you@school.com"
-                  autocomplete="email"
+                  placeholder="you@school.com or TCH-2024-001"
+                  autocomplete="username"
                   required
                 />
               </div>
@@ -132,6 +131,10 @@
           </div>
 
           <div class="hint">Password: <strong>test123</strong> · Code: <strong>SCHOOL001</strong></div>
+
+          <button class="register-link" type="button" @click="router.push('/school-register')">
+            🏫 Register your school
+          </button>
         </div>
 
         <div class="footer-note">© 2026 VICHEALAI · School Management System</div>
@@ -203,6 +206,35 @@ async function handleLogin() {
   await new Promise(r => setTimeout(r, 800))
 
   try {
+    // ── Check stored users (teachers/students with login codes) ──
+    const storedTeachers: any[] = JSON.parse(localStorage.getItem('teachers') || '[]')
+    const storedStudents: any[] = JSON.parse(localStorage.getItem('students') || '[]')
+    const allStoredUsers = [...storedTeachers, ...storedStudents]
+
+    const storedMatch = allStoredUsers.find(u =>
+      (u.loginCode && u.loginCode === email.value) ||
+      (u.email && u.email === email.value)
+    )
+
+    if (storedMatch && storedMatch.loginPassword === password.value) {
+      authStore.setAuth(`token_${Date.now()}`, {
+        id: storedMatch.id,
+        schoolId: storedMatch.schoolId || 'school_1',
+        email: storedMatch.email || storedMatch.loginCode,
+        name: storedMatch.name,
+        role: storedMatch.role || (storedMatch.loginCode?.startsWith('TCH') ? 'teacher' : 'student'),
+        loginCode: storedMatch.loginCode,
+        mustChangePassword: storedMatch.mustChangePassword ?? false,
+      })
+      if (storedMatch.mustChangePassword) {
+        router.push('/change-password')
+      } else {
+        router.push('/dashboard')
+      }
+      return
+    }
+
+    // ── Check hardcoded test accounts ──
     if (validEmails.includes(email.value) && password.value === 'test123' && schoolCode.value === 'SCHOOL001') {
       const prefix  = email.value.split('@')[0].toLowerCase()
       const matched = testAccounts.find(a => a.email === email.value)
@@ -487,6 +519,24 @@ ion-page { --ion-background-color: #0f172a; }
   animation: fadeUp .4s .55s ease both;
 }
 .hint strong { color:rgba(255,255,255,.58); }
+
+.register-link {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1.5px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,.6);
+  cursor: pointer;
+  text-align: center;
+  transition: background .2s, color .2s;
+  animation: fadeUp .4s .6s ease both;
+}
+.register-link:hover { background:rgba(255,255,255,.1); color:rgba(255,255,255,.85); }
 
 .footer-note {
   margin-top: 20px;

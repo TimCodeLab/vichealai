@@ -204,6 +204,36 @@
       </div>
     </ion-content>
 
+    <!-- Credentials popup -->
+    <ion-modal :is-open="!!newCredentials" @did-dismiss="newCredentials = null">
+      <div class="mo-wrap">
+        <div class="mo-handle"></div>
+        <div class="mo-head">
+          <span class="mo-title">🔑 {{ t('credentials.title') }}</span>
+          <button class="mo-close" @click="newCredentials = null">✕</button>
+        </div>
+        <div class="mo-body">
+          <div class="cred-banner">
+            <div class="cred-notice">{{ t('credentials.saveNote') }}</div>
+            <div class="cred-name">{{ newCredentials?.name }}</div>
+          </div>
+          <div class="cred-box">
+            <div class="cred-row">
+              <span class="cred-lbl">{{ t('credentials.loginCode') }}</span>
+              <span class="cred-val code">{{ newCredentials?.loginCode }}</span>
+            </div>
+            <div class="cred-divider"></div>
+            <div class="cred-row">
+              <span class="cred-lbl">{{ t('credentials.tempPassword') }}</span>
+              <span class="cred-val">{{ newCredentials?.loginPassword }}</span>
+            </div>
+          </div>
+          <div class="cred-hint">{{ t('credentials.changeHint') }}</div>
+          <button class="mo-save" style="width:100%" @click="newCredentials = null">{{ t('actions.ok') }}</button>
+        </div>
+      </div>
+    </ion-modal>
+
     <!-- Modal -->
     <ion-modal
       :is-open="showModal"
@@ -361,13 +391,34 @@ function deleteItem(id: string) {
     LocalStorageService.set('students', students.value);
   }
 }
+const newCredentials = ref<{loginCode:string; loginPassword:string; name:string} | null>(null)
+
+function genStudentCode() {
+  const year = new Date().getFullYear()
+  const existing = students.value.filter((s: any) => s.loginCode?.startsWith(`STD-${year}-`))
+  const num = String(existing.length + 1).padStart(3, '0')
+  return `STD-${year}-${num}`
+}
+function genPassword() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!'
+  return Array.from({length:8}, () => chars[Math.floor(Math.random()*chars.length)]).join('')
+}
+
 function saveItem() {
   if (!form.value.name) return;
   if (editing.value) {
-    const i = students.value.findIndex(s=>s.id===editing.value.id);
-    if (i!==-1) students.value[i] = {...students.value[i], ...form.value};
+    const i = students.value.findIndex((s: any) => s.id === editing.value.id);
+    if (i !== -1) students.value[i] = {...students.value[i], ...form.value};
+    newCredentials.value = null;
   } else {
-    students.value.push({id:`stu_${Date.now()}`, schoolId:'school_1', status:'active', ...form.value});
+    const loginCode     = genStudentCode()
+    const loginPassword = genPassword()
+    students.value.push({
+      id:`stu_${Date.now()}`, schoolId:'school_1', status:'active',
+      loginCode, loginPassword, mustChangePassword: true, role: 'student',
+      ...form.value
+    });
+    newCredentials.value = { loginCode, loginPassword, name: form.value.name }
   }
   LocalStorageService.set('students', students.value); closeModal();
 }
@@ -414,21 +465,19 @@ function saveItem() {
 .pg-badges  { display:flex; gap:5px; margin-top:6px; flex-wrap:wrap; }
 .pg-badge   { font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; }
 .pg-green   { background:#dcfce7; color:#16a34a; }
-.pg-blue    { background:#dbeafe; color:#1d4ed8; }
-.pg-orange  { background:#ffedd5; color:#c2410c; }
-
-/* Action buttons */
-.pg-actions { display:flex; flex-direction:column; gap:6px; flex-shrink:0; }
-.pg-btn     { width:32px; height:32px; border-radius:8px; border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .15s; }
-.pg-btn-edit { background:#eff6ff; color:#1976d2; }
-.pg-btn-edit:active { background:#dbeafe; }
-.pg-btn-del  { background:#fff5f5; color:#ef4444; }
-.pg-btn-del:active  { background:#fee2e2; }
-
-/* Modal */
-ion-modal { --border-radius:20px 20px 0 0; --max-height:88vh; align-items:flex-end; }
-.mo-wrap   { background:white; border-radius:20px 20px 0 0; display:flex; flex-direction:column; max-height:88vh; }
-.mo-handle { width:36px; height:4px; border-radius:2px; background:#e5e7eb; margin:12px auto 0; }
+.pg-blue    { background:#dbeafe; color:#1d
+/* Credentials modal */
+.cred-banner { background:#f0fdf4; border-radius:12px; padding:14px; text-align:center; }
+.cred-notice { font-size:12px; color:#16a34a; font-weight:600; margin-bottom:4px; }
+.cred-name   { font-size:16px; font-weight:800; color:#1f2937; }
+.cred-box    { background:#f8faff; border:1.5px solid #dbeafe; border-radius:12px; padding:16px; }
+.cred-row    { display:flex; align-items:center; justify-content:space-between; }
+.cred-lbl    { font-size:12px; font-weight:600; color:#6b7280; }
+.cred-val    { font-size:14px; font-weight:700; color:#1f2937; font-family:monospace; }
+.cred-val.code { font-size:18px; color:#1565c0; letter-spacing:1px; }
+.cred-divider{ height:1px; background:#e5e7eb; margin:10px 0; }
+.cred-hint   { font-size:12px; color:#9ca3af; text-align:center; }
+:#e5e7eb; margin:12px auto 0; }
 .mo-head   { display:flex; align-items:center; justify-content:space-between; padding:14px 18px 10px; border-bottom:1px solid #f3f4f6; }
 .mo-title  { font-size:16px; font-weight:700; color:#1f2937; }
 .mo-close  { width:30px; height:30px; border-radius:50%; background:#f3f4f6; border:none; cursor:pointer; font-size:13px; color:#6b7280; }

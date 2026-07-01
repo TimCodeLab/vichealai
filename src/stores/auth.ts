@@ -10,6 +10,8 @@ export interface User {
   phone?: string
   isActive?: boolean
   createdAt?: string
+  loginCode?: string
+  mustChangePassword?: boolean
 }
 
 export const useAuth = defineStore('auth', () => {
